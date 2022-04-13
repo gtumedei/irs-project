@@ -12,8 +12,8 @@ private:
 
 public:
   MeWheels(uint8_t rightWheelPort, uint8_t leftWheelPort);
-  void spinRight(uint8_t speed);
-  void spinLeft(uint8_t speed);
+  void spinRight(int16_t speed);
+  void spinLeft(int16_t speed);
   void stopRight();
   void stopLeft();
 };

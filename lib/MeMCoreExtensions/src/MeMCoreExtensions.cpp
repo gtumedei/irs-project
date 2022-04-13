@@ -5,11 +5,11 @@ MeWheels::MeWheels(uint8_t rightWheelPort, uint8_t leftWheelPort) {
   leftMotor.reset(leftWheelPort);
 }
 
-void MeWheels::spinRight(uint8_t speed) {
+void MeWheels::spinRight(int16_t speed) {
   rightMotor.run(speed);
 }
 
-void MeWheels::spinLeft(uint8_t speed) {
+void MeWheels::spinLeft(int16_t speed) {
   leftMotor.run(-speed);
 }
 

@@ -1,8 +1,7 @@
 #include "MeMCore.h"
+#include "MeMCoreExtensions.h"
 
-MeDCMotor leftWheel(M1);
-
-MeDCMotor rightWheel(M2);
+MeWheels wheels(M2, M1);
 
 uint8_t motorSpeed = 100;
 
@@ -13,28 +12,28 @@ void setup()
 
 void loop()
 {
-  leftWheel.run(-motorSpeed);
+  wheels.spinLeft(motorSpeed);
   Serial.println("Left wheel spinning");
   delay(2000);
-  leftWheel.stop();
-  rightWheel.run(motorSpeed);
+  wheels.stopLeft();
+  wheels.spinRight(motorSpeed);
   Serial.println("Right wheel spinning");
   delay(2000);
-  rightWheel.stop();
+  wheels.stopRight();
   delay(2000);
 
-  leftWheel.run(-motorSpeed);
-  rightWheel.run(motorSpeed);
+  wheels.spinLeft(motorSpeed);
+  wheels.spinRight(motorSpeed);
   Serial.println("Wheels spinning forward");
   delay(2000);
-  leftWheel.stop();
-  rightWheel.stop();
+  wheels.stopLeft();
+  wheels.stopRight();
   delay(500);
-  leftWheel.run(motorSpeed);
-  rightWheel.run(-motorSpeed);
+  wheels.spinLeft(-motorSpeed);
+  wheels.spinRight(-motorSpeed);
   Serial.println("Wheels spinning backrward");
   delay(2000);
-  leftWheel.stop();
-  rightWheel.stop();
+  wheels.stopLeft();
+  wheels.stopRight();
   delay(2000);
 }

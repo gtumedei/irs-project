@@ -13,8 +13,12 @@ void setup()
 void loop()
 {
   int lineSensorState = lineSensor.readSensors();
-  int distance = ultrasonicSensor.distanceCm();
+  double distance = ultrasonicSensor.distanceCm();
   int speed = distance * 255 / 400;
+
+  if (speed < 50) {
+    speed = 0; 
+  }
 
   Serial.print("Distance: ");
   Serial.print(distance);
