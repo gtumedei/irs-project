@@ -6,6 +6,10 @@
 #endif
 
 class MeWheels {
+private:
+  MeDCMotor rightMotor;
+  MeDCMotor leftMotor;
+
 public:
   MeWheels(uint8_t rightWheelPort, uint8_t leftWheelPort);
   void spinRight(uint8_t speed);
