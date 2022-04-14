@@ -1,10 +1,11 @@
 // #include <Wire.h>
 // #include <SoftwareSerial.h>
 #include <MeMCore.h>
+#include "BuzzerTones.h"
 
-MeRGBLed rgb(0, 16);
-MeUltrasonicSensor ultr(PORT_3);
-MeLineFollower line(PORT_2);
+MeRGBLed rgbLed(0, 16);
+MeUltrasonicSensor ultrasonicSensor(PORT_3);
+MeLineFollower lineFollower(PORT_2);
 // MeLEDMatrix ledMx;
 MeIR ir;
 MeJoystick joystick;
@@ -12,33 +13,10 @@ MeBuzzer buzzer;
 // MeTemperature ts;
 // Me7SegmentDisplay seg;
 
-MeDCMotor MotorL(M1);
-MeDCMotor MotorR(M2);
+MeDCMotor leftWheel(M1);
+MeDCMotor rightWheel(M2);
 MePort generalDevice;
 // Servo servo;
-
-// Buzzer sound codes
-#define NTD1     294
-#define NTD2     330
-#define NTD3     350
-#define NTD4     393
-#define NTD5     441
-#define NTD6     495
-#define NTD7     556
-#define NTDL1    147
-#define NTDL2    165
-#define NTDL3    175
-#define NTDL4    196
-#define NTDL5    221
-#define NTDL6    248
-#define NTDL7    278
-#define NTDH1    589
-#define NTDH2    661
-#define NTDH3    700
-#define NTDH4    786
-#define NTDH5    882
-#define NTDH6    990
-#define NTDH7    112
 
 // Wheels directions
 #define RUN_F    0x01
@@ -104,16 +82,14 @@ boolean buttonPressed = false;
 boolean currentPressed = false;
 boolean pre_buttonPressed = false;
 
-float angleServo = 90.0;
 double lastTime = 0.0;
 double currentTime = 0.0;
 
-int len = 52;
-int LineFollowFlag=0;
+int LineFollowFlag = 0;
 int moveSpeed = 200;
 int minSpeed = 48;
 int factor = 23;
-int analogs[8]={A0, A1, A2, A3, A4, A5, A6, A7};
+int analogs[8] = {A0, A1, A2, A3, A4, A5, A6, A7};
 int px = 0;
 
 uint8_t command_index = 0;
@@ -200,7 +176,7 @@ unsigned char readBuffer(int16_t index)
 
 void writeBuffer(int16_t index, unsigned char c)
 {
-  buffer[index]=c;
+  buffer[index] = c;
 }
 
 void writeHead()
@@ -239,7 +215,7 @@ void serialHandle()
     {
       if (prevc == 0xff)
       {
-        index=1;
+        index = 1;
         isStart = true;
       }
     }
@@ -262,26 +238,16 @@ void serialHandle()
     index++;
     if (index > 51)
     {
-      index=0;
+      index = 0;
       isStart = false;
     }
     if (isStart && (dataLen == 0) && (index > 3))
     {
       isStart = false;
       parseData();
-      index=0;
+      index = 0;
     }
   }
-}
-
-void buzzerOn()
-{
-  buzzer.tone(500, 1000);
-}
-
-void buzzerOff()
-{
-  buzzer.noTone();
 }
 
 void getIRCommand()
@@ -299,15 +265,15 @@ void getIRCommand()
         mode = DRIVING_MODE;
         stop();
         cli();
-        buzzer.tone(NTD1,300);
+        buzzer.tone(NTD1, 300);
         sei();
-        if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+        if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
         {
-          rgb.reset(PORT_7,SLOT2);;
+          rgbLed.reset(PORT_7,SLOT2);;
         }
-        rgb.setColor(0,0,0);
-        rgb.setColor(10,10,10);
-        rgb.show();
+        rgbLed.setColor(0,0,0);
+        rgbLed.setColor(10,10,10);
+        rgbLed.show();
         break;
       case IR_BUTTON_B:
         controlflag = IR_CONTROLER;
@@ -315,15 +281,15 @@ void getIRCommand()
         mode = OBSTACLE_AVOIDANCE_MODE;
         stop();
         cli();
-        buzzer.tone(NTD2,300);
+        buzzer.tone(NTD2, 300);
         sei();
-        if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+        if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
         {
-          rgb.reset(PORT_7,SLOT2);;
+          rgbLed.reset(PORT_7,SLOT2);;
         }
-        rgb.setColor(0,0,0);
-        rgb.setColor(0,10,0);
-        rgb.show();
+        rgbLed.setColor(0,0,0);
+        rgbLed.setColor(0,10,0);
+        rgbLed.show();
         break;
       case IR_BUTTON_C:
         controlflag = IR_CONTROLER;
@@ -331,28 +297,28 @@ void getIRCommand()
         mode = LINE_FOLLWING_MODE;
         stop();
         cli();
-        buzzer.tone(NTD3,300);
+        buzzer.tone(NTD3, 300);
         sei();
-        if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+        if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
         {
-          rgb.reset(PORT_7,SLOT2);;
+          rgbLed.reset(PORT_7,SLOT2);;
         }
-        rgb.setColor(0,0,0);
-        rgb.setColor(0,0,10);
-        rgb.show();
+        rgbLed.setColor(0,0,0);
+        rgbLed.setColor(0,0,10);
+        rgbLed.show();
         break;
       case IR_BUTTON_PLUS:
         controlflag = IR_CONTROLER;
         if (mode == DRIVING_MODE)
         {
           motor_sta = RUN_F;
-          if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+          if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
           {
-            rgb.reset(PORT_7,SLOT2);;
+            rgbLed.reset(PORT_7,SLOT2);;
           }
-          rgb.setColor(0,0,0);
-          rgb.setColor(10,10,0);
-          rgb.show();
+          rgbLed.setColor(0,0,0);
+          rgbLed.setColor(10,10,0);
+          rgbLed.show();
         }
         break;
       case IR_BUTTON_MINUS:
@@ -360,13 +326,13 @@ void getIRCommand()
         if (mode == DRIVING_MODE)
         {
           motor_sta = RUN_B;
-          if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+          if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
           {
-            rgb.reset(PORT_7,SLOT2);;
+            rgbLed.reset(PORT_7,SLOT2);;
           }
-          rgb.setColor(0,0,0);
-          rgb.setColor(10,0,0);
-          rgb.show();
+          rgbLed.setColor(0,0,0);
+          rgbLed.setColor(10,0,0);
+          rgbLed.show();
         }
         break;
       case IR_BUTTON_NEXT:
@@ -374,13 +340,13 @@ void getIRCommand()
         if (mode == DRIVING_MODE)
         {
           motor_sta = RUN_R;
-          if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+          if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
           {
-            rgb.reset(PORT_7,SLOT2);;
+            rgbLed.reset(PORT_7,SLOT2);;
           }
-          rgb.setColor(0,0,0);
-          rgb.setColor(1,10,10,0);
-          rgb.show();
+          rgbLed.setColor(0,0,0);
+          rgbLed.setColor(1,10,10,0);
+          rgbLed.show();
         }
         break;
       case IR_BUTTON_PREVIOUS:
@@ -388,13 +354,13 @@ void getIRCommand()
         if (mode == DRIVING_MODE)
         {
           motor_sta = RUN_L;
-          if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+          if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
           {
-            rgb.reset(PORT_7,SLOT2);;
+            rgbLed.reset(PORT_7,SLOT2);;
           }
-          rgb.setColor(0,0,0);
-          rgb.setColor(2,10,10,0);
-          rgb.show();
+          rgbLed.setColor(0,0,0);
+          rgbLed.setColor(2,10,10,0);
+          rgbLed.show();
         }
         break;
       case IR_BUTTON_9:
@@ -468,88 +434,88 @@ void getIRCommand()
     time = millis();
     if (mode == DRIVING_MODE )
     {
-      if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+      if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
       {
-        rgb.reset(PORT_7,SLOT2);;
+        rgbLed.reset(PORT_7,SLOT2);;
       }
-      rgb.setColor(10, 10, 10);
-      rgb.show();
+      rgbLed.setColor(10, 10, 10);
+      rgbLed.show();
     }
     else if (mode == OBSTACLE_AVOIDANCE_MODE )
     {
-      if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+      if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
       {
-        rgb.reset(PORT_7,SLOT2);;
+        rgbLed.reset(PORT_7,SLOT2);;
       }
-      rgb.setColor(0, 10, 0);
-      rgb.show();
+      rgbLed.setColor(0, 10, 0);
+      rgbLed.show();
     }
     else if (mode == LINE_FOLLWING_MODE)
     {
-      if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+      if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
       {
-        rgb.reset(PORT_7,SLOT2);;
+        rgbLed.reset(PORT_7,SLOT2);;
       }
-      rgb.setColor(0, 0, 10);
-      rgb.show();
+      rgbLed.setColor(0, 0, 10);
+      rgbLed.show();
     }
   }
 }
 
 void forward()
 {
-  MotorL.run(-moveSpeed);
-  MotorR.run(moveSpeed);
+  leftWheel.run(-moveSpeed);
+  rightWheel.run(moveSpeed);
 }
 
 void backward()
 {
-  MotorL.run(moveSpeed);
-  MotorR.run(-moveSpeed);
+  leftWheel.run(moveSpeed);
+  rightWheel.run(-moveSpeed);
 }
 
 void turnLeft()
 {
-  MotorL.run(moveSpeed*0.8);
-  MotorR.run(moveSpeed*0.8);
+  leftWheel.run(moveSpeed*0.8);
+  rightWheel.run(moveSpeed*0.8);
 }
 
 void turnRight()
 {
-  MotorL.run(-moveSpeed*0.8);
-  MotorR.run(-moveSpeed*0.8);
+  leftWheel.run(-moveSpeed*0.8);
+  rightWheel.run(-moveSpeed*0.8);
 }
 
 void turnLeft2()
 {
-  MotorL.run(-moveSpeed/5);
-  MotorR.run(moveSpeed);
+  leftWheel.run(-moveSpeed/5);
+  rightWheel.run(moveSpeed);
 }
 
 void turnRight2()
 {
-  MotorL.run(-moveSpeed);
-  MotorR.run(moveSpeed/5);
+  leftWheel.run(-moveSpeed);
+  rightWheel.run(moveSpeed/5);
 }
 
 void backwardAndTurnLeft()
 {
-  MotorL.run(moveSpeed/3 );
-  MotorR.run(-moveSpeed);
+  leftWheel.run(moveSpeed/3 );
+  rightWheel.run(-moveSpeed);
 }
 
 void backwardAndTurnRight()
 {
-  MotorL.run(moveSpeed);
-  MotorR.run(-moveSpeed/3);
+  leftWheel.run(moveSpeed);
+  rightWheel.run(-moveSpeed/3);
 }
 
 void stop()
 {
-  rgb.setColor(0,0,0);
-  rgb.show();
-  MotorL.run(0);
-  MotorR.run(0);
+  rgbLed.setColor(0,0,0);
+  rgbLed.show();
+  leftWheel.run(0);
+  rightWheel.run(0);
 }
 
 uint8_t prevState = 0;
@@ -591,7 +557,7 @@ void drivingMode()
 
 void obstacleAvoidanceMode()
 {
-  uint8_t d = ultr.distanceCm(70);
+  uint8_t d = ultrasonicSensor.distanceCm(70);
   static long time = millis();
   randomSeed(analogRead(6));
   uint8_t randNumber = random(2);
@@ -633,10 +599,10 @@ void obstacleAvoidanceMode()
 void lineFollowingMode()
 {
   uint8_t val;
-  val = line.readSensors();
+  val = lineFollower.readSensors();
   if (moveSpeed > 230)
   {
-    moveSpeed=230;
+    moveSpeed = 230;
   }
   switch (val)
   {
@@ -655,7 +621,7 @@ void lineFollowingMode()
 
     case S1_OUT_S2_IN:
       forward();
-      if (LineFollowFlag<20)
+      if (LineFollowFlag < 20)
       {
         LineFollowFlag++;
       }
@@ -707,9 +673,9 @@ void parseData()
     case RESET:
     {
       //reset
-      MotorL.run(0);
-      MotorR.run(0);
-      buzzerOff();
+      leftWheel.run(0);
+      rightWheel.run(0);
+      buzzer.noTone();
       callOK();
     }
     break;
@@ -740,7 +706,7 @@ void sendString(String s)
   int l = s.length();
   writeSerial(4);
   writeSerial(l);
-  for (int i=0;i<l;i++)
+  for (int i = 0; i < l; i++)
   {
     writeSerial(s.charAt(i));
   }
@@ -799,11 +765,12 @@ float readFloat(int idx)
 
 char _receiveStr[20] = {};
 uint8_t _receiveUint8[16] = {};
-char* readString(int idx,int len)
+
+char* readString(int idx, int len)
 {
-  for (int i=0;i<len;i++)
+  for (int i = 0; i < len; i++)
   {
-    _receiveStr[i]=readBuffer(idx+i);
+    _receiveStr[i] = readBuffer(idx+i);
   }
   _receiveStr[len] = '\0';
   return _receiveStr;
@@ -811,9 +778,9 @@ char* readString(int idx,int len)
 
 uint8_t* readUint8(int idx,int len)
 {
-  for (int i=0;i<len;i++)
+  for (int i = 0;i < len;i++)
   {
-    if (i>15)
+    if (i > 15)
     {
       break;
     }
@@ -832,16 +799,16 @@ void runModule(int device)
     {
       controlflag = BLUETOOTH;
       int16_t speed = readShort(7);
-      port==M1?MotorL.run(speed):MotorR.run(speed);
+      port == M1 ? leftWheel.run(speed) : rightWheel.run(speed);
     }
     break;
     case JOYSTICK:
     {
       controlflag = BLUETOOTH;
       int16_t leftSpeed = readShort(6);
-      MotorL.run(leftSpeed);
+      leftWheel.run(leftSpeed);
       int16_t rightSpeed = readShort(8);
-      MotorR.run(rightSpeed);
+      rightWheel.run(rightSpeed);
     }
     break;
     case RGBLED:
@@ -853,19 +820,19 @@ void runModule(int device)
       int16_t g = readBuffer(10);
       int16_t b = readBuffer(11);
 
-      if ((rgb.getPort() != port) || rgb.getSlot() != slot)
+      if ((rgbLed.getPort() != port) || rgbLed.getSlot() != slot)
       {
-        rgb.reset(port,slot);
+        rgbLed.reset(port,slot);
       }
       if (idx > 0)
       {
-        rgb.setColorAt(idx-1,r,g,b);
+        rgbLed.setColorAt(idx-1,r,g,b);
       }
       else
       {
-        rgb.setColor(r,g,b);
+        rgbLed.setColor(r,g,b);
       }
-      rgb.show();
+      rgbLed.show();
     }
     break;
     /* case SEVSEG:
@@ -917,9 +884,9 @@ void runModule(int device)
     {
       String Str_data;
       int16_t len = readBuffer(2) - 3;
-      for (int16_t i=0;i<len;i++)
+      for (int16_t i = 0; i < len; i++)
       {
-        Str_data += (char)readBuffer(6+i);
+        Str_data += (char)readBuffer(6 + i);
       }
       ir.sendString(Str_data);
       Str_data = "";
@@ -929,7 +896,7 @@ void runModule(int device)
     {
       pinMode(pin,OUTPUT);
       int v = readBuffer(7);
-      digitalWrite(pin,v);
+      digitalWrite(pin, v);
     }
     break;
     case PWM:
@@ -945,7 +912,7 @@ void runModule(int device)
       int tone_time = readShort(8);
       if (hz > 0)
       {
-        buzzer.tone(hz,tone_time);
+        buzzer.tone(hz, tone_time);
       }
       else
       {
@@ -955,7 +922,7 @@ void runModule(int device)
     break;
     case TIMER:
     {
-      lastTime = millis()/1000.0;
+      lastTime = millis() / 1000.0;
     }
     break;
   }
@@ -963,21 +930,23 @@ void runModule(int device)
 
 void readSensor(int device)
 {
-  float value=0.0;
+  float value = 0.0;
   int port, slot, pin;
   port = readBuffer(6);
   pin = port;
   switch (device)
   {
     case ULTRASONIC_SENSOR:
-      if (ultr.getPort() != port)
+    {
+      if (ultrasonicSensor.getPort() != port)
       {
-        ultr.reset(port);
+        ultrasonicSensor.reset(port);
       }
-      value = (float)ultr.distanceCm();
+      value = (float)ultrasonicSensor.distanceCm();
       writeHead();
       writeSerial(command_index);
       sendFloat(value);
+    }
     break;
     /* case JOYSTICK:
     {
@@ -991,6 +960,7 @@ void readSensor(int device)
     }
     break; */
     case LINEFOLLOWER:
+    {
       if (generalDevice.getPort() != port)
       {
         generalDevice.reset(port);
@@ -999,29 +969,40 @@ void readSensor(int device)
       }
       value = generalDevice.dRead1()*2 + generalDevice.dRead2();
       sendFloat(value);
+    }
     break;
     case BUTTON_INNER:
+    {
       pin = analogs[pin];
       char s = readBuffer(7);
       pinMode(pin,INPUT);
-      boolean currentPressed = !(analogRead(pin)>10);
+      boolean currentPressed = !(analogRead(pin) > 10);
       sendByte(s^(currentPressed?1:0));
       buttonPressed = currentPressed;
+    }
     break;
     case VERSION:
+    {
       sendString(mVersion);
+    }
     break;
     case DIGITAL:
+    {
       pinMode(pin,INPUT);
       sendFloat(digitalRead(pin));
+    }
     break;
     case ANALOG:
+    {
       pin = analogs[pin];
       pinMode(pin,INPUT);
       sendFloat(analogRead(pin));
+    }
     break;
     case TIMER:
+    {
       sendFloat(currentTime);
+    }
     break;
   }
 }
@@ -1030,9 +1011,9 @@ void handleOnBoardButton() {
   currentPressed = !(analogRead(7) > 100);
   if (currentPressed != pre_buttonPressed)
   {
-    if ((rgb.getPort() != PORT_7) || rgb.getSlot() != SLOT2)
+    if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
     {
-      rgb.reset(PORT_7,SLOT2);
+      rgbLed.reset(PORT_7,SLOT2);
     }
     pre_buttonPressed = currentPressed;
     if (currentPressed == true)
@@ -1046,9 +1027,9 @@ void handleOnBoardButton() {
         buzzer.tone(NTD2, 300);
         sei();
         buzzer.noTone();
-        rgb.setColor(0,0,0);
-        rgb.setColor(0, 10, 0);
-        rgb.show();
+        rgbLed.setColor(0,0,0);
+        rgbLed.setColor(0, 10, 0);
+        rgbLed.show();
       }
       else if (mode == OBSTACLE_AVOIDANCE_MODE)
       {
@@ -1059,9 +1040,9 @@ void handleOnBoardButton() {
         buzzer.tone(NTD2, 300);
         sei();
         buzzer.noTone();
-        rgb.setColor(0,0,0);
-        rgb.setColor(0, 0, 10);
-        rgb.show();
+        rgbLed.setColor(0,0,0);
+        rgbLed.setColor(0, 0, 10);
+        rgbLed.show();
       }
       else if (mode == LINE_FOLLWING_MODE)
       {
@@ -1072,9 +1053,9 @@ void handleOnBoardButton() {
         buzzer.tone(NTD1, 300);
         sei();
         buzzer.noTone();
-        rgb.setColor(0,0,0);
-        rgb.setColor(10, 10, 10);
-        rgb.show();
+        rgbLed.setColor(0, 0, 0);
+        rgbLed.setColor(10, 10, 10);
+        rgbLed.show();
       }
     }
   }
@@ -1083,16 +1064,16 @@ void handleOnBoardButton() {
 void startingBuzz() {
   buzzer.tone(NTD1, 300);
   delay(300);
-  rgb.setColor(0, 10, 0);
-  rgb.show();
+  rgbLed.setColor(0, 10, 0);
+  rgbLed.show();
   buzzer.tone(NTD2, 300);
   delay(300);
-  rgb.setColor(0, 0, 10);
-  rgb.show();
+  rgbLed.setColor(0, 0, 10);
+  rgbLed.show();
   buzzer.tone(NTD3, 300);
   delay(300);
-  rgb.setColor(10, 10, 10);
-  rgb.show();
+  rgbLed.setColor(10, 10, 10);
+  rgbLed.show();
   buzzer.noTone();
 }
 
@@ -1105,12 +1086,12 @@ void setup()
   digitalWrite(13, HIGH);
   delay(300);
   digitalWrite(13, LOW);
-  rgb.reset(PORT_7, SLOT2);
-  rgb.setColor(0, 0, 0);
-  rgb.show();
+  rgbLed.reset(PORT_7, SLOT2);
+  rgbLed.setColor(0, 0, 0);
+  rgbLed.show();
   delay(1);
-  rgb.setColor(10, 0, 0);
-  rgb.show();
+  rgbLed.setColor(10, 0, 0);
+  rgbLed.show();
   startingBuzz();
   Serial.begin(9600);
   ir.begin();
