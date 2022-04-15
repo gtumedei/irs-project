@@ -1,9 +1,7 @@
 #ifndef MeMCoreExtensions_H
 #define MeMCoreExtensions_H
 
-#ifndef MeDCMotor_H
 #include "MeDCMotor.h"
-#endif
 
 class MeWheels {
 private:
