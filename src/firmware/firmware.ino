@@ -16,315 +16,63 @@ int minSpeed = 48;
 int factor = 23;
 
 Direction motorState = STOP;
+Direction prevMotorState = STOP;
 Mode mode = DRIVING_MODE;
 
-void handleOnBoardButton() {
-  currentButtonPressed = !(analogRead(7) > 100);
-  if (currentButtonPressed != prevButtonPressed)
-  {
-    if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-    {
-      rgbLed.reset(PORT_7,SLOT2);
-    }
-    prevButtonPressed = currentButtonPressed;
-    if (currentButtonPressed == true)
-    {
-      if (mode == DRIVING_MODE)
-      {
-        mode = OBSTACLE_AVOIDANCE_MODE;
-        moveSpeed = 200;
-        stop();
-        cli();
-        buzzer.tone(NTD2, 300);
-        sei();
-        buzzer.noTone();
-        rgbLed.setColor(0,0,0);
-        rgbLed.setColor(0, 10, 0);
-        rgbLed.show();
-      }
-      else if (mode == OBSTACLE_AVOIDANCE_MODE)
-      {
-        mode = LINE_FOLLWING_MODE;
-        moveSpeed = 200;
-        stop();
-        cli();
-        buzzer.tone(NTD2, 300);
-        sei();
-        buzzer.noTone();
-        rgbLed.setColor(0,0,0);
-        rgbLed.setColor(0, 0, 10);
-        rgbLed.show();
-      }
-      else if (mode == LINE_FOLLWING_MODE)
-      {
-        mode = DRIVING_MODE;
-        moveSpeed = 220;
-        stop();
-        cli();
-        buzzer.tone(NTD1, 300);
-        sei();
-        buzzer.noTone();
-        rgbLed.setColor(0, 0, 0);
-        rgbLed.setColor(10, 10, 10);
-        rgbLed.show();
-      }
-    }
-  }
-}
 
-void handleIRCommand()
-{
-  static long time = millis();
-  if (ir.decode())
-  {
-    uint32_t value = ir.value;
-    time = millis();
-    switch ((value >> 16) & 0xff)
-    {
-      case IR_BUTTON_A:
-        moveSpeed = 220;
-        mode = DRIVING_MODE;
-        stop();
-        cli();
-        buzzer.tone(NTD1, 300);
-        sei();
-        if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-        {
-          rgbLed.reset(PORT_7,SLOT2);;
-        }
-        rgbLed.setColor(0,0,0);
-        rgbLed.setColor(10,10,10);
-        rgbLed.show();
-        break;
-      case IR_BUTTON_B:
-        moveSpeed = 200;
-        mode = OBSTACLE_AVOIDANCE_MODE;
-        stop();
-        cli();
-        buzzer.tone(NTD2, 300);
-        sei();
-        if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-        {
-          rgbLed.reset(PORT_7,SLOT2);;
-        }
-        rgbLed.setColor(0,0,0);
-        rgbLed.setColor(0,10,0);
-        rgbLed.show();
-        break;
-      case IR_BUTTON_C:
-        moveSpeed = 200;
-        mode = LINE_FOLLWING_MODE;
-        stop();
-        cli();
-        buzzer.tone(NTD3, 300);
-        sei();
-        if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-        {
-          rgbLed.reset(PORT_7,SLOT2);;
-        }
-        rgbLed.setColor(0,0,0);
-        rgbLed.setColor(0,0,10);
-        rgbLed.show();
-        break;
-      case IR_BUTTON_PLUS:
-        if (mode == DRIVING_MODE)
-        {
-          motorState = RUN_F;
-          if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-          {
-            rgbLed.reset(PORT_7,SLOT2);;
-          }
-          rgbLed.setColor(0,0,0);
-          rgbLed.setColor(10,10,0);
-          rgbLed.show();
-        }
-        break;
-      case IR_BUTTON_MINUS:
-        if (mode == DRIVING_MODE)
-        {
-          motorState = RUN_B;
-          if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-          {
-            rgbLed.reset(PORT_7,SLOT2);;
-          }
-          rgbLed.setColor(0,0,0);
-          rgbLed.setColor(10,0,0);
-          rgbLed.show();
-        }
-        break;
-      case IR_BUTTON_NEXT:
-        if (mode == DRIVING_MODE)
-        {
-          motorState = RUN_R;
-          if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-          {
-            rgbLed.reset(PORT_7,SLOT2);;
-          }
-          rgbLed.setColor(0,0,0);
-          rgbLed.setColor(1,10,10,0);
-          rgbLed.show();
-        }
-        break;
-      case IR_BUTTON_PREVIOUS:
-        if (mode == DRIVING_MODE)
-        {
-          motorState = RUN_L;
-          if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-          {
-            rgbLed.reset(PORT_7,SLOT2);;
-          }
-          rgbLed.setColor(0,0,0);
-          rgbLed.setColor(2,10,10,0);
-          rgbLed.show();
-        }
-        break;
-      case IR_BUTTON_9:
-        cli();
-        buzzer.tone(NTDH2, 300);
-        sei();
-        changeSpeed(factor * 9 + minSpeed);
-        break;
-      case IR_BUTTON_8:
-        cli();
-        buzzer.tone(NTDH1, 300);
-        sei();
-        changeSpeed(factor * 9 + minSpeed);
-        break;
-      case IR_BUTTON_7:
-        cli();
-        buzzer.tone(NTD7, 300);
-        sei();
-        changeSpeed(factor * 9 + minSpeed);
-        break;
-      case IR_BUTTON_6:
-        cli();
-        buzzer.tone(NTD6, 300);
-        sei();
-        changeSpeed(factor * 6 + minSpeed);
-        break;
-      case IR_BUTTON_5:
-        cli();
-        buzzer.tone(NTD5, 300);
-        sei();
-        changeSpeed(factor * 6 + minSpeed);
-        break;
-      case IR_BUTTON_4:
-        cli();
-        buzzer.tone(NTD4, 300);
-        sei();
-        changeSpeed(factor * 6 + minSpeed);
-        break;
-      case IR_BUTTON_3:
-        cli();
-        buzzer.tone(NTD3, 300);
-        sei();
-        changeSpeed(factor * 3 + minSpeed);
-        break;
-      case IR_BUTTON_2:
-        cli();
-        buzzer.tone(NTD2, 300);
-        sei();
-        changeSpeed(factor * 3 + minSpeed);
-        break;
-      case IR_BUTTON_1:
-        cli();
-        buzzer.tone(NTD1, 300);
-        sei();
-        changeSpeed(factor * 3 + minSpeed);
-        break;
-    }
-  }
-  else if (millis() - time > 120)
-  {
-    motorState = STOP;
-    time = millis();
-    if (mode == DRIVING_MODE )
-    {
-      if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-      {
-        rgbLed.reset(PORT_7,SLOT2);;
-      }
-      rgbLed.setColor(10, 10, 10);
-      rgbLed.show();
-    }
-    else if (mode == OBSTACLE_AVOIDANCE_MODE )
-    {
-      if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-      {
-        rgbLed.reset(PORT_7,SLOT2);;
-      }
-      rgbLed.setColor(0, 10, 0);
-      rgbLed.show();
-    }
-    else if (mode == LINE_FOLLWING_MODE)
-    {
-      if ((rgbLed.getPort() != PORT_7) || rgbLed.getSlot() != SLOT2)
-      {
-        rgbLed.reset(PORT_7,SLOT2);;
-      }
-      rgbLed.setColor(0, 0, 10);
-      rgbLed.show();
-    }
-  }
-}
-
-void forward()
+void forward(int moveSpeed)
 {
   wheels.spinLeft(moveSpeed);
   wheels.spinRight(moveSpeed);
 }
 
-void backward()
+void backward(int moveSpeed)
 {
   wheels.spinLeft(-moveSpeed);
   wheels.spinRight(-moveSpeed);
 }
 
-void turnLeft()
+void turnLeft(int moveSpeed, float factor = 0.8)
 {
-  wheels.spinLeft(-moveSpeed*0.8);
-  wheels.spinRight(moveSpeed*0.8);
+  wheels.spinLeft(-moveSpeed * factor);
+  wheels.spinRight(moveSpeed * factor);
 }
 
-void turnRight()
+void turnRight(int moveSpeed, float factor = 0.8)
 {
-  wheels.spinLeft(moveSpeed*0.8);
-  wheels.spinRight(-moveSpeed*0.8);
+  wheels.spinLeft(moveSpeed * factor);
+  wheels.spinRight(-moveSpeed * factor);
 }
 
-void turnLeft2()
+void forwardAndTurnLeft(int moveSpeed, float factor = 0.2)
 {
-  wheels.spinLeft(moveSpeed/5);
+  wheels.spinLeft(moveSpeed * factor);
   wheels.spinRight(moveSpeed);
 }
 
-void turnRight2()
+void forwardAndTurnRight(int moveSpeed, float factor = 0.2)
 {
   wheels.spinLeft(moveSpeed);
-  wheels.spinRight(moveSpeed/5);
+  wheels.spinRight(moveSpeed * factor);
 }
 
-void backwardAndTurnLeft()
+void backwardAndTurnLeft(int moveSpeed, float factor = 0.333)
 {
-  wheels.spinLeft(-moveSpeed/3 );
+  wheels.spinLeft(-moveSpeed * factor);
   wheels.spinRight(-moveSpeed);
 }
 
-void backwardAndTurnRight()
+void backwardAndTurnRight(int moveSpeed, float factor = 0.333)
 {
   wheels.spinLeft(-moveSpeed);
-  wheels.spinRight(-moveSpeed/3);
+  wheels.spinRight(-moveSpeed * factor);
 }
 
 void stop()
 {
-  rgbLed.setColor(0,0,0);
-  rgbLed.show();
   wheels.stopLeft();
   wheels.stopRight();
 }
-
-uint8_t prevState = 0;
 
 void changeSpeed(int spd)
 {
@@ -336,25 +84,25 @@ void drivingMode()
   switch (motorState)
   {
     case RUN_F:
-      forward();
-      prevState = motorState;
+      forward(moveSpeed);
+      prevMotorState = motorState;
       break;
     case RUN_B:
-      backward();
-      prevState = motorState;
+      backward(moveSpeed);
+      prevMotorState = motorState;
       break;
     case RUN_L:
-      turnLeft();
-      prevState = motorState;
+      turnLeft(moveSpeed);
+      prevMotorState = motorState;
       break;
     case RUN_R:
-      turnRight();
-      prevState = motorState;
+      turnRight(moveSpeed);
+      prevMotorState = motorState;
       break;
     case STOP:
-      if (prevState != motorState)
+      if (prevMotorState != motorState)
       {
-        prevState = motorState;
+        prevMotorState = motorState;
         stop();
       }
       break;
@@ -369,18 +117,18 @@ void obstacleAvoidanceMode()
   uint8_t randNumber = random(2);
   if ((d > HIGH_DISTANCE) || (d == 0))
   {
-    forward();
+    forward(moveSpeed);
   }
   else if ((d > LOW_DISTANCE) && (d < HIGH_DISTANCE))
   {
     switch (randNumber)
     {
       case 0:
-        turnLeft();
+        turnLeft(moveSpeed);
         delay(300);
         break;
       case 1:
-        turnRight();
+        turnRight(moveSpeed);
         delay(300);
         break;
     }
@@ -390,11 +138,11 @@ void obstacleAvoidanceMode()
     switch (randNumber)
     {
       case 0:
-        turnLeft();
+        turnLeft(moveSpeed);
         delay(800);
         break;
       case 1:
-        turnRight();
+        turnRight(moveSpeed);
         delay(800);
         break;
     }
@@ -413,12 +161,12 @@ void lineFollowingMode()
   switch (val)
   {
     case S1_IN_S2_IN:
-      forward();
+      forward(moveSpeed);
       lineFollowFlag = 10;
       break;
 
     case S1_IN_S2_OUT:
-      forward();
+      forward(moveSpeed);
       if (lineFollowFlag > 1)
       {
         lineFollowFlag--;
@@ -426,7 +174,7 @@ void lineFollowingMode()
       break;
 
     case S1_OUT_S2_IN:
-      forward();
+      forward(moveSpeed);
       if (lineFollowFlag < 20)
       {
         lineFollowFlag++;
@@ -436,15 +184,15 @@ void lineFollowingMode()
     case S1_OUT_S2_OUT:
       if (lineFollowFlag == 10)
       {
-        backward();
+        backward(moveSpeed);
       }
       if (lineFollowFlag < 10)
       {
-        turnLeft2();
+        forwardAndTurnLeft(moveSpeed);
       }
       if (lineFollowFlag > 10)
       {
-        turnRight2();
+        forwardAndTurnRight(moveSpeed);
       }
       break;
   }
@@ -491,7 +239,7 @@ void loop()
   while (1)
   {
     handleIRCommand();
-    handleOnBoardButton();
+    handleBuiltinButton();
     // Execute the selected mode
     switch (mode)
     {

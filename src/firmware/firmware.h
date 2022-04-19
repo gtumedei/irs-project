@@ -4,6 +4,8 @@
 #include <MeMCore.h>
 #include "BuzzerTones.h"
 #include "MeMCoreExtensions.h"
+#include "BuiltinButton.h"
+#include "IRCommand.h"
 
 // Wheels directions
 enum Direction {
@@ -34,6 +36,7 @@ extern MeBuzzer buzzer;
 extern MeWheels wheels;
 
 extern Direction motorState;
+extern Direction prevMotorState;
 extern Mode mode;
 
 extern boolean currentButtonPressed;
@@ -44,6 +47,8 @@ extern int moveSpeed;
 extern int minSpeed;
 extern int factor;
 
+// TODO remove
 void stop();
+void changeSpeed(int spd);
 
 #endif
