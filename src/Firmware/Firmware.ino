@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "Firmware.h"
 
 MeRGBLed rgbLed(0, 16);
 MeUltrasonicSensor ultrasonicSensor(PORT_3);

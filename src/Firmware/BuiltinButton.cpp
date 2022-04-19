@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "Firmware.h"
 
 boolean currentButtonPressed = false;
 boolean prevButtonPressed = false;

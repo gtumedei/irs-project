@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "Firmware.h"
 
 void startingBuzz() {
   buzzer.tone(NTD1, 300);
