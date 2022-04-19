@@ -1,4 +1,4 @@
-#include "IRCommand.h"
+#include "firmware.h"
 
 void handleIRCommand()
 {

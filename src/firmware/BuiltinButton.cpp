@@ -1,4 +1,7 @@
-#include "BuiltinButton.h"
+#include "firmware.h"
+
+boolean currentButtonPressed = false;
+boolean prevButtonPressed = false;
 
 void handleBuiltinButton() {
   currentButtonPressed = !(analogRead(7) > 100);
