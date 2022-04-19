@@ -15,7 +15,7 @@ void handleBuiltinButton() {
       {
         mode = OBSTACLE_AVOIDANCE_MODE;
         moveSpeed = 200;
-        stop();
+        wheels.stop();
         cli();
         buzzer.tone(NTD2, 300);
         sei();
@@ -28,7 +28,7 @@ void handleBuiltinButton() {
       {
         mode = LINE_FOLLWING_MODE;
         moveSpeed = 200;
-        stop();
+        wheels.stop();
         cli();
         buzzer.tone(NTD2, 300);
         sei();
@@ -41,7 +41,7 @@ void handleBuiltinButton() {
       {
         mode = DRIVING_MODE;
         moveSpeed = 220;
-        stop();
+        wheels.stop();
         cli();
         buzzer.tone(NTD1, 300);
         sei();

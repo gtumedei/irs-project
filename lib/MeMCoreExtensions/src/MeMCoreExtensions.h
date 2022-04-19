@@ -14,6 +14,15 @@ public:
   void spinLeft(int16_t speed);
   void stopRight();
   void stopLeft();
+  void forward(int moveSpeed);
+  void backward(int moveSpeed);
+  void turnLeft(int moveSpeed, float factor = 0.8);
+  void turnRight(int moveSpeed, float factor = 0.8);
+  void forwardAndTurnLeft(int moveSpeed, float factor = 0.2);
+  void forwardAndTurnRight(int moveSpeed, float factor = 0.2);
+  void backwardAndTurnLeft(int moveSpeed, float factor = 0.333);
+  void backwardAndTurnRight(int moveSpeed, float factor = 0.333);
+  void stop();
 };
 
 #endif

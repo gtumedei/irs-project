@@ -19,91 +19,31 @@ Direction motorState = STOP;
 Direction prevMotorState = STOP;
 Mode mode = DRIVING_MODE;
 
-
-void forward(int moveSpeed)
-{
-  wheels.spinLeft(moveSpeed);
-  wheels.spinRight(moveSpeed);
-}
-
-void backward(int moveSpeed)
-{
-  wheels.spinLeft(-moveSpeed);
-  wheels.spinRight(-moveSpeed);
-}
-
-void turnLeft(int moveSpeed, float factor = 0.8)
-{
-  wheels.spinLeft(-moveSpeed * factor);
-  wheels.spinRight(moveSpeed * factor);
-}
-
-void turnRight(int moveSpeed, float factor = 0.8)
-{
-  wheels.spinLeft(moveSpeed * factor);
-  wheels.spinRight(-moveSpeed * factor);
-}
-
-void forwardAndTurnLeft(int moveSpeed, float factor = 0.2)
-{
-  wheels.spinLeft(moveSpeed * factor);
-  wheels.spinRight(moveSpeed);
-}
-
-void forwardAndTurnRight(int moveSpeed, float factor = 0.2)
-{
-  wheels.spinLeft(moveSpeed);
-  wheels.spinRight(moveSpeed * factor);
-}
-
-void backwardAndTurnLeft(int moveSpeed, float factor = 0.333)
-{
-  wheels.spinLeft(-moveSpeed * factor);
-  wheels.spinRight(-moveSpeed);
-}
-
-void backwardAndTurnRight(int moveSpeed, float factor = 0.333)
-{
-  wheels.spinLeft(-moveSpeed);
-  wheels.spinRight(-moveSpeed * factor);
-}
-
-void stop()
-{
-  wheels.stopLeft();
-  wheels.stopRight();
-}
-
-void changeSpeed(int spd)
-{
-  moveSpeed = spd;
-}
-
 void drivingMode()
 {
   switch (motorState)
   {
     case RUN_F:
-      forward(moveSpeed);
+      wheels.forward(moveSpeed);
       prevMotorState = motorState;
       break;
     case RUN_B:
-      backward(moveSpeed);
+      wheels.backward(moveSpeed);
       prevMotorState = motorState;
       break;
     case RUN_L:
-      turnLeft(moveSpeed);
+      wheels.turnLeft(moveSpeed);
       prevMotorState = motorState;
       break;
     case RUN_R:
-      turnRight(moveSpeed);
+      wheels.turnRight(moveSpeed);
       prevMotorState = motorState;
       break;
     case STOP:
       if (prevMotorState != motorState)
       {
         prevMotorState = motorState;
-        stop();
+        wheels.stop();
       }
       break;
   }
@@ -117,18 +57,18 @@ void obstacleAvoidanceMode()
   uint8_t randNumber = random(2);
   if ((d > HIGH_DISTANCE) || (d == 0))
   {
-    forward(moveSpeed);
+    wheels.forward(moveSpeed);
   }
   else if ((d > LOW_DISTANCE) && (d < HIGH_DISTANCE))
   {
     switch (randNumber)
     {
       case 0:
-        turnLeft(moveSpeed);
+        wheels.turnLeft(moveSpeed);
         delay(300);
         break;
       case 1:
-        turnRight(moveSpeed);
+        wheels.turnRight(moveSpeed);
         delay(300);
         break;
     }
@@ -138,11 +78,11 @@ void obstacleAvoidanceMode()
     switch (randNumber)
     {
       case 0:
-        turnLeft(moveSpeed);
+        wheels.turnLeft(moveSpeed);
         delay(800);
         break;
       case 1:
-        turnRight(moveSpeed);
+        wheels.turnRight(moveSpeed);
         delay(800);
         break;
     }
@@ -161,12 +101,12 @@ void lineFollowingMode()
   switch (val)
   {
     case S1_IN_S2_IN:
-      forward(moveSpeed);
+      wheels.forward(moveSpeed);
       lineFollowFlag = 10;
       break;
 
     case S1_IN_S2_OUT:
-      forward(moveSpeed);
+      wheels.forward(moveSpeed);
       if (lineFollowFlag > 1)
       {
         lineFollowFlag--;
@@ -174,7 +114,7 @@ void lineFollowingMode()
       break;
 
     case S1_OUT_S2_IN:
-      forward(moveSpeed);
+      wheels.forward(moveSpeed);
       if (lineFollowFlag < 20)
       {
         lineFollowFlag++;
@@ -184,15 +124,15 @@ void lineFollowingMode()
     case S1_OUT_S2_OUT:
       if (lineFollowFlag == 10)
       {
-        backward(moveSpeed);
+        wheels.backward(moveSpeed);
       }
       if (lineFollowFlag < 10)
       {
-        forwardAndTurnLeft(moveSpeed);
+        wheels.forwardAndTurnLeft(moveSpeed);
       }
       if (lineFollowFlag > 10)
       {
-        forwardAndTurnRight(moveSpeed);
+        wheels.forwardAndTurnRight(moveSpeed);
       }
       break;
   }
@@ -217,7 +157,7 @@ void startingBuzz() {
 void setup()
 {
   delay(5);
-  stop();
+  wheels.stop();
   pinMode(13, OUTPUT);
   pinMode(7, INPUT);
   digitalWrite(13, HIGH);

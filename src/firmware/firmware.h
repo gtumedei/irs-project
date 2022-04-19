@@ -47,8 +47,4 @@ extern int moveSpeed;
 extern int minSpeed;
 extern int factor;
 
-// TODO remove
-void stop();
-void changeSpeed(int spd);
-
 #endif

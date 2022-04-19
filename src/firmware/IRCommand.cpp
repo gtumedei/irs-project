@@ -12,7 +12,7 @@ void handleIRCommand()
       case IR_BUTTON_A:
         moveSpeed = 220;
         mode = DRIVING_MODE;
-        stop();
+        wheels.stop();
         cli();
         buzzer.tone(NTD1, 300);
         sei();
@@ -27,7 +27,7 @@ void handleIRCommand()
       case IR_BUTTON_B:
         moveSpeed = 200;
         mode = OBSTACLE_AVOIDANCE_MODE;
-        stop();
+        wheels.stop();
         cli();
         buzzer.tone(NTD2, 300);
         sei();
@@ -42,7 +42,7 @@ void handleIRCommand()
       case IR_BUTTON_C:
         moveSpeed = 200;
         mode = LINE_FOLLWING_MODE;
-        stop();
+        wheels.stop();
         cli();
         buzzer.tone(NTD3, 300);
         sei();
@@ -110,55 +110,55 @@ void handleIRCommand()
         cli();
         buzzer.tone(NTDH2, 300);
         sei();
-        changeSpeed(factor * 9 + minSpeed);
+        moveSpeed = factor * 9 + minSpeed;
         break;
       case IR_BUTTON_8:
         cli();
         buzzer.tone(NTDH1, 300);
         sei();
-        changeSpeed(factor * 9 + minSpeed);
+        moveSpeed = factor * 9 + minSpeed;
         break;
       case IR_BUTTON_7:
         cli();
         buzzer.tone(NTD7, 300);
         sei();
-        changeSpeed(factor * 9 + minSpeed);
+        moveSpeed = factor * 9 + minSpeed;
         break;
       case IR_BUTTON_6:
         cli();
         buzzer.tone(NTD6, 300);
         sei();
-        changeSpeed(factor * 6 + minSpeed);
+        moveSpeed = factor * 6 + minSpeed;
         break;
       case IR_BUTTON_5:
         cli();
         buzzer.tone(NTD5, 300);
         sei();
-        changeSpeed(factor * 6 + minSpeed);
+        moveSpeed = factor * 6 + minSpeed;
         break;
       case IR_BUTTON_4:
         cli();
         buzzer.tone(NTD4, 300);
         sei();
-        changeSpeed(factor * 6 + minSpeed);
+        moveSpeed = factor * 6 + minSpeed;
         break;
       case IR_BUTTON_3:
         cli();
         buzzer.tone(NTD3, 300);
         sei();
-        changeSpeed(factor * 3 + minSpeed);
+        moveSpeed = factor * 3 + minSpeed;
         break;
       case IR_BUTTON_2:
         cli();
         buzzer.tone(NTD2, 300);
         sei();
-        changeSpeed(factor * 3 + minSpeed);
+        moveSpeed = factor * 3 + minSpeed;
         break;
       case IR_BUTTON_1:
         cli();
         buzzer.tone(NTD1, 300);
         sei();
-        changeSpeed(factor * 3 + minSpeed);
+        moveSpeed = factor * 3 + minSpeed;
         break;
     }
   }
