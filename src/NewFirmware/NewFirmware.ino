@@ -1,4 +1,4 @@
-#include "NewFirmware.h"
+  #include "NewFirmware.h"
 
 MeRGBLed rgbLed(0, 16);
 MeUltrasonicSensor ultrasonicSensor(PORT_3);
@@ -33,6 +33,7 @@ void setup()
   startingBuzz();
   Serial.begin(9600);
   ir.begin();
+  randomSeed(analogRead(6));
 }
 
 void loop()

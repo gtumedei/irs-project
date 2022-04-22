@@ -2,6 +2,7 @@
 #define NewFirmware_H
 
 #include <MeMCore.h>
+#include <NoDelay.h>
 #include "BuzzerTones.h"
 #include "MeMCoreExtensions.h"
 
@@ -21,10 +22,6 @@ enum Mode
   OBSTACLE_AVOIDANCE_MODE,
   LINE_FOLLWING_MODE
 };
-
-// Distances for the ultrasonic sensor
-#define HIGH_DISTANCE 15
-#define LOW_DISTANCE 15
 
 extern MeRGBLed rgbLed;
 extern MeUltrasonicSensor ultrasonicSensor;
