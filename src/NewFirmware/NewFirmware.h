@@ -16,8 +16,7 @@ enum Direction {
 };
 
 // Robot modes
-enum Mode
-{
+enum Mode {
   DRIVING_MODE,
   OBSTACLE_AVOIDANCE_MODE,
   LINE_FOLLWING_MODE

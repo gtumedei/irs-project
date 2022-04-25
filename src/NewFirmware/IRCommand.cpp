@@ -1,7 +1,6 @@
 #include "NewFirmware.h"
 
-void handleIRCommand()
-{
+void handleIRCommand() {
   static long time = millis();
   if (ir.decode())
   {

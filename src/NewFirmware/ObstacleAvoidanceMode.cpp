@@ -5,24 +5,32 @@
 
 #define TURN_DELAY 5000
 
-bool tryLeft = false;
-bool tryRight = false;
-unsigned long lastTurnTimestamp = 0;
-
 uint8_t distance = 0;
 
+// Wether or not the robot has tried turning left and right to avoid an obstacle
+bool avoiding = false;
+bool changedDirection = false;
+
+// Timestamp of the last turn (both random turns and obstacle avoidance turns)
+unsigned long lastTurnTimestamp = 0;
+
+TurnDirection turnDirection = DIR_NONE;
+
 void wander() {
-  tryLeft = false;
-  tryRight = false;
-  uint8_t r = random(30);
+  // Reset obstacle avoidance variables
+  avoiding = false;
+  changedDirection = false;
+  turnDirection = DIR_NONE;
+
   unsigned long timestamp = millis();
   bool canTurn = timestamp - lastTurnTimestamp > TURN_DELAY;
+  uint8_t r = random(30);
   if (r == 0 && canTurn) {
-    wheels.turnRight(moveSpeed);
+    wheels.forwardAndTurnRight(moveSpeed);
     lastTurnTimestamp = timestamp;
     delay(500);
   } else if (r == 1 && canTurn) {
-    wheels.turnLeft(moveSpeed);
+    wheels.forwardAndTurnLeft(moveSpeed);
     lastTurnTimestamp = timestamp;
     delay(500);
   } else {
@@ -32,29 +40,19 @@ void wander() {
 }
 
 void avoidObstacle() {
-  if (tryLeft && tryRight) {
-    tryLeft = false;
-    tryRight = false;
-    wheels.backward(moveSpeed);
-  } else if (tryLeft && distance < LOW_DISTANCE) {
-    wheels.turnRight(moveSpeed);
-    tryRight = true;
-  } else if (tryRight && distance < LOW_DISTANCE) {
-    wheels.turnLeft(moveSpeed);
-    tryLeft = true;
+  lastTurnTimestamp = millis();
+  if (!avoiding) {
+    // On first entering avoidance mode, turn in a random direction
+    avoiding = true;
+    turnDirection = random(2) == 0 ? DIR_RIGHT : DIR_LEFT;
+    wheels.turn(turnDirection, moveSpeed);
   } else {
-    uint8_t r = random(2);
-    switch (r)
-    {
-      case 0:
-        wheels.turnLeft(moveSpeed);
-        tryLeft = true;
-        break;
-      case 1:
-        wheels.turnRight(moveSpeed);
-        tryRight = true;
-        break;
+    // Invert turning direction if the distance has lowed
+    if (distance < LOW_DISTANCE && !changedDirection) {
+      changedDirection = true;
+      turnDirection = turnDirection == DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
     }
+    wheels.turn(turnDirection, moveSpeed);
   }
   delay(300);
 }

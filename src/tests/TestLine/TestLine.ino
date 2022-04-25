@@ -2,13 +2,11 @@
 
 MeLineFollower lineFinder(PORT_2);
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
 }
 
-void loop()
-{
+void loop() {
   int sensorState = lineFinder.readSensors();
   switch(sensorState)
   {

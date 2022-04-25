@@ -1,7 +1,6 @@
 #include "Firmware.h"
 
-void obstacleAvoidanceMode()
-{
+void obstacleAvoidanceMode() {
   uint8_t d = ultrasonicSensor.distanceCm(70);
   static long time = millis();
   randomSeed(analogRead(6));

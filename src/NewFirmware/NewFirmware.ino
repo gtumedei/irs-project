@@ -15,8 +15,7 @@ Direction motorState = STOP;
 Direction prevMotorState = STOP;
 Mode mode = DRIVING_MODE;
 
-void setup()
-{
+void setup() {
   delay(5);
   wheels.stop();
   pinMode(13, OUTPUT);
@@ -36,8 +35,7 @@ void setup()
   randomSeed(analogRead(6));
 }
 
-void loop()
-{
+void loop() {
   while (1)
   {
     handleIRCommand();

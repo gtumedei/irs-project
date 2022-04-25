@@ -1,7 +1,6 @@
 #include "Firmware.h"
 
-void drivingMode()
-{
+void drivingMode() {
   switch (motorState)
   {
     case RUN_F:

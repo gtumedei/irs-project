@@ -2,8 +2,7 @@
 
 int lineFollowFlag = 0;
 
-void lineFollowingMode()
-{
+void lineFollowingMode() {
   uint8_t val;
   val = lineFollower.readSensors();
   if (moveSpeed > 230)

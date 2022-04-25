@@ -5,13 +5,11 @@ MeWheels wheels(M2, M1);
 
 uint8_t motorSpeed = 100;
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
 }
 
-void loop()
-{
+void loop() {
   wheels.spinLeft(motorSpeed);
   Serial.println("Left wheel spinning");
   delay(2000);

@@ -5,19 +5,17 @@ MeWheels wheels(M2, M1);
 MeLineFollower lineSensor(PORT_2);
 MeUltrasonicSensor ultrasonicSensor(PORT_3);
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
 }
 
-void loop()
-{
+void loop() {
   int lineSensorState = lineSensor.readSensors();
   double distance = ultrasonicSensor.distanceCm();
   int speed = distance * 255 / 400;
 
   if (speed < 50) {
-    speed = 0; 
+    speed = 0;
   }
 
   Serial.print("Distance: ");

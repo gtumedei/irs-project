@@ -2,14 +2,12 @@
 
 MeUltrasonicSensor ultraSensor(PORT_3);
 
-void setup()
-{
+void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(9600);
 }
 
-void loop()
-{
+void loop() {
   digitalWrite(LED_BUILTIN, HIGH);
   Serial.print("Distance: ");
   Serial.print(ultraSensor.distanceCm());

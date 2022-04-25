@@ -11,8 +11,7 @@ int computeMoveSpeed() {
   return max(speed, MIN_SPEED);
 }
 
-void lineFollowingMode()
-{
+void lineFollowingMode() {
   uint8_t sensorsValue = lineFollower.readSensors();
   Serial.println(moveSpeed);
   switch (sensorsValue)

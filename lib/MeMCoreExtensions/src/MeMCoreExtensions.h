@@ -3,6 +3,12 @@
 
 #include "MeDCMotor.h"
 
+enum TurnDirection {
+  DIR_RIGHT,
+  DIR_LEFT,
+  DIR_NONE
+};
+
 class MeWheels {
 private:
   MeDCMotor rightMotor;
@@ -16,10 +22,13 @@ public:
   void stopLeft();
   void forward(int moveSpeed);
   void backward(int moveSpeed);
+  void turn(TurnDirection direction, int moveSpeed, float factor = 0.8);
   void turnLeft(int moveSpeed, float factor = 0.8);
   void turnRight(int moveSpeed, float factor = 0.8);
+  void forwardAndTurn(TurnDirection direction, int moveSpeed, float factor = 0.8);
   void forwardAndTurnLeft(int moveSpeed, float factor = 0.2);
   void forwardAndTurnRight(int moveSpeed, float factor = 0.2);
+  void backwardAndTurn(TurnDirection direction, int moveSpeed, float factor = 0.8);
   void backwardAndTurnLeft(int moveSpeed, float factor = 0.333);
   void backwardAndTurnRight(int moveSpeed, float factor = 0.333);
   void stop();
