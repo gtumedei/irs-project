@@ -1,6 +1,6 @@
 #include "MeMCore.h"
 
-MeUltrasonicSensor ultraSensor(PORT_3);
+MeUltrasonicSensor ultraSensor(PORT_1);
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);

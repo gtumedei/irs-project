@@ -1,7 +1,7 @@
   #include "NewFirmware.h"
 
 MeRGBLed rgbLed(0, 16);
-MeUltrasonicSensor ultrasonicSensor(PORT_3);
+MeUltrasonicSensor ultrasonicSensor(PORT_1);
 MeLineFollower lineFollower(PORT_2);
 MeIR ir;
 MeBuzzer buzzer;
