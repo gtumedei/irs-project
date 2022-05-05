@@ -1,5 +1,5 @@
-#ifndef NewFirmware_H
-#define NewFirmware_H
+#ifndef ObstacleAvoidanceFirmware_H
+#define ObstacleAvoidanceFirmware_H
 
 #include <MeMCore.h>
 #include <NoDelay.h>
@@ -17,9 +17,8 @@ enum Direction {
 
 // Robot modes
 enum Mode {
-  DRIVING_MODE,
-  OBSTACLE_AVOIDANCE_MODE,
-  LINE_FOLLWING_MODE
+  MANUAL_MODE,
+  AUTO_MODE
 };
 
 extern MeRGBLed rgbLed;
@@ -39,9 +38,8 @@ extern int factor;
 
 void handleIRCommand();
 void handleBuiltinButton();
-void drivingMode();
-void lineFollowingMode();
-void obstacleAvoidanceMode();
+void manualMode();
+void autoMode();
 void startingBuzz();
 
 #endif

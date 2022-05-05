@@ -1,7 +1,8 @@
-#ifndef Firmware_H
-#define Firmware_H
+#ifndef LineFollowingFirmware_H
+#define LineFollowingFirmware_H
 
 #include <MeMCore.h>
+#include <NoDelay.h>
 #include "BuzzerTones.h"
 #include "MeMCoreExtensions.h"
 
@@ -16,14 +17,9 @@ enum Direction {
 
 // Robot modes
 enum Mode {
-  DRIVING_MODE,
-  OBSTACLE_AVOIDANCE_MODE,
-  LINE_FOLLWING_MODE
+  MANUAL_MODE,
+  AUTO_MODE
 };
-
-// Distances for the ultrasonic sensor
-#define HIGH_DISTANCE 15
-#define LOW_DISTANCE 15
 
 extern MeRGBLed rgbLed;
 extern MeUltrasonicSensor ultrasonicSensor;
@@ -42,9 +38,8 @@ extern int factor;
 
 void handleIRCommand();
 void handleBuiltinButton();
-void drivingMode();
-void lineFollowingMode();
-void obstacleAvoidanceMode();
+void manualMode();
+void autoMode();
 void startingBuzz();
 
 #endif

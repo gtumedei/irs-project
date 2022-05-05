@@ -1,4 +1,4 @@
-#include "Firmware.h"
+#include "ObstacleAvoidanceFirmware.h"
 
 boolean currentButtonPressed = false;
 boolean prevButtonPressed = false;
@@ -14,22 +14,9 @@ void handleBuiltinButton() {
     prevButtonPressed = currentButtonPressed;
     if (currentButtonPressed == true)
     {
-      if (mode == DRIVING_MODE)
+      if (mode == MANUAL_MODE)
       {
-        mode = OBSTACLE_AVOIDANCE_MODE;
-        moveSpeed = 200;
-        wheels.stop();
-        cli();
-        buzzer.tone(NTD2, 300);
-        sei();
-        buzzer.noTone();
-        rgbLed.setColor(0,0,0);
-        rgbLed.setColor(0, 10, 0);
-        rgbLed.show();
-      }
-      else if (mode == OBSTACLE_AVOIDANCE_MODE)
-      {
-        mode = LINE_FOLLWING_MODE;
+        mode = AUTO_MODE;
         moveSpeed = 200;
         wheels.stop();
         cli();
@@ -40,9 +27,9 @@ void handleBuiltinButton() {
         rgbLed.setColor(0, 0, 10);
         rgbLed.show();
       }
-      else if (mode == LINE_FOLLWING_MODE)
+      else if (mode == AUTO_MODE)
       {
-        mode = DRIVING_MODE;
+        mode = MANUAL_MODE;
         moveSpeed = 220;
         wheels.stop();
         cli();

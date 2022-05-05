@@ -1,11 +1,18 @@
-#include "NewFirmware.h"
+#include "LightChasingFirmware.h"
+#include <math.h>
 
 #define HIGH_DISTANCE 20
 #define LOW_DISTANCE 5
 
+#define LOW_LIGHT 60
+#define HIGH_LIGHT 600
+#define LIGHT_TRESHOLD 15
+
 #define TURN_DELAY 5000
 
 uint8_t distance = 0;
+int lightRight = 0;
+int lightLeft = 0;
 
 // Wether or not the robot has tried turning left and right to avoid an obstacle
 bool avoiding = false;
@@ -57,11 +64,35 @@ void avoidObstacle() {
   delay(300);
 }
 
-void obstacleAvoidanceMode() {
-  distance = ultrasonicSensor.distanceCm();
-  if (distance > HIGH_DISTANCE || distance == 0) {
-    wander();
+void chaseLight() {
+  Serial.print("Left value = ");
+  Serial.println(lightLeft);
+  Serial.print("Right value = ");
+  Serial.println(lightRight);
+  if (lightRight > HIGH_LIGHT && lightLeft > HIGH_LIGHT) {
+    wheels.stop();
+  } else if(abs(lightRight - lightLeft) <= LIGHT_TRESHOLD) {
+    wheels.forward(moveSpeed);
+  } else if (lightRight > lightLeft) {
+    wheels.forwardAndTurnRight(moveSpeed);
   } else {
-    avoidObstacle();
+    wheels.forwardAndTurnLeft(moveSpeed);
   }
+}
+
+void lightChasingMode() {
+  distance = ultrasonicSensor.distanceCm();
+  lightRight = rightLightSensor.read();
+  lightLeft = leftLightSensor.read();
+  if (distance <= HIGH_DISTANCE && distance != 0) {
+    avoidObstacle();
+  } else if (lightRight >= LOW_LIGHT || lightLeft >= LOW_LIGHT) {
+    chaseLight();
+  } else {
+    wander();
+  }
+}
+
+void autoMode() {
+  lightChasingMode();
 }

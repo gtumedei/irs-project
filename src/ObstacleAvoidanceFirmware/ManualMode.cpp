@@ -1,6 +1,6 @@
-#include "NewFirmware.h"
+#include "ObstacleAvoidanceFirmware.h"
 
-void drivingMode() {
+void manualMode() {
   switch (motorState)
   {
     case RUN_F:

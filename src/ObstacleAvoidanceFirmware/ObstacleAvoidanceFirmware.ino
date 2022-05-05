@@ -1,8 +1,10 @@
-#include "Firmware.h"
+#include "ObstacleAvoidanceFirmware.h"
 
 MeRGBLed rgbLed(0, 16);
 MeUltrasonicSensor ultrasonicSensor(PORT_1);
 MeLineFollower lineFollower(PORT_2);
+MeLightSensor rightLightSensor(PORT_4);
+MeLightSensor leftLightSensor(PORT_3);
 MeIR ir;
 MeBuzzer buzzer;
 MeWheels wheels(M2, M1);
@@ -13,7 +15,7 @@ int factor = 23;
 
 Direction motorState = STOP;
 Direction prevMotorState = STOP;
-Mode mode = DRIVING_MODE;
+Mode mode = MANUAL_MODE;
 
 void setup() {
   delay(5);
@@ -32,6 +34,7 @@ void setup() {
   startingBuzz();
   Serial.begin(9600);
   ir.begin();
+  randomSeed(analogRead(6));
 }
 
 void loop() {
@@ -42,14 +45,11 @@ void loop() {
     // Execute the selected mode
     switch (mode)
     {
-      case DRIVING_MODE:
-        drivingMode();
+      case MANUAL_MODE:
+        manualMode();
         break;
-      case OBSTACLE_AVOIDANCE_MODE:
-        obstacleAvoidanceMode();
-        break;
-      case LINE_FOLLWING_MODE:
-        lineFollowingMode();
+      case AUTO_MODE:
+        autoMode();
         break;
     }
   }

@@ -1,5 +1,5 @@
 #include <math.h>
-#include "NewFirmware.h"
+#include "LineFollowingFirmware.h"
 
 #define MAX_SPEED 255
 #define MIN_SPEED 230
@@ -55,4 +55,8 @@ void lineFollowingMode() {
       }
       break;
   }
+}
+
+void autoMode() {
+  lineFollowingMode();
 }
