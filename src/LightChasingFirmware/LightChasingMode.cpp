@@ -4,15 +4,17 @@
 #define HIGH_DISTANCE 20
 #define LOW_DISTANCE 5
 
-#define LOW_LIGHT 60
-#define HIGH_LIGHT 600
-#define LIGHT_TRESHOLD 15
+#define MIN_TRESHOLD 10
+#define MAX_TRESHOLD 40
 
 #define TURN_DELAY 5000
 
 uint8_t distance = 0;
 int lightRight = 0;
 int lightLeft = 0;
+int lightTreshold = MIN_TRESHOLD;
+int lowLight = 0;
+int highLight = 0;
 
 // Wether or not the robot has tried turning left and right to avoid an obstacle
 bool avoiding = false;
@@ -22,6 +24,30 @@ bool changedDirection = false;
 unsigned long lastTurnTimestamp = 0;
 
 TurnDirection turnDirection = DIR_NONE;
+
+int computeLowLight() {
+  int lowLight = 1000;
+  wheels.turnLeft(100);
+  for (int i = 0; i<30; i++) {
+    lightRight = rightLightSensor.read();
+    lightLeft = leftLightSensor.read();
+    int minLight = min(lightLeft, lightRight);
+    lowLight = minLight < lowLight ? minLight : lowLight;
+    delay(100);
+  }
+  wheels.stop();
+  return lowLight;
+}
+
+int computeTreshold() {
+  int lightRange = highLight - lowLight;
+  int tresholdRange = MAX_TRESHOLD - MIN_TRESHOLD;
+  double lightMax = max(lightRight, lightLeft);
+  if (lightMax > lightRange * 0.75 + 60) {
+    return lightMax * tresholdRange / lightRange;
+  }
+  return MIN_TRESHOLD;
+}
 
 void wander() {
   // Reset obstacle avoidance variables
@@ -65,13 +91,16 @@ void avoidObstacle() {
 }
 
 void chaseLight() {
-  Serial.print("Left value = ");
+  lightTreshold = computeTreshold();
+/*   Serial.print("Left value = ");
   Serial.println(lightLeft);
   Serial.print("Right value = ");
   Serial.println(lightRight);
-  if (lightRight > HIGH_LIGHT && lightLeft > HIGH_LIGHT) {
+  Serial.print("Treshold value = ");
+  Serial.println(lightTreshold); */
+  if (lightRight > highLight && lightLeft > highLight) {
     wheels.stop();
-  } else if(abs(lightRight - lightLeft) <= LIGHT_TRESHOLD) {
+  } else if (abs(lightRight - lightLeft) <= lightTreshold) {
     wheels.forward(moveSpeed);
   } else if (lightRight > lightLeft) {
     wheels.forwardAndTurnRight(moveSpeed);
@@ -84,9 +113,17 @@ void lightChasingMode() {
   distance = ultrasonicSensor.distanceCm();
   lightRight = rightLightSensor.read();
   lightLeft = leftLightSensor.read();
-  if (distance <= HIGH_DISTANCE && distance != 0) {
+  if (highLight == 0) {
+    lowLight = computeLowLight();
+    highLight = min(lowLight * 10, 950);
+    Serial.print("Luce minima: ");
+    Serial.println(lowLight);
+    Serial.print("Luce massima: ");
+    Serial.println(highLight);
+  }
+  if (distance <= HIGH_DISTANCE && distance != 0 && !(lightRight > highLight || lightLeft > highLight)) {
     avoidObstacle();
-  } else if (lightRight >= LOW_LIGHT || lightLeft >= LOW_LIGHT) {
+  } else if (lightRight >= lowLight || lightLeft >= lowLight) {
     chaseLight();
   } else {
     wander();
