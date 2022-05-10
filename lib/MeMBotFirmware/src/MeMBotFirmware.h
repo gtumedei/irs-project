@@ -1,5 +1,5 @@
-#ifndef LineFollowingFirmware_H
-#define LineFollowingFirmware_H
+#ifndef GenericFirmaware_H
+#define GenericFirmaware_H
 
 #include <MeMCore.h>
 #include <NoDelay.h>
@@ -24,6 +24,8 @@ enum Mode {
 extern MeRGBLed rgbLed;
 extern MeUltrasonicSensor ultrasonicSensor;
 extern MeLineFollower lineFollower;
+extern MeLightSensor rightLightSensor;
+extern MeLightSensor leftLightSensor;
 extern MeIR ir;
 extern MeBuzzer buzzer;
 extern MeWheels wheels;

@@ -1,4 +1,4 @@
-#include "ObstacleAvoidanceFirmware.h"
+#include "MeMBotFirmware.h"
 
 MeRGBLed rgbLed(0, 16);
 MeUltrasonicSensor ultrasonicSensor(PORT_1);
