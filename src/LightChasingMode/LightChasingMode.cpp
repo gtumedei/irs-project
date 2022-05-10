@@ -1,22 +1,24 @@
 #include <math.h>
 #include "MeMBotFirmware.h"
 
-#define HIGH_DISTANCE 20
-#define LOW_DISTANCE 5
+#define AVOID_DISTANCE 20
+#define CRITICAL_DISTANCE 5
 
 #define MIN_TRESHOLD 10
 #define MAX_TRESHOLD 40
 
 #define TURN_DELAY 5000
 
-uint8_t distance = 0;
 int lightRight = 0;
 int lightLeft = 0;
-int lightTreshold = MIN_TRESHOLD;
-int lowLight = 0;
-int highLight = 0;
 
-// Wether or not the robot has tried turning left and right to avoid an obstacle
+int lightTreshold = MIN_TRESHOLD;
+int chaseLightLevel = 0;
+int doneLightLevel = 0;
+
+uint8_t distance = 0;
+
+// Whether or not the robot has tried turning left and right to avoid an obstacle
 bool avoiding = false;
 bool changedDirection = false;
 
@@ -25,25 +27,28 @@ unsigned long lastTurnTimestamp = 0;
 
 TurnDirection turnDirection = DIR_NONE;
 
-int computeLowLight() {
-  int lowLight = 1000;
-  wheels.turnLeft(100);
-  for (int i = 0; i<30; i++) {
+int computeChaseLightLevel() {
+  int maxLight = -1;
+  wheels.turnLeft(150);
+  for (int i = 0; i < 30; i++) {
     lightRight = rightLightSensor.read();
     lightLeft = leftLightSensor.read();
-    int minLight = min(lightLeft, lightRight);
-    lowLight = minLight < lowLight ? minLight : lowLight;
-    delay(100);
+    maxLight = max(maxLight, max(lightLeft, lightRight));
+    delay(75);
   }
   wheels.stop();
-  return lowLight;
+  return maxLight * 1.1;
+}
+
+int computeDoneLightLevel(int chaseLightLevel) {
+  return -50 + 155 * log(chaseLightLevel);
 }
 
 int computeTreshold() {
-  int lightRange = highLight - lowLight;
+  int lightRange = doneLightLevel - chaseLightLevel;
   int tresholdRange = MAX_TRESHOLD - MIN_TRESHOLD;
   double lightMax = max(lightRight, lightLeft);
-  if (lightMax > lightRange * 0.75 + 60) {
+  if (lightMax > lightRange * 0.75 + chaseLightLevel) {
     return lightMax * tresholdRange / lightRange;
   }
   return MIN_TRESHOLD;
@@ -81,7 +86,7 @@ void avoidObstacle() {
     wheels.turn(turnDirection, moveSpeed);
   } else {
     // Invert turning direction if the distance has lowed
-    if (distance < LOW_DISTANCE && !changedDirection) {
+    if (distance < CRITICAL_DISTANCE && !changedDirection) {
       changedDirection = true;
       turnDirection = turnDirection == DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
     }
@@ -92,13 +97,7 @@ void avoidObstacle() {
 
 void chaseLight() {
   lightTreshold = computeTreshold();
-/*   Serial.print("Left value = ");
-  Serial.println(lightLeft);
-  Serial.print("Right value = ");
-  Serial.println(lightRight);
-  Serial.print("Treshold value = ");
-  Serial.println(lightTreshold); */
-  if (lightRight > highLight && lightLeft > highLight) {
+  if (lightRight > doneLightLevel && lightLeft > doneLightLevel) {
     wheels.stop();
   } else if (abs(lightRight - lightLeft) <= lightTreshold) {
     wheels.forward(moveSpeed);
@@ -113,17 +112,23 @@ void lightChasingMode() {
   distance = ultrasonicSensor.distanceCm();
   lightRight = rightLightSensor.read();
   lightLeft = leftLightSensor.read();
-  if (highLight == 0) {
-    lowLight = computeLowLight();
-    highLight = min(lowLight * 10, 950);
-    Serial.print("Luce minima: ");
-    Serial.println(lowLight);
-    Serial.print("Luce massima: ");
-    Serial.println(highLight);
+  if (doneLightLevel == 0) {
+    chaseLightLevel = computeChaseLightLevel();
+    doneLightLevel = computeDoneLightLevel(chaseLightLevel);
+    Serial.print("Chase level: ");
+    Serial.println(chaseLightLevel);
+    Serial.print("Done level: ");
+    Serial.println(doneLightLevel);
   }
-  if (distance <= HIGH_DISTANCE && distance != 0 && !(lightRight > highLight || lightLeft > highLight)) {
+  Serial.print("Left value = ");
+  Serial.println(lightLeft);
+  Serial.print("Right value = ");
+  Serial.println(lightRight);
+  Serial.print("Treshold value = ");
+  Serial.println(lightTreshold);
+  if (distance <= AVOID_DISTANCE && distance != 0 && !(lightRight > doneLightLevel || lightLeft > doneLightLevel)) {
     avoidObstacle();
-  } else if (lightRight >= lowLight || lightLeft >= lowLight) {
+  } else if (lightRight >= chaseLightLevel || lightLeft >= chaseLightLevel) {
     chaseLight();
   } else {
     wander();

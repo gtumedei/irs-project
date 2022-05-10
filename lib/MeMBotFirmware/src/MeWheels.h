@@ -1,5 +1,5 @@
-#ifndef MeMCoreExtensions_H
-#define MeMCoreExtensions_H
+#ifndef MeWheels_H
+#define MeWheels_H
 
 #include "MeDCMotor.h"
 
