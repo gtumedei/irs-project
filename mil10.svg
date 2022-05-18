@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="200mm"
+   height="64mm"
+   viewBox="0 0 200 64"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="mil10.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:export-filename="/home/gianni/Desktop/mil10.png"
+   inkscape:export-xdpi="162.56"
+   inkscape:export-ydpi="162.56"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.95497112"
+     inkscape:cx="326.71145"
+     inkscape:cy="152.8842"
+     inkscape:window-width="2560"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="text2671" />
+  <defs
+     id="defs2">
+    <rect
+       x="49.106766"
+       y="137.45729"
+       width="647.0304"
+       height="242.47369"
+       id="rect2673" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-13.035595,-37.281816)">
+    <g
+       aria-label="mil10"
+       transform="matrix(2.0865622,0,0,2.0865622,-94.93862,-268.80025)"
+       id="text2671"
+       style="font-size:40px;line-height:1.25;white-space:pre;shape-inside:url(#rect2673)">
+      <g
+         id="g23236"
+         transform="translate(3.9016982,1.4762312)">
+        <path
+           d="m 67.987422,160.81204 v 4.6 h -4.64 v -4.08 q 0,-1.64 -0.96,-2.4 -0.96,-0.8 -2.48,-0.8 -1.08,0 -2,0.36 -0.92,0.32 -1.52,0.72 v 6.2 h -4.64 v -6.44 q 0,-0.92 0.36,-1.52 0.4,-0.64 1.24,-1.16 1.2,-0.8 3,-1.32 1.8,-0.52 3.68,-0.52 1.96,0 3.6,0.6 1.64,0.6 2.64,1.76 0.28,0.24 0.48,0.48 0.24,0.24 0.4,0.56 0.36,0.56 0.6,1.36 0.24,0.76 0.24,1.6 z m 11.6,0.36 v 4.24 h -4.64 v -4.08 q 0,-1.64 -0.92,-2.4 -0.92,-0.8 -2.48,-0.8 -1.12,0 -2.2,0.48 -1.04,0.48 -1.84,1.28 l -2.24,-2.92 q 1.16,-1.04 2.84,-1.76 1.72,-0.76 4,-0.76 2.12,0 3.8,0.68 1.72,0.68 2.68,2.2 1,1.48 1,3.84 z m -27.84,2.28 h 4.64 v 10.32 q -0.32,0.12 -0.88,0.2 -0.56,0.12 -1.24,0.12 -1.28,0 -1.92,-0.48 -0.6,-0.48 -0.6,-1.64 z m 11.6,0 h 4.64 v 10.32 q -0.28,0.12 -0.88,0.2 -0.56,0.12 -1.24,0.12 -1.28,0 -1.92,-0.48 -0.6,-0.48 -0.6,-1.64 z m 11.6,0 h 4.64 v 10.32 q -0.28,0.12 -0.88,0.2 -0.56,0.12 -1.2,0.12 -1.32,0 -1.96,-0.48 -0.6,-0.48 -0.6,-1.64 z"
+           style="font-weight:600;font-family:'Baloo Tamma 2';-inkscape-font-specification:'Baloo Tamma 2 Semi-Bold';fill:#ff2e38;fill-opacity:1"
+           id="path23022" />
+        <path
+           d="m 84.627386,149.33204 v 0 q 0,-1.12 0.76,-1.88 0.8,-0.76 1.96,-0.76 1.24,0 1.96,0.76 0.76,0.76 0.76,1.88 0,1.08 -0.76,1.88 -0.72,0.76 -1.96,0.76 -1.16,0 -1.96,-0.76 -0.76,-0.8 -0.76,-1.88 z m 0.4,13.96 h 4.64 v 10.48 q -0.28,0.12 -0.84,0.2 -0.56,0.12 -1.24,0.12 -1.28,0 -1.92,-0.48 -0.64,-0.48 -0.64,-1.64 z m 4.64,2.36 h -4.64 v -10.52 q 0.32,-0.08 0.88,-0.16 0.6,-0.12 1.28,-0.12 1.28,0 1.88,0.48 0.6,0.44 0.6,1.68 z"
+           style="font-weight:600;font-family:'Baloo Tamma 2';-inkscape-font-specification:'Baloo Tamma 2 Semi-Bold';fill:#ff5500;fill-opacity:1"
+           id="path23024" />
+        <path
+           d="m 95.47545,163.29204 4.64,0.28 v 10.2 q -0.32,0.12 -0.88,0.2 -0.56,0.12 -1.24,0.12 -1.28,0 -1.92,-0.48 -0.6,-0.48 -0.6,-1.64 z m 4.64,2.64 -4.64,-0.28 v -17.8 q 0.28,-0.08 0.84,-0.16 0.6,-0.12 1.24,-0.12 1.32,0 1.92,0.48 0.64,0.44 0.64,1.64 z"
+           style="font-weight:600;font-family:'Baloo Tamma 2';-inkscape-font-specification:'Baloo Tamma 2 Semi-Bold';fill:#ffaf00;fill-opacity:1"
+           id="path23026" />
+        <path
+           d="m 114.15544,165.85204 h -4.32 v -12.6 l -4.92,2.08 q -0.56,-0.24 -1,-0.72 -0.4,-0.52 -0.4,-1.36 0,-1.52 1.92,-2.28 l 5.36,-2.2 h 1 q 1.12,0 1.72,0.64 0.64,0.64 0.64,1.76 z m -4.32,-2.76 h 4.32 v 10.76 q -0.24,0.12 -0.8,0.2 -0.52,0.12 -1.16,0.12 -1.2,0 -1.8,-0.44 -0.56,-0.48 -0.56,-1.6 z"
+           style="font-weight:600;font-family:'Baloo Tamma 2';-inkscape-font-specification:'Baloo Tamma 2 Semi-Bold';fill:#00c02d;fill-opacity:1"
+           id="path23028" />
+        <path
+           d="m 135.35547,161.45204 v 0 q 0,-3.28 -0.76,-5.32 -0.72,-2.08 -2,-3.04 -1.28,-0.96 -2.88,-0.96 -1.56,0 -2.84,1 -1.28,1 -2.04,3.08 -0.76,2.04 -0.76,5.24 0,4.56 1.48,6.96 1.48,2.4 4.16,2.4 2.68,0 4.16,-2.4 1.48,-2.4 1.48,-6.96 z m -5.64,12.96 v 0 q -2.96,0 -5.24,-1.4 -2.28,-1.44 -3.56,-4.32 -1.24,-2.88 -1.24,-7.24 0,-4.56 1.36,-7.4 1.4,-2.84 3.68,-4.2 2.28,-1.36 5,-1.36 2.72,0 5,1.4 2.32,1.36 3.68,4.24 1.4,2.84 1.4,7.32 0,4.32 -1.28,7.2 -1.28,2.88 -3.56,4.32 -2.24,1.44 -5.24,1.44 z"
+           style="font-weight:600;font-family:'Baloo Tamma 2';-inkscape-font-specification:'Baloo Tamma 2 Semi-Bold';fill:#0074ff;fill-opacity:1"
+           id="path23030" />
+      </g>
+    </g>
+  </g>
+</svg>
