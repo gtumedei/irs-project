@@ -85,7 +85,7 @@ The main criteria used to identify the robot kit that best fits our needs are th
                 <ul>
                     <li>Uses Arduino as its mainboard</li>
                     <li>Very solid chassis that protects every sensor</li>
-                    <li>asdasd</li>
+                    <li>Front-facing camera</li>
                 </ul>
             </td>
             <td>
@@ -106,12 +106,12 @@ The main criteria used to identify the robot kit that best fits our needs are th
                 <ul>
                     <li>Uses Arduino as its mainboard</li>
                     <li>Very solid chassis that protects every sensor</li>
-                    <li>asdasd</li>
+                    <li>Cheaper compared to the other options</li>
+                    <li>Has two wheels</li>
                 </ul>
             </td>
             <td>
                 <ul>
-                    <li>Has four wheels</li>
                     <li>An expansion board occupies every mainboard pin, preventing the installation of new modules</li>
                     <li>No light sensors</li>
                 </ul>
@@ -125,16 +125,16 @@ The main criteria used to identify the robot kit that best fits our needs are th
             </td>
             <td>
                 <ul>
-                    <li>asdasd</li>
-                    <li>asdasd</li>
-                    <li>asdasd</li>
+                    <li>Movable ultrasonic sensor</li>
+                    <li>Uses Arduino as its mainboard</li>
                 </ul>
             </td>
             <td>
                 <ul>
-                    <li>asdasd</li>
-                    <li>asdasd</li>
-                    <li>asdasd</li>
+                    <li>Has four wheels</li>
+                    <li>No light sensors</li>
+                    <li>Exposed sensors and wires</li>
+                    <li>Poor documentation</li>
                 </ul>
             </td>
         </tr>
@@ -146,16 +146,15 @@ The main criteria used to identify the robot kit that best fits our needs are th
             </td>
             <td>
                 <ul>
-                    <li>asdasd</li>
-                    <li>asdasd</li>
-                    <li>asdasd</li>
+                    <li>Has two wheels</li>
+                    <li>Uses Raspberry Pi as its mainboard</li>
                 </ul>
             </td>
             <td>
                 <ul>
-                    <li>asdasd</li>
-                    <li>asdasd</li>
-                    <li>asdasd</li>
+                    <li>No light sensors</li>
+                    <li>Exposed sensors and wires</li>
+                    <li>Poor documentation</li>
                 </ul>
             </td>
         </tr>
@@ -164,11 +163,100 @@ The main criteria used to identify the robot kit that best fits our needs are th
 
 ### Our choice
 
+After careful analysis of the various options the market has to offer, our choice fell on the mBot kit produced by Makeblock.
+
 ## Robot kit analysis
+
+The kit provided contains all the components necessary to meet most of the features required to complete the project objectives. The only lack is related to light sensors, which are needed for possible implementation of more complex behaviors such as combining obstacle avoidance and light chasing.
+For this reason, we decided to purchase an additional kit that allows to implement three additional modes to the robot:
+- Light chasing
+- Scorpion (add a rgb-responsive tail)
+- Intelligent desk light
+
+<table>
+    <thead>
+        <tr>
+            <th>Makeblock mBot kit</th>
+            <th>Makeblock mBot Add-on 3-in-1</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <img height="200" src="https://drive.google.com/uc?export=view&id=1iIHip_pIJdKip6pugbEDiucPwCZXv268">
+                <img height="300" src="https://drive.google.com/uc?export=view&id=1te4AjnjjeQa8E3wZ79ZFdrNh0Z49Befm">
+            </td>
+            <td>
+                <img height="300" src="https://drive.google.com/uc?export=view&id=1REbNeqX91fLJRQoElLyLo-WaTCKrCl7D">
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 ### Hardware
 
+<table>
+    <thead>
+        <tr>
+            <th>Kit</th>
+            <th>Components list</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <strong>Makeblock mBot kit</strong><br>
+                <img height="350" src="https://drive.google.com/uc?export=view&id=1DoDd6_Jf0MZ20qUcL1Fyng-e5RsvFIkV">
+            </td>
+            <td>
+                <ul>
+                    <li>AA battery holder</li>
+                    <li>Chassis</li>
+                    <li>Fasteners</li>
+                    <li>IR remote</li>
+                    <li>Line-follower sensor</li>
+                    <li>Mainboard mCore</li>
+                    <li>Mini screwdriver</li>
+                    <li>Mini wheel</li>
+                    <li>Motors</li>
+                    <li>RJ25 cables</li>
+                    <li>Screwdriver</li>
+                    <li>USB cable</li>
+                    <li>Ultrasonic sensor</li>
+                    <li>Velcro sticker</li>
+                    <li>Wheels</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>Makeblock mBot Add-on 3-in-1</strong><br>
+                <img height="350" src="https://drive.google.com/uc?export=view&id=1sX3-d8Da5P27FlVUPPt8YvPWt6nwU3FW">
+            </td>
+            <td>
+                <ul>
+                    <li>Beam and plates</li>
+                    <li>Fasteners</li>
+                    <li>M5/M7 wrench</li>
+                    <li>Me RGB LED</li>
+                    <li>Me light sensor</li>
+                    <li>Me sound sensor</li>
+                    <li>RJ25 cables</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 ### Software
+
+Most of the robot kits produced by Makeblock, including mBot, support several development modes, which can be chosen according to the desired level of difficulty, making them ideal for any user.
+
+- **mBlock 5**: cooding tool that supports both Python and block programming via a dedicated browser platform. More information available at https://mblock.makeblock.com/en-us/
+- **mBlock Blockly**: game-based programmable robot app that supports block programming, specifically designed for younger users. More information available at https://www.makeblock.com/software/mblock-app
+- **Makeblock App**: all-in-1 controller for any Makeblock robots that supports multiple control modes and 3D modeling. More information available at https://www.makeblock.com/software/makeblock-app
+
+The above development options have been listed for completeness purposes only. In fact, given the type of project being carried out, the development mode we have chosen is from scratch. In this regard, Makeblock provides a particularly comprehensive GitHub repository, accessible at https://github.com/Makeblock-official/Makeblock-Libraries
 
 ## Controller design
 
