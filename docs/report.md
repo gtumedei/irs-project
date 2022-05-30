@@ -85,7 +85,7 @@ The main criteria used to identify the robot kit that best fits our needs are th
                 <ul>
                     <li>Uses Arduino as its mainboard</li>
                     <li>Very solid chassis that protects every sensor</li>
-                    <li>Front-facing camera</li>
+                    <li>Front-facing servo motor helps with obstacle avoidance</li>
                 </ul>
             </td>
             <td>
@@ -112,7 +112,7 @@ The main criteria used to identify the robot kit that best fits our needs are th
             </td>
             <td>
                 <ul>
-                    <li>An expansion board occupies every mainboard pin, preventing the installation of new modules</li>
+                    <li>Offers expansion ports, but we were unable to find first party additional modules</li>
                     <li>No light sensors</li>
                 </ul>
             </td>
@@ -125,8 +125,8 @@ The main criteria used to identify the robot kit that best fits our needs are th
             </td>
             <td>
                 <ul>
-                    <li>Movable ultrasonic sensor</li>
                     <li>Uses Arduino as its mainboard</li>
+                    <li>Front-facing servo motor helps with obstacle avoidance</li>
                 </ul>
             </td>
             <td>
@@ -163,14 +163,14 @@ The main criteria used to identify the robot kit that best fits our needs are th
 
 ### Our choice
 
-After careful analysis of the various options the market has to offer, our choice fell on the mBot kit produced by Makeblock.
+After a careful analysis of the various options the market has to offer, our choice fell on the mBot kit produced by Makeblock. The only real downside is that we had to buy the light sensors separately, bringing the total cost just shy of the 100€ price limit.
 
 ## Robot kit analysis
 
-The kit provided contains all the components necessary to meet most of the features required to complete the project objectives. The only lack is related to light sensors, which are needed for possible implementation of more complex behaviors such as combining obstacle avoidance and light chasing.
-For this reason, we decided to purchase an additional kit that allows to implement three additional modes to the robot:
-- Light chasing
-- Scorpion (add a rgb-responsive tail)
+The provided kit contains all the components necessary to meet most of the features required to complete the project objectives. The only lack is related to light sensors, which are needed for the implementation of more complex behaviors such as combining obstacle avoidance and light chasing.
+For this reason, we decided to purchase an additional kit that allows to setup the robot in three additional configurations:
+- Light chasing (the one we were interested in)
+- Scorpion (with a rgb-responsive tail)
 - Intelligent desk light
 
 <table>
@@ -196,93 +196,122 @@ For this reason, we decided to purchase an additional kit that allows to impleme
 ### Hardware
 
 <table>
-    <thead>
-        <tr>
-            <th>Kit</th>
-            <th>Components list</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <strong>Makeblock mBot kit</strong><br>
-                <img height="350" src="https://drive.google.com/uc?export=view&id=1DoDd6_Jf0MZ20qUcL1Fyng-e5RsvFIkV">
-            </td>
-            <td>
-                <ul>
-                    <li>AA battery holder</li>
-                    <li>Chassis</li>
-                    <li>Fasteners</li>
-                    <li>IR remote</li>
-                    <li>Line-follower sensor</li>
-                    <li>Mainboard mCore</li>
-                    <li>Mini screwdriver</li>
-                    <li>Mini wheel</li>
-                    <li>Motors</li>
-                    <li>RJ25 cables</li>
-                    <li>Screwdriver</li>
-                    <li>USB cable</li>
-                    <li>Ultrasonic sensor</li>
-                    <li>Velcro sticker</li>
-                    <li>Wheels</li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <strong>Makeblock mBot Add-on 3-in-1</strong><br>
-                <img height="350" src="https://drive.google.com/uc?export=view&id=1sX3-d8Da5P27FlVUPPt8YvPWt6nwU3FW">
-            </td>
-            <td>
-                <ul>
-                    <li>Beam and plates</li>
-                    <li>Fasteners</li>
-                    <li>M5/M7 wrench</li>
-                    <li>Me RGB LED</li>
-                    <li>Me light sensor</li>
-                    <li>Me sound sensor</li>
-                    <li>RJ25 cables</li>
-                </ul>
-            </td>
-        </tr>
-    </tbody>
+    <tr>
+        <td colspan="2">Makeblock mBot kit</td>
+    </tr>
+    <tr>
+        <td>
+            <img height="350" src="https://drive.google.com/uc?export=view&id=1DoDd6_Jf0MZ20qUcL1Fyng-e5RsvFIkV">
+        </td>
+        <td>
+            <ul>
+                <li>AA battery holder</li>
+                <li>Chassis</li>
+                <li>Fasteners</li>
+                <li>IR remote</li>
+                <li>Line-follower sensor</li>
+                <li>Mainboard mCore</li>
+                <li>Mini screwdriver</li>
+                <li>Mini wheel</li>
+                <li>Motors</li>
+                <li>RJ25 cables</li>
+                <li>Screwdriver</li>
+                <li>USB cable</li>
+                <li>Ultrasonic sensor</li>
+                <li>Velcro sticker</li>
+                <li>Wheels</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Makeblock mBot Add-on 3-in-1</td>
+    </tr>
+    <tr>
+        <td>
+            <img height="350" src="https://drive.google.com/uc?export=view&id=1sX3-d8Da5P27FlVUPPt8YvPWt6nwU3FW">
+        </td>
+        <td>
+            <ul>
+                <li>Beams and plates</li>
+                <li>Fasteners</li>
+                <li>M5/M7 wrench</li>
+                <li>Me RGB LED</li>
+                <li>Me light sensor</li>
+                <li>Me sound sensor</li>
+                <li>RJ25 cables</li>
+            </ul>
+        </td>
+    </tr>
 </table>
 
 ### Software
 
-Most of the robot kits produced by Makeblock, including mBot, support several development modes, which can be chosen according to the desired level of difficulty, making them ideal for any user.
+Most of the robot kits produced by Makeblock, including mBot, support several development platforms, which can be chosen according to the desired level of difficulty, making them ideal for any user.
 
 - **mBlock 5**: cooding tool that supports both Python and block programming via a dedicated browser platform. More information available at https://mblock.makeblock.com/en-us/
-- **mBlock Blockly**: game-based programmable robot app that supports block programming, specifically designed for younger users. More information available at https://www.makeblock.com/software/mblock-app
+- **mBlock Blockly**: game-based robot app that supports block programming, specifically designed for younger users. More information available at https://www.makeblock.com/software/mblock-app
 - **Makeblock App**: all-in-1 controller for any Makeblock robots that supports multiple control modes and 3D modeling. More information available at https://www.makeblock.com/software/makeblock-app
+- **Arduino IDE**: it's just like programming a normal Arduino board, but with additional resources provided by Makeblock through their official GitHub repository, accessible at https://github.com/Makeblock-official/Makeblock-Libraries
 
-The above development options have been listed for completeness purposes only. In fact, given the type of project being carried out, the development mode we have chosen is from scratch. In this regard, Makeblock provides a particularly comprehensive GitHub repository, accessible at https://github.com/Makeblock-official/Makeblock-Libraries
+We obviously chose the latter.
 
-## Controller design
+## Firmware analysis and refactor
+
+### Working with sensors and actuators
+
+**Wheels**
+
+**Line follower sensor**
+
+**Ultrasonic sensor**
+
+**Light sensor**
+
+### Refactoring the default firmware
 
 ## Controller development
 
-### Firmware refactoring
+### Line following
 
-**MeWHeels class**
+**Design**
+
+**Implementation**
+
+### Obstacle avoidance
+
+**Design**
+
+**Implementation**
+
+### Light chasing
+
+**Design**
+
+**Implementation**
+
+---
 
 ### Line following behavior
 
-The first behavior that has been implemented is the mode that allows the robot to follow a black line drawn on the ground. The line-follower sensor is placed below the robot and consists of two sensors, both equipped with an infrared emitter, infrared receiver and a detection range of 1 to 2cm. The infrared emitter continually emits infrared light during the mBot moving: if the infrared light is reflected (encountering white or other light color surfaces), the receiver receives the infrared signal and output the value 1, if the infrared light is absorbed or cannot be reflected, the receiver will not receive the infrared signal but output the value 0.
-The following table shows all four possible scenarios
+The first behavior that has been implemented is the mode that allows the robot to follow a black line drawn on the ground. The line-follower module placed below the robot consists of two sensors, both equipped with an infrared emitter and infrared receiver, with a detection range of 1 to 2cm. The infrared emitters continually generate infrared light. If the light is reflected (encountering white or other light color surfaces), the corresponding receiver gets the infrared signal back and outputs the value 1; if the infrared light is absorbed or cannot be reflected, the receiver will not get the infrared signal back and output the value 0.
+The following table shows all four possible scenarios.
 
 | Case 1                                                                                                | Case 2                                                                                                                                  | Case 3                                                                                                                                  | Case 4                                                                                                                 |
 | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | <img height="250" src="https://drive.google.com/uc?export=view&id=1o2HyuJU_8iDzg89Bkogz3yebSaX4aUMc"> | <img height="250" src="https://drive.google.com/uc?export=view&id=1TijwBejeKzvTrgsoi45z_NsPoeojQDUL">                                   | <img height="250" src="https://drive.google.com/uc?export=view&id=1Depcz2jUsGjtVr_5oxeJX2HKvhep5G_z">                                   | <img height="250" src="https://drive.google.com/uc?export=view&id=16jpkEiu_sicN7yhg33FNrm5AUCvpVmyx">                  |
-| mBot is on the black line, the value of the line-follower sensor is 0. The robot keeps moving foward  | mBot deviates from the black line to the right, the value of the line-follower sensor is 1. The robot turns left to find the black line | mBot deviates from the black line to the left, the value of the line-follower sensor is 2. The robot turns right to find the black line | mBot is not on the black line, the value of the line-follower sensor is 3. THe robot turns back to find the black line |
+| mBot is on the black line, the value of the line-follower sensor is 0. The robot should keep moving forward.  | mBot deviates from the black line to the right, the value of the line-follower sensor is 1. The robot should turn left to find the black line. | mBot deviates from the black line to the left, the value of the line-follower sensor is 2. The robot should turn right to find the black line. | mBot is not on the black line, the value of the line-follower sensor is 3. The robot should move backwards to find the black line. |
 
-The program that allows the robot to assume the behavior of following the line basically consists of a switch that handles the above four cases, moving the wheels according to the value read from the sensors. Regarding the speed, after some tests we identified the following formula as the ideal way to calculate it
+The line following controller is very simple and basically consists of a switch that handles the above four cases, moving the wheels according to the value read from the sensors. Regarding the speed, after some tests we identified the following formula as the ideal way to compute it:
 
-$$ speed= MAX\_SPEED * (1-{\vert direction \vert\over 10 }) $$
+$$ speed= maxSpeed * (1-{\vert direction \vert\over 10 }) $$
 
-Where `MAX_SPEED` is a constant representing the maximum value of speed the robot can reach, which is 255. The calculation is done within the `computeSpeed()` method, which returns the minimum between the calculated speed and `MIN_SPEED`, a constant set to 230.
+Where $maxSpeed$ is a constant representing the maximum value of speed the robot can reach, which is 255. The calculation is done within the `computeSpeed()` function, which returns the minimum between the calculated speed and $minSpeed$, a constant set to 230.
 
-During our tests, we carried out several trials on different tracks to verify that the implementation was working as expected. The first track used was the one bundled with mBot, which is an infinity-shaped line printed on paper. Next, a track was made on cardboard using electrical tape, giving it a rectangular shape to test the robot's behavior in sharp turns. Finally, we turned to the construction of a more complex track that had the properties of the previous ones. The line was at first drawn using an indelible marker, but in this case the sensor was unable to detect it correctly, as the light was not refracted in any way. By redoing the tracing using a can of black paint, the robot was able to walk the line without any hiccups.
+We conducted several tests, placing the robot on different tracks to verify that the implementation was working as expected. The first track used was the one bundled with the mBot kit, which is an infinity-shaped line printed on paper. Next, a track was made on cardboard using electrical tape, giving it a rectangular shape to test the robot's behavior in sharp turns. Finally, we built a more complex track that had the properties of both the previous ones. The line was at first drawn using an indelible marker, but in this case the sensor was unable to detect it correctly, as the ink probably contained some reflective substances. By recreating the tracing using a can of black paint, the robot was able to walk the line without any hiccups.
+
+<!-- Talk about cutting sharp corners -->
+<!-- Talk about the direction value in the code -->
+<!-- Talk about the scientific approach to tests -->
 
 | Track 1                                                                                               | Track 2                                                                                                                                | Track 3                                                                                                                                  |
 | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
