@@ -261,39 +261,14 @@ We obviously chose the latter.
 
 **Wheels**
 
+<img height="250" src="https://drive.google.com/uc?export=view&id=1lmTIVMaEcnv2D_NmNa49LbAqFAn7RR0O">
+<img height="250" src="https://drive.google.com/uc?export=view&id=1vR-N5KxgLyByGvqCfQ3w9mc65ZqfHbHI">
+
+Each of the two wheels equipped by mBot are attached to a servo motor, both connected to the motherboard via two RJ45 connectors. These are mapped inside Arduino to PWM inputs, in this way the rotation speed can be singularly specified using values between 0 and 255.
+
 **Line follower sensor**
 
-**Ultrasonic sensor**
-
-**Light sensor**
-
-### Refactoring the default firmware
-
-## Controller development
-
-### Line following
-
-**Design**
-
-**Implementation**
-
-### Obstacle avoidance
-
-**Design**
-
-**Implementation**
-
-### Light chasing
-
-**Design**
-
-**Implementation**
-
----
-
-### Line following behavior
-
-The first behavior that has been implemented is the mode that allows the robot to follow a black line drawn on the ground. The line-follower module placed below the robot consists of two sensors, both equipped with an infrared emitter and infrared receiver, with a detection range of 1 to 2cm. The infrared emitters continually generate infrared light. If the light is reflected (encountering white or other light color surfaces), the corresponding receiver gets the infrared signal back and outputs the value 1; if the infrared light is absorbed or cannot be reflected, the receiver will not get the infrared signal back and output the value 0.
+The line-follower module placed below the robot consists of two sensors, both equipped with an infrared emitter and infrared receiver, with a detection range of 1 to 2cm. The infrared emitters continually generate infrared light. If the light is reflected (encountering white or other light color surfaces), the corresponding receiver gets the infrared signal back and outputs the value 1; if the infrared light is absorbed or cannot be reflected, the receiver will not get the infrared signal back and output the value 0.
 The following table shows all four possible scenarios.
 
 | Case 1                                                                                                | Case 2                                                                                                                                  | Case 3                                                                                                                                  | Case 4                                                                                                                 |
@@ -301,24 +276,75 @@ The following table shows all four possible scenarios.
 | <img height="250" src="https://drive.google.com/uc?export=view&id=1o2HyuJU_8iDzg89Bkogz3yebSaX4aUMc"> | <img height="250" src="https://drive.google.com/uc?export=view&id=1TijwBejeKzvTrgsoi45z_NsPoeojQDUL">                                   | <img height="250" src="https://drive.google.com/uc?export=view&id=1Depcz2jUsGjtVr_5oxeJX2HKvhep5G_z">                                   | <img height="250" src="https://drive.google.com/uc?export=view&id=16jpkEiu_sicN7yhg33FNrm5AUCvpVmyx">                  |
 | mBot is on the black line, the value of the line-follower sensor is 0. The robot should keep moving forward.  | mBot deviates from the black line to the right, the value of the line-follower sensor is 1. The robot should turn left to find the black line. | mBot deviates from the black line to the left, the value of the line-follower sensor is 2. The robot should turn right to find the black line. | mBot is not on the black line, the value of the line-follower sensor is 3. The robot should move backwards to find the black line. |
 
+**Ultrasonic sensor**
+
+![](https://drive.google.com/uc?export=view&id=1zHcr1mlZDDbEsbjadmiXVXWqKQDyeZ0C)
+
+mBot is equipped with a classic ultrasonic sensor, similar to those found in standard Arduino kits, which allows it to detect obstacles in a range from 1cm to 400cm.
+
+The basic operation of the sensor is quite simple, it emits an ultrasound at high frequency (~40kHz) which travels through the air and if there is an object or obstacle on its path it will bounce back to the module. Considering the travel time of the signal (back and forth) and the speed of the sound you can calculate the distance.
+
+$$ distance = {34cm/ms * time \over 2} $$
+
+**Light sensor**
+
+<img height="250" src="https://drive.google.com/uc?export=view&id=1YW9k6YBKi1IRVWuHb-ds3Y-74Ht0vQQu">
+<img height="250" src="https://drive.google.com/uc?export=view&id=1yaFvBeka8FaKZ4XWClKY8oEpVrLJ_DLi">
+<!-- <img height="350" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba"> -->
+
+The two light sensors available in the add-on kit for mBot are connected to the motherboard via two RJ45 connectors, whose analog ports must necessarily be those numbered as 1 and 2, visible in the photo.
+
+Those sensors are developed on the basis of photoelectric effect principle in semiconductor and can be used to detect the intensity of ambient light.
+
+The photosensitive wavelength range varies between 400 and 1100nm, the analog value of the output goes from 0 to 1000. According to the documentation provided by Makeblock these values can be interpreted as follows:
+- \[0-100]: evening
+- \[100-500]: indoor lighting condition
+- \>500: exposure to sunlight
+
+### Refactoring the default firmware
+
+## Controller development
+
+### Line following
+
+The first behavior that has been implemented is the mode that allows the robot to follow a black line drawn on the ground.
+
+#### Design
+
+#### Tests and experiments
+
+The goal of our tests was, of course, to demonstrate that the robot was able to follow the drawn black line. To carry out the verification of our hypotheses, we created three tracks of increasing difficulty and tested the behavior of the robot ten times each.
+
+- **Infinity-shaped track**: this is the track provided bundled with the robot, characterized by infinity-shaped line printed on paper, so we expected the robot to be able to follow the line without particular difficulty. After adjusting our parameters to optimize the robot's movements, the success rate was 100%.
+- **Rectangular track**: hand-built track using electrical tape on cardboard, the rectangular shape allowed us to test the robot's behavior in sharp turns. Initially, the success factor on this track was relatively low; in the first ten attempts, the robot was able to complete a full lap only 30 percent of the time. We then realized that that the sharp turns needed to be slightly cut off on the outside. This was because otherwise both sensors of the line-following module, by detecting the black track, were communicating to the bot to proceed straight, inevitably causing it to leave the track. By making the above change, the innermost sensor remains inside the track, while the outermost sensor detects the white background, allowing the robot to curve correctly and obtaining a success rate of 100%.
+- **Mixed track**: a more complex track that had the properties of both the previous ones. The line was at first drawn using an indelible marker, but in this case the sensor was unable to detect it correctly, as the ink probably contained some reflective substances. After recreating the track using a black spry can, we were able to make the ten attempts. Despite the difficulty of the path, our experiments yielded excellent results: the robot was able to complete the path 80% of the time.
+
+| Infinity-shaped track                                                                                               | Rectangular track                                                                                                                               | Mixed track                                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| <img width="650" src="https://drive.google.com/uc?export=view&id=1VVzeHh6uENo4SxQycs6u5JeqdmkOHL9P"> | <img width="650" src="https://drive.google.com/uc?export=view&id=1XGQeXnBC5ACRlYf55nEEAwRyD4rd2x78">                                     | <img width="650" src="https://drive.google.com/uc?export=view&id=1tXyivJEmGDgJU8mMY4VuGNSvYleuGTAw">                                    |
+|<a href="https://drive.google.com/file/d/111KmP_mfyQhs-e7-Xhquj9NTwerWya8x/view?usp=sharing">Link to the video</a><br>  | <a href="https://drive.google.com/file/d/1eC8OpXyJH8jLvrJn8K7qu9o_2jx-icFX/view?usp=sharing">Link to the video</a><br>                                     | <a href="https://drive.google.com/file/d/1GKMX8KEeZe8vkeV6XMvj6-Tru8w0QBOJ/view?usp=sharing">Link to the video</a><br>                                  |
+
+#### Implementation
+
 The line following controller is very simple and basically consists of a switch that handles the above four cases, moving the wheels according to the value read from the sensors. Regarding the speed, after some tests we identified the following formula as the ideal way to compute it:
 
 $$ speed= maxSpeed * (1-{\vert direction \vert\over 10 }) $$
 
 Where $maxSpeed$ is a constant representing the maximum value of speed the robot can reach, which is 255. The calculation is done within the `computeSpeed()` function, which returns the minimum between the calculated speed and $minSpeed$, a constant set to 230.
 
-We conducted several tests, placing the robot on different tracks to verify that the implementation was working as expected. The first track used was the one bundled with the mBot kit, which is an infinity-shaped line printed on paper. Next, a track was made on cardboard using electrical tape, giving it a rectangular shape to test the robot's behavior in sharp turns. Finally, we built a more complex track that had the properties of both the previous ones. The line was at first drawn using an indelible marker, but in this case the sensor was unable to detect it correctly, as the ink probably contained some reflective substances. By recreating the tracing using a can of black paint, the robot was able to walk the line without any hiccups.
-
-<!-- Talk about cutting sharp corners -->
 <!-- Talk about the direction value in the code -->
-<!-- Talk about the scientific approach to tests -->
 
-| Track 1                                                                                               | Track 2                                                                                                                                | Track 3                                                                                                                                  |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| <img width="650" src="https://drive.google.com/uc?export=view&id=1VVzeHh6uENo4SxQycs6u5JeqdmkOHL9P"> | <img width="650" src="https://drive.google.com/uc?export=view&id=1XGQeXnBC5ACRlYf55nEEAwRyD4rd2x78">                                     | <img width="650" src="https://drive.google.com/uc?export=view&id=1tXyivJEmGDgJU8mMY4VuGNSvYleuGTAw">                                    |
-|<a href="https://drive.google.com/file/d/111KmP_mfyQhs-e7-Xhquj9NTwerWya8x/view?usp=sharing">Link to the video</a><br>  | <a href="https://drive.google.com/file/d/1eC8OpXyJH8jLvrJn8K7qu9o_2jx-icFX/view?usp=sharing">Link to the video</a><br>                                     | <a href="https://drive.google.com/file/d/1GKMX8KEeZe8vkeV6XMvj6-Tru8w0QBOJ/view?usp=sharing">Link to the video</a><br>                                  |
+### Obstacle avoidance
 
-### Obstacle avoidance behavior
+#### Design
+
+#### Implementation
+
+### Light chasing
+
+#### Design
+
+#### Implementation
 
 ## Control software analysis
 
