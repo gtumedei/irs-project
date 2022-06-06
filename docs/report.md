@@ -287,11 +287,14 @@ $$ distance = {34cm/ms * time \over 2} $$
 
 **Light sensor**
 
-<img height="250" src="https://drive.google.com/uc?export=view&id=1YW9k6YBKi1IRVWuHb-ds3Y-74Ht0vQQu">
-<img height="250" src="https://drive.google.com/uc?export=view&id=1yaFvBeka8FaKZ4XWClKY8oEpVrLJ_DLi">
+![](https://drive.google.com/uc?export=view&id=1Da553WpNjLGmU8zdvgYw9QoRmWK8_EYs)
+
+<!-- Immagine unica (?) -->
 <!-- <img height="350" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba"> -->
 
-The two light sensors available in the add-on kit for mBot are connected to the motherboard via RJ45 connectors, and must use ports 1 and 2.
+The two light sensors available in the add-on kit for mBot are connected to the motherboard via RJ45 connectors, and must use ports 3 and 4 as shown in the picture.
+
+![](https://drive.google.com/uc?export=view&id=112d1gGe8w4nuZTNu0aPKUfR9teqG-ZaD)
 
 These sensors are based on the photoelectric effect principle in semiconductors and can be used to detect the intensity of ambient light.
 
@@ -302,13 +305,38 @@ The photosensitive wavelength range varies between 400 and 1100nm, the analog va
 
 ### Refactoring the default firmware
 
+#### MeWheels class
+
+To simplify the use of the wheels, we created an additional class, called MeWheels, found within the libraries that make up the robot's firmware. The class contains the following functions:
+- `spinRight`: spins the right wheel at a given speed
+- `spinLeft`: spins the left wheel at a given speed
+- `stopRight`: stops the right wheel
+- `stopLeft`: stops the left wheel
+- `forward`: moves forward at a given speed
+- `backward`: moves backward at a given speed
+- `turn`: turns toward the direction specified as a parameter, at the given speed, multiplied by a factor set to 0.8 by default
+- `turnLeft`: turns to the left at the given speed, multiplied by a factor set to 0.8 by default
+- `turnRight`: turns to the right at the given speed, multiplied by a factor set to 0.8 by default
+- `forwardAndTurn`: turns toward the direction specified as a parameter, while keep going forward at the given speed, multiplied by a factor set to 0.8 by default
+- `forwardAndTurnLeft`: turns to the left while keep going forward at the given speed, multiplied by a factor set to 0.2 by default
+- `forwardAndTurnRight`: turns to the right while keep going forward at the given speed, multiplied by a factor set to 0.2 by default
+- `backwardAndTurn`: turns toward the direction specified as a parameter, while keep going backward at the given speed, multiplied by a factor set to 0.8 by default
+- `backwardAndTurnLeft`: turns to the left while keep going backward at the given speed, multiplied by a factor set to 0.333 by default
+- `backwardAndTurnRight`: turns to the right while keep going backward at the given speed, multiplied by a factor set to 0.333 by default
+- `stop`: stops both wheels
+
+In addition, to more intuitively specify the direction in which to proceed, there is an enum in the .h file, named `TurnDirection`, which can assume the following values:
+- DIR_RIGHT
+- DIR_LEFT
+- DIR_NONE
+
 ## Controller development
 
 ### Line following
 
 The first behavior that has been implemented is the mode that allows the robot to follow a black line drawn on the ground.
 
-<!-- line following: mention line thickness -->
+When the line-follower module has two sensors there are basically two methodologies for constructing the path that the robot has to follow. Based on the distance between the two sensors (in our case 1.5cm) it is possible to decide to draw a line with a thickness less than the aforementioned distance, or greater, which is the solution we opted for.
 
 #### Design
 
@@ -325,11 +353,13 @@ $$ speed= maxSpeed * (1-{\vert direction \vert\over 10 }) $$
 
 Where $maxSpeed$ is a constant representing the maximum value of speed the robot can reach, which is 255. The calculation is done within the `computeSpeed()` function, which returns the minimum between the calculated speed and $minSpeed$, a constant set to 230.
 
+<!-- Add flowchart -->
+
 <!-- Talk about the direction value in the code -->
 
 #### Tests and experiments
 
-The goal of our tests was, of course, to demonstrate that the robot is able to follow the drawn black line. To carry out the verification of our hypotheses, we created three tracks of increasing difficulty and tested the behavior of the robot ten times each.
+The goal of our tests was to demonstrate that the robot is able to follow the drawn black line. To carry out the verification of our hypotheses, we created three tracks of increasing difficulty and tested the behavior of the robot ten times each.
 
 - **Infinity-shaped track**: this is the track bundled with the robot kit, characterized by an infinity-shaped line printed on paper, so we expected the robot to be able to follow the line without particular difficulty. After adjusting our parameters to optimize the robot's movements, the success rate was 100%.
 - **Rectangular track**: hand-built track using electrical tape on cardboard, the rectangular shape allowed us to test the robot's behavior in sharp turns. In the first tests, the robot was able to properly follow about 1 turn every 3. We then realized that the sharp turns needed to be slightly cut off on the outside. This is because otherwise the sensors of the line-following module reached the white background roughly at the same time, causing the robot to: go backwards if it detected white on both sensors simultaneously, turn 90° (correct behavior) or turn 270° if a sensor read white before the other. By making the above change, the outermost sensor always detects the white background first, allowing the robot to curve correctly and obtain a success rate of 100%.
@@ -342,15 +372,85 @@ The goal of our tests was, of course, to demonstrate that the robot is able to f
 
 ### Obstacle avoidance
 
-#### Design
+The second and last behavior that we could realize using only the basic kit is obstacle avoidance.
 
-#### Implementation
-
-### Light chasing
+When approaching this type of problem using a single frontal ultrasonic sensor there are basically two possibilities, which depend on the type of robot kit being used. In the case where the sensor is mobile, an algorithm can be implemented that periodically checks the state of the environment around the agent, which can then more effectively avoid obstacles since it is, potentially, free of blind spots. Otherwise, as in our case, the robot is equipped with a single ultrasonic sensor placed in a fixed position, which, as we will see later, leads to some disadvantages and problems that can hardly be avoided.
 
 #### Design
 
+As mentioned earlier, using such a sensor to implement an obstacle avoidance algorithm has some limitations, represented below.
+
+![](https://drive.google.com/uc?export=view&id=1zgV7ugPvJHh_1fsA5jEyatoL0PbdOlHX)
+
+In our case, these limitations may result in scenarios where the robot is unable to detect the obstacle, especially because the body width is significantly wider (11cm) than the sensor size (4.5cm).
+The sound waves emitted by the transmitter, therefore, may not be wide enough, especially when the robot is at certain angles to the obstacle, to ensure that the passage area is actually free.
+
+Below are graphically depicted the two most frequent scenarios in which the robot may find itself when it needs to avoid an obstacle.
+
+| Case 1                                                                                                | Case 2                                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| <img width="250" src="https://drive.google.com/uc?export=view&id=1Gs2VW1mq0hzX0DMY-CrnlymQ-Vmf7eMO"> | <img width="250" src="https://drive.google.com/uc?export=view&id=1GWq5lqiK97Tg18xkevRsV39O56XcMEFy">                                   |
+| The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction.  | The ultrasonic sensor is unable to detect any obstacle, since it is in the blind zone. mBot does won't change direction and will inevitably collide with the object. |
+
 #### Implementation
+
+Our obstacle avoidance algorithm is based on two different behaviors: wander and, indeed, obstacle avoidance. The program uses the following constants:
+- `HIGH_DISTANCE`: distance beyond which the robot remains in wander mode
+- `LOW_DISTANCE`: distance within which the robot changes direction to avoid the obstacle
+And the following global variables:
+- `distance`: current distance detected by the ultrasonic sensor
+- `avoiding`: boolean set to true if the robot is in obstacle avoidance mode
+- `changedDirection`: boolean set to true if the robot has already tried to change direction
+- `lastTurnTimestamp`: timestamp of the last turn
+- `turnDirection`: enum value representing the direction in which to turn
+
+The robot remains in wander mode until the sensor detects an obstacle at a shorter distance than `HIGH_DISTANCE`, three possibilities can occur during this phase:
+- The robot makes a left turn with a probability of 3.33%
+- The robot makes a right turn with a probability of 3.33%
+- The robot proceeds straight with a probability of 93.34%
+
+For a direction change to occur, a minimum time, identified in the `TURN_DELAY` constant, must have elapsed since the last direction change.
+
+If an obstacle is detected, the robot enters the obstacle avoidance mode, which consists of the following steps:
+1. The robot tries to turn, staying in place, to the right or left with a probability of 50% each
+2. If the robot remains in obstacle avoidance mode and the distance to the obstacle is less than `LOW_DISTANCE`, then it turns from the opposite direction than the previous attempt
+3. The robot proceeds in the selected direction
+
+<!-- Add flowchart -->
+
+#### Test and experiments
+
+The goal of our tests was to demonstrate that the robot is able to avoid obstacle in a controlled environment. To carry out the verification of our hypotheses, we created two different cases of increasing difficulty and let the robot running on the field for a minute, testing the scenarios ten times each.
+
+- **Controlled perimeter**: limited area defined by a perimeter composed of cardboard boxes, in this test the robot was able to easily detect obstacles, staying within the area and generating few collisions during out tests. All collisions happened upon the occurrence of the conditions that highlight the limitations of the ultrasonic sensor, mentioned in the previous design section
+- **Open environment**: large space of about 12sqm with some cardboard boxes, again used as obstacles. Although the collision avoidance algorithm worked correctly as expected, collisions were more frequent during our tests than in the previous case study, but still dictated by the limitations of the ultrasonic sensor. The frequency of collisions is obviously higher as the probability of the robot finding an obstacle in a blind spot increases
+
+| Controlled perimeter                                                                                  | Open environment                                                                                                                        |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| <img width="550" src="https://drive.google.com/uc?export=view&id=1STkrO68TkiODY0vH1kDabf1mb7bMYvvm">  | <img width="550" src="https://drive.google.com/uc?export=view&id=1fWpy0qN9GY-kqCCeTJhIj2dzgjNzAFvq">                                    |
+|<a href="https://drive.google.com/file/d/16hjmNWZJci_vfP-aY5fA5w3V-6P3VM1W/view?usp=sharing">Link to the video</a><br>  | <a href="https://drive.google.com/file/d/1_O2Lzs7QVdZh8MXopDFHaz6QkgEBlsgZ/view?usp=sharing">Link to the video</a><br> |
+
+### Light chasing with obstacle avoidance
+
+As mentioned earlier, thanks to the purchase of the add-on kit we were able to equip the robot with two side light sensors.
+
+Since this is a dual behavior, all the assumptions made earlier for obstacle avoidance apply again, to which some considerations regarding light chasing must be added.
+
+#### Design
+
+| Basic setup                                                                                  | Light chasing mode                                                                                                                        |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| <img width="550" src="https://drive.google.com/uc?export=view&id=1qMO4-wElRXtY-NxhLOUwxygP2Br04wmg">  | <img width="550" src="https://drive.google.com/uc?export=view&id=1Lq25r8le4_N1_qDS35i15WzghULaKOzO">                                    |
+
+As soon as the assembly phase of the two light sensors was completed, it was immediately clear that combining light chasing with obstacle avoidance has a strong limitation due to the size of the robot. The two side sensors bring the width of the mBot to 168mm compared to 126mm in the basic configuration (+33%) which, as mentioned earlier, caused problems when obstacles were in the blind zone of the ultrasonic sensor.
+
+#### Implementation
+
+<!-- Add flowchart -->
+
+#### Test and experiments
+
+<!-- Add video -->
 
 ## Control software analysis
 
