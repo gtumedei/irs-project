@@ -314,7 +314,14 @@ We obviously chose the latter.
 
 #### Refactoring the default firmware
 
-<!-- TODO: how we split the firmware in multiuple files -->
+Starting from the single file that composes the basic firmware provided by Makeblock, we have created a new library called MeMBotFirmware, dividing the main functionalities into the following files:
+- **BuiltinButton**: handles the button on the motherboard (used to change from automatic to manual mode and vice versa)
+- **IRCommand**: handles the inputs of the remote
+- **ManualMode**: handles the operations of the manual mode
+- **MeWheels**: custom class for wheel management
+- **StartingBuzz**: performs robot power-up sounds and lighting
+
+<!-- Talk about manual/auto mode -->
 
 #### MeWheels class
 
@@ -383,9 +390,9 @@ The goal of our tests was to demonstrate that the robot is able to follow the dr
 
 #### Limitations
 
-.       |
---------|
-.       |
+The only limitation that emerged during our tests is related to the line thickness being greater than the distance between the two sensors of the line-following module. In fact, as shown in the image below, using a line that is thinner, thus placed between the two sensors, allows to place a black line parallel to the module that, when detected by both sensors, indicates the finish line. This is indeed impossible in our case, where if both sensors detect the black line, then it means the robot is inside the track, while if they both detect the white background then the robot has simply left the track.
+
+![](https://drive.google.com/uc?export=view&id=1LTR8Dhzb9fuKJJoVDFW4FLSavmwRBYY4)
 
 ### Obstacle avoidance
 
@@ -395,21 +402,7 @@ When approaching this type of problem using a single frontal ultrasonic sensor t
 
 #### Design
 
-<!-- Limitations chapter -->
-
-![](https://drive.google.com/uc?export=view&id=1zgV7ugPvJHh_1fsA5jEyatoL0PbdOlHX)
-
-<!-- Table image ? -->
-
-In our case, these limitations may result in scenarios where the robot is unable to detect the obstacle, mainly because its body is significantly wider (11cm) than the area covered by the sensor (4.5cm).
-The sound waves emitted by the transmitter, therefore, may not be wide enough, especially when the robot is at certain angles to the obstacle, to ensure that the passage area is actually free.
-
-Below are graphically depicted the two most frequent scenarios in which the robot may find itself when it needs to avoid an obstacle.
-
-| Case 1                                                                                                | Case 2                                                                                                                                  |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| <img width="250" src="https://drive.google.com/uc?export=view&id=1Gs2VW1mq0hzX0DMY-CrnlymQ-Vmf7eMO"> | <img width="250" src="https://drive.google.com/uc?export=view&id=1GWq5lqiK97Tg18xkevRsV39O56XcMEFy">                                   |
-| The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction and avoid it with no issues.  | The ultrasonic sensor is unable to detect any obstacle, since it is in the blind zone. mBot won't change direction and will inevitably collide with the object. |
+<!-- TODO -->
 
 #### Implementation
 
@@ -445,6 +438,25 @@ The goal of our tests was to demonstrate that the robot is able to avoid obstacl
 | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | <img width="550" src="https://drive.google.com/uc?export=view&id=1STkrO68TkiODY0vH1kDabf1mb7bMYvvm">  | <img width="550" src="https://drive.google.com/uc?export=view&id=1fWpy0qN9GY-kqCCeTJhIj2dzgjNzAFvq">                                    |
 |<a href="https://drive.google.com/file/d/16hjmNWZJci_vfP-aY5fA5w3V-6P3VM1W/view?usp=sharing">Link to the video</a><br>  | <a href="https://drive.google.com/file/d/1_O2Lzs7QVdZh8MXopDFHaz6QkgEBlsgZ/view?usp=sharing">Link to the video</a><br> |
+
+#### Limitations
+
+During our tests emerged two types of limitations, the first is related to the working mode of the Arduino ultrasonic sensor, whose cases are shown in the following table. However, another type of limitations, is associated to the structure of the robot and the use of the sensor in a fixed position.
+
+| Case 1                                                                                                | Case 2                                                                                                                                  | Case 3                                                                                                                                  | Case 4                                                                                                                 |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| <img width="300" src="https://drive.google.com/uc?export=view&id=16kooovh31j4DQnbAM3kn7G11GxGvpA4g"> | <img width="300" src="https://drive.google.com/uc?export=view&id=18YU7aSQEpP7PTzHXBFM_6VAx9ueZWK-3">                                   | <img width="300" src="https://drive.google.com/uc?export=view&id=1eG2G0QueXjrFfH94hWbEoyokIe3z_2Mu">                                   | <img width="300" src="https://drive.google.com/uc?export=view&id=1dTI569X0yYUjTHgPQYNSMDranEnox6-m">                  |
+| Object is too far away  | Flat object is not facing sensor | Object is too small | Object is too soft |
+
+In our case, these limitations may result in scenarios where the robot is unable to detect the obstacle, mainly because its body is significantly wider (11cm) than the area covered by the sensor (4.5cm).
+The sound waves emitted by the transmitter, therefore, may not be wide enough, especially when the robot is at certain angles to the obstacle, to ensure that the passage area is actually free.
+
+Below are graphically depicted the two most frequent scenarios in which the robot may find itself when it needs to avoid an obstacle.
+
+| Case 1                                                                                                | Case 2                                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| <img width="250" src="https://drive.google.com/uc?export=view&id=1Gs2VW1mq0hzX0DMY-CrnlymQ-Vmf7eMO"> | <img width="250" src="https://drive.google.com/uc?export=view&id=1GWq5lqiK97Tg18xkevRsV39O56XcMEFy">                                   |
+| The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction and avoid it with no issues.  | The ultrasonic sensor is unable to detect any obstacle, since it is in the blind zone. mBot won't change direction and will inevitably collide with the object. |
 
 ### Light chasing with obstacle avoidance
 
