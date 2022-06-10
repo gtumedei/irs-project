@@ -2,6 +2,8 @@
 
 ## Introduction
 
+<!-- TODO -->
+
 ## Choosing the robot kit
 
 Choosing the right kit is an important step because its components will define what can and can't be done in the project. As such, we have started by defining a set of features that a kit must match in order to be a valid candidate.
@@ -248,10 +250,7 @@ For this reason, we decided to purchase an additional kit that allows to setup t
 
 **Wheels**
 
-<img height="250" src="https://drive.google.com/uc?export=view&id=1lmTIVMaEcnv2D_NmNa49LbAqFAn7RR0O">
-<img height="250" src="https://drive.google.com/uc?export=view&id=1vR-N5KxgLyByGvqCfQ3w9mc65ZqfHbHI">
-
-<!-- Single image? -->
+<img height="250" src="https://drive.google.com/uc?export=view&id=1GT9KO9y2CCT283IapBGvkIVHU9n0GFbd">
 
 Each of the two wheels equipped to mBot are attached to a servo motor and connected to the motherboard via RJ45 connectors. These are mapped inside Arduino to PWM pins, enabling the rotation speed for each wheel to be specified using values between 0 and 255.
 
@@ -306,9 +305,18 @@ We obviously chose the latter.
 
 ## Firmware analysis and refactor
 
-### Default firmware
+### Makeblock library
 
 <!-- TODO -->
+
+### Default firmware
+
+The default firmware that comes with mBot allows to put the robot in one of three modes, either through the button that's builtin to the board or via the included IR remote. The first mode is fully manual, with the robot that stays completely still unless the IR remote is used to make it go forward, go backward, turn or adjust its speed. The other two modes offer a basic implementation of line following and obstacle avoidance respectively, with the latter having the robot always proceed forward unless it encounters an obstacle (no wandering). The robot lights its LEDs and rings its buzzer every time it receives a command via IR, which is a nice touch. The firmware is based on the Makeblock library, is open source and can be downloaded from the official Makeblock repository on GitHub:\
+[https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_firmware/mbot_firmware.ino](https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_firmware/mbot_firmware.ino)
+
+<!-- TODO
+- shortcomings of the default firmware
+-->
 
 ### Our firmware
 
