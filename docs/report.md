@@ -193,7 +193,7 @@ For this reason, we decided to purchase an additional kit that allows to setup t
     </tbody>
 </table>
 
-### Hardware
+### Bundle
 
 <table>
     <tr>
@@ -244,27 +244,16 @@ For this reason, we decided to purchase an additional kit that allows to setup t
     </tr>
 </table>
 
-### Software
-
-Most of the robot kits produced by Makeblock, including mBot, support several development platforms, which can be chosen according to the desired level of difficulty, making them ideal for any user.
-
-- **mBlock 5**: cooding tool that supports both Python and block programming via a dedicated browser platform. More information available at https://mblock.makeblock.com/en-us/
-- **mBlock Blockly**: game-based robot app that supports block programming, specifically designed for younger users. More information available at https://www.makeblock.com/software/mblock-app
-- **Makeblock App**: all-in-1 controller for any Makeblock robots that supports multiple control modes and 3D modeling. More information available at https://www.makeblock.com/software/makeblock-app
-- **Arduino IDE**: it's just like programming a normal Arduino board, but with additional resources provided by Makeblock through their official GitHub repository, accessible at https://github.com/Makeblock-official/Makeblock-Libraries
-
-We obviously chose the latter.
-
-## Firmware analysis and refactor
-
-### Working with sensors and actuators
+### Sensors and actuators
 
 **Wheels**
 
 <img height="250" src="https://drive.google.com/uc?export=view&id=1lmTIVMaEcnv2D_NmNa49LbAqFAn7RR0O">
 <img height="250" src="https://drive.google.com/uc?export=view&id=1vR-N5KxgLyByGvqCfQ3w9mc65ZqfHbHI">
 
-Each of the two wheels equipped to mBot are attached to a servo motor and connected to the motherboard via two RJ45 connectors. These are mapped inside Arduino to PWM pins, enabling the rotation speed for each wheel to be specified using values between 0 and 255.
+<!-- Single image? -->
+
+Each of the two wheels equipped to mBot are attached to a servo motor and connected to the motherboard via RJ45 connectors. These are mapped inside Arduino to PWM pins, enabling the rotation speed for each wheel to be specified using values between 0 and 255.
 
 **Line follower sensor**
 
@@ -279,9 +268,11 @@ Given that the robot has two sensors, the resulting combinations are the followi
 
 ![](https://drive.google.com/uc?export=view&id=1zHcr1mlZDDbEsbjadmiXVXWqKQDyeZ0C)
 
+<!-- Delete watermark -->
+
 mBot is equipped with a classic ultrasonic sensor, similar to those found in standard Arduino kits, which allows it to detect obstacles in a range from 1cm to 400cm.
 
-The basic operation of the sensor is quite simple, it emits an ultrasound at high frequency (~40kHz) which travels through the air and if there is an object or obstacle on its path it will bounce back to the module. Considering the travel time of the signal (back and forth) and the speed of the sound you can calculate the distance.
+The way the sensor works is quite simple: it emits an ultrasound at high frequency (~40kHz) which travels through the air and bounces back to the module if there is an obstacle on its path. The distance from the object can be calculated considering the travel time of the signal (roundtrip) and the speed of the sound.
 
 $$ distance = {34cm/ms * time \over 2} $$
 
@@ -289,10 +280,9 @@ $$ distance = {34cm/ms * time \over 2} $$
 
 ![](https://drive.google.com/uc?export=view&id=1Da553WpNjLGmU8zdvgYw9QoRmWK8_EYs)
 
-<!-- Immagine unica (?) -->
 <!-- <img height="350" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba"> -->
 
-The two light sensors available in the add-on kit for mBot are connected to the motherboard via RJ45 connectors, and must use ports 3 and 4 as shown in the picture.
+The two light sensors available in the add-on kit for mBot are connected to the motherboard via RJ45 connectors, and must use ports 3 and 4 as shown in the figure.
 
 ![](https://drive.google.com/uc?export=view&id=112d1gGe8w4nuZTNu0aPKUfR9teqG-ZaD)
 
@@ -303,32 +293,53 @@ The photosensitive wavelength range varies between 400 and 1100nm, the analog va
 - \[100-500]: indoor lighting condition
 - \>500: exposure to sunlight
 
-### Refactoring the default firmware
+### Software
+
+Most of the robot kits produced by Makeblock, including mBot, support several development platforms, which can be chosen according to the desired level of difficulty, making them ideal for any user.
+
+- **mBlock 5**: cooding tool that supports both Python and block programming via a dedicated browser platform. More information available at https://mblock.makeblock.com/en-us/
+- **mBlock Blockly**: game-based robot app that supports block programming, specifically designed for younger users. More information available at https://www.makeblock.com/software/mblock-app
+- **Makeblock App**: all-in-1 controller for any Makeblock robots that supports multiple control modes and 3D modeling. More information available at https://www.makeblock.com/software/makeblock-app
+- **Arduino IDE**: it's just like programming a normal Arduino board, but with additional resources provided by Makeblock through their official GitHub repository, accessible at https://github.com/Makeblock-official/Makeblock-Libraries
+
+We obviously chose the latter.
+
+## Firmware analysis and refactor
+
+### Default firmware
+
+<!-- TODO -->
+
+### Our firmware
+
+#### Refactoring the default firmware
+
+<!-- TODO: how we split the firmware in multiuple files -->
 
 #### MeWheels class
 
-To simplify the use of the wheels, we created an additional class, called MeWheels, found within the libraries that make up the robot's firmware. The class contains the following functions:
+The default firmware does not handle the usage of the wheels in a very intuitive way. The main issue is that, since the left motor is identical to the right, but mounted in a flipped way, to go forward the robot needs to spin the two wheels in opposite directions. To overcome this limitation and simplify operations like turning, we added a new class to the firmware, called `MeWheels`. The class contains the following functions:
 - `spinRight`: spins the right wheel at a given speed
 - `spinLeft`: spins the left wheel at a given speed
 - `stopRight`: stops the right wheel
 - `stopLeft`: stops the left wheel
+- `stop`: stops both wheels
 - `forward`: moves forward at a given speed
 - `backward`: moves backward at a given speed
-- `turn`: turns toward the direction specified as a parameter, at the given speed, multiplied by a factor set to 0.8 by default
-- `turnLeft`: turns to the left at the given speed, multiplied by a factor set to 0.8 by default
-- `turnRight`: turns to the right at the given speed, multiplied by a factor set to 0.8 by default
-- `forwardAndTurn`: turns toward the direction specified as a parameter, while keep going forward at the given speed, multiplied by a factor set to 0.8 by default
-- `forwardAndTurnLeft`: turns to the left while keep going forward at the given speed, multiplied by a factor set to 0.2 by default
-- `forwardAndTurnRight`: turns to the right while keep going forward at the given speed, multiplied by a factor set to 0.2 by default
-- `backwardAndTurn`: turns toward the direction specified as a parameter, while keep going backward at the given speed, multiplied by a factor set to 0.8 by default
-- `backwardAndTurnLeft`: turns to the left while keep going backward at the given speed, multiplied by a factor set to 0.333 by default
-- `backwardAndTurnRight`: turns to the right while keep going backward at the given speed, multiplied by a factor set to 0.333 by default
-- `stop`: stops both wheels
+- `turn`: stops the robot and turns itself in the direction specified as a parameter, at the given speed, multiplied by a factor set to 0.8 by default
+    - `turnLeft`: calls `turn` with left as the direction
+    - `turnRight`: calls `turn` with right as the direction
+- `forwardAndTurn`: turns toward the given direction, while going forward at the given speed, multiplied by a factor set to 0.8 by default
+    - `forwardAndTurnLeft`: calls `forwardAndTurn` with left as the direction
+    - `forwardAndTurnRight`: calls `forwardAndTurn` with right as the direction
+- `backwardAndTurn`: turns toward the given direction, while keep going backward at the given speed, multiplied by a factor set to 0.8 by default
+    - `backwardAndTurnLeft`: calls `backwardAndTurn` with left as the direction
+    - `backwardAndTurnRight`: calls `backwardAndTurn` with left as the direction
 
-In addition, to more intuitively specify the direction in which to proceed, there is an enum in the .h file, named `TurnDirection`, which can assume the following values:
-- DIR_RIGHT
-- DIR_LEFT
-- DIR_NONE
+To specify the direction in which to proceed, turning functions accept a value from the `TurnDirection` enum, which can be:
+- `DIR_RIGHT`
+- `DIR_LEFT`
+- `DIR_NONE`
 
 ## Controller development
 
@@ -370,19 +381,27 @@ The goal of our tests was to demonstrate that the robot is able to follow the dr
 | <img width="650" src="https://drive.google.com/uc?export=view&id=1VVzeHh6uENo4SxQycs6u5JeqdmkOHL9P"> | <img width="650" src="https://drive.google.com/uc?export=view&id=1XGQeXnBC5ACRlYf55nEEAwRyD4rd2x78">                                     | <img width="650" src="https://drive.google.com/uc?export=view&id=1tXyivJEmGDgJU8mMY4VuGNSvYleuGTAw">                                    |
 |<a href="https://drive.google.com/file/d/111KmP_mfyQhs-e7-Xhquj9NTwerWya8x/view?usp=sharing">Link to the video</a><br>  | <a href="https://drive.google.com/file/d/1eC8OpXyJH8jLvrJn8K7qu9o_2jx-icFX/view?usp=sharing">Link to the video</a><br>                                     | <a href="https://drive.google.com/file/d/1GKMX8KEeZe8vkeV6XMvj6-Tru8w0QBOJ/view?usp=sharing">Link to the video</a><br>                                  |
 
+#### Limitations
+
+.       |
+--------|
+.       |
+
 ### Obstacle avoidance
 
-The second and last behavior that we could realize using only the basic kit is obstacle avoidance.
+The second and last behavior that we were able to realize using only the basic kit is wandering + obstacle avoidance.
 
-When approaching this type of problem using a single frontal ultrasonic sensor there are basically two possibilities, which depend on the type of robot kit being used. In the case where the sensor is mobile, an algorithm can be implemented that periodically checks the state of the environment around the agent, which can then more effectively avoid obstacles since it is, potentially, free of blind spots. Otherwise, as in our case, the robot is equipped with a single ultrasonic sensor placed in a fixed position, which, as we will see later, leads to some disadvantages and problems that can hardly be avoided.
+When approaching this type of problem using a single frontal ultrasonic sensor there are basically two possibilities, which depend on the type of robot kit being used. If the sensor can be moved through a servo motor, we can use an algorithm that periodically scans the environment around the agent, which can then more effectively avoid obstacles since it is, potentially, free of blind spots. In our case, the ultrasonic sensor is mounted directly to the robot's chassis, which, as pointed out below, leads to some disadvantages and problems that can hardly be avoided.
 
 #### Design
 
-As mentioned earlier, using such a sensor to implement an obstacle avoidance algorithm has some limitations, represented below.
+<!-- Limitations chapter -->
 
 ![](https://drive.google.com/uc?export=view&id=1zgV7ugPvJHh_1fsA5jEyatoL0PbdOlHX)
 
-In our case, these limitations may result in scenarios where the robot is unable to detect the obstacle, especially because the body width is significantly wider (11cm) than the sensor size (4.5cm).
+<!-- Table image ? -->
+
+In our case, these limitations may result in scenarios where the robot is unable to detect the obstacle, mainly because its body is significantly wider (11cm) than the area covered by the sensor (4.5cm).
 The sound waves emitted by the transmitter, therefore, may not be wide enough, especially when the robot is at certain angles to the obstacle, to ensure that the passage area is actually free.
 
 Below are graphically depicted the two most frequent scenarios in which the robot may find itself when it needs to avoid an obstacle.
@@ -390,11 +409,11 @@ Below are graphically depicted the two most frequent scenarios in which the robo
 | Case 1                                                                                                | Case 2                                                                                                                                  |
 | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | <img width="250" src="https://drive.google.com/uc?export=view&id=1Gs2VW1mq0hzX0DMY-CrnlymQ-Vmf7eMO"> | <img width="250" src="https://drive.google.com/uc?export=view&id=1GWq5lqiK97Tg18xkevRsV39O56XcMEFy">                                   |
-| The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction.  | The ultrasonic sensor is unable to detect any obstacle, since it is in the blind zone. mBot does won't change direction and will inevitably collide with the object. |
+| The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction and avoid it with no issues.  | The ultrasonic sensor is unable to detect any obstacle, since it is in the blind zone. mBot won't change direction and will inevitably collide with the object. |
 
 #### Implementation
 
-Our obstacle avoidance algorithm is based on two different behaviors: wander and, indeed, obstacle avoidance. The program uses the following constants:
+Our obstacle avoidance algorithm is based on two different behaviors: wander and obstacle avoidance. The program uses the following constants:
 - `HIGH_DISTANCE`: distance beyond which the robot remains in wander mode
 - `LOW_DISTANCE`: distance within which the robot changes direction to avoid the obstacle
 And the following global variables:
@@ -404,26 +423,23 @@ And the following global variables:
 - `lastTurnTimestamp`: timestamp of the last turn
 - `turnDirection`: enum value representing the direction in which to turn
 
-The robot remains in wander mode until the sensor detects an obstacle at a shorter distance than `HIGH_DISTANCE`, three possibilities can occur during this phase:
-- The robot makes a left turn with a probability of 3.33%
-- The robot makes a right turn with a probability of 3.33%
-- The robot proceeds straight with a probability of 93.34%
+The robot stays in wander mode by default. In this behavior, it performs the following actions:
+- Turns left with a probability of 3.33%, if it hasn't turned in the last `TURN_DELAY` milliseconds
+- Turns right with a probability of 3.33%, if it hasn't turned in the last `TURN_DELAY` milliseconds
+- Proceeds straight otherwise
 
-For a direction change to occur, a minimum time, identified in the `TURN_DELAY` constant, must have elapsed since the last direction change.
-
-If an obstacle is detected, the robot enters the obstacle avoidance mode, which consists of the following steps:
-1. The robot tries to turn, staying in place, to the right or left with a probability of 50% each
-2. If the robot remains in obstacle avoidance mode and the distance to the obstacle is less than `LOW_DISTANCE`, then it turns from the opposite direction than the previous attempt
-3. The robot proceeds in the selected direction
+If an obstacle is detected at a shorter distance than `HIGH_DISTANCE`, the robot switches to obstacle avoidance mode, which consists of the following steps:
+1. The robot randomly chooses a direction and turns toward it with the `turn` function, until no obstacle is detected
+2. If, while turning, the distance to the obstacle gets reduced even further, going below `LOW_DISTANCE`, then it means the chosen direction was probably wrong, so the robot tries turning in the opposite one to avoid the imminent collision. This can only happen once per obstacle
 
 <!-- Add flowchart -->
 
 #### Test and experiments
 
-The goal of our tests was to demonstrate that the robot is able to avoid obstacle in a controlled environment. To carry out the verification of our hypotheses, we created two different cases of increasing difficulty and let the robot running on the field for a minute, testing the scenarios ten times each.
+The goal of our tests was to demonstrate that the robot is able to avoid obstacles in a controlled environment. To carry out the verification of our hypotheses, we created two different cases of increasing difficulty and left the robot running on the field for a minute, testing the scenarios ten times each.
 
-- **Controlled perimeter**: limited area defined by a perimeter composed of cardboard boxes, in this test the robot was able to easily detect obstacles, staying within the area and generating few collisions during out tests. All collisions happened upon the occurrence of the conditions that highlight the limitations of the ultrasonic sensor, mentioned in the previous design section
-- **Open environment**: large space of about 12sqm with some cardboard boxes, again used as obstacles. Although the collision avoidance algorithm worked correctly as expected, collisions were more frequent during our tests than in the previous case study, but still dictated by the limitations of the ultrasonic sensor. The frequency of collisions is obviously higher as the probability of the robot finding an obstacle in a blind spot increases
+- **Controlled perimeter**: limited area defined by a perimeter composed of cardboard boxes. In this test the robot was able to easily detect obstacles, staying within the area and avoiding them in most cases.
+- **Open environment**: large space of about 12sqm with some cardboard boxes, again used as obstacles. Although the collision avoidance algorithm worked correctly as expected, collisions were more frequent during our tests than in the previous case study, due to the limitations of the ultrasonic sensor. The frequency of collisions is obviously higher as the probability of the robot finding an obstacle in a blind spot increases.
 
 | Controlled perimeter                                                                                  | Open environment                                                                                                                        |
 | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
