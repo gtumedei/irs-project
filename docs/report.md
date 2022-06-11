@@ -415,8 +415,9 @@ When approaching this type of problem using a single frontal ultrasonic sensor t
 #### Implementation
 
 Our obstacle avoidance algorithm is based on two different behaviors: wander and obstacle avoidance. The program uses the following constants:
-- `HIGH_DISTANCE`: distance beyond which the robot remains in wander mode
-- `LOW_DISTANCE`: distance within which the robot changes direction to avoid the obstacle
+- `AVOID_DISTANCE`: distance beyond which the robot remains in wander mode
+- `CRITICAL_DISTANCE`: distance within which the robot changes direction to avoid the obstacle
+- `TURN_DELAY`: minimum time (ms) that must elapse between turns
 And the following global variables:
 - `distance`: current distance detected by the ultrasonic sensor
 - `avoiding`: boolean set to true if the robot is in obstacle avoidance mode
@@ -429,9 +430,9 @@ The robot stays in wander mode by default. In this behavior, it performs the fol
 - Turns right with a probability of 3.33%, if it hasn't turned in the last `TURN_DELAY` milliseconds
 - Proceeds straight otherwise
 
-If an obstacle is detected at a shorter distance than `HIGH_DISTANCE`, the robot switches to obstacle avoidance mode, which consists of the following steps:
+If an obstacle is detected at a shorter distance than `AVOID_DISTANCE`, the robot switches to obstacle avoidance mode, which consists of the following steps:
 1. The robot randomly chooses a direction and turns toward it with the `turn` function, until no obstacle is detected
-2. If, while turning, the distance to the obstacle gets reduced even further, going below `LOW_DISTANCE`, then it means the chosen direction was probably wrong, so the robot tries turning in the opposite one to avoid the imminent collision. This can only happen once per obstacle
+2. If, while turning, the distance to the obstacle gets reduced even further, going below `CRITICAL_DISTANCE`, then it means the chosen direction was probably wrong, so the robot tries turning in the opposite one to avoid the imminent collision. This can only happen once per obstacle
 
 <!-- Add flowchart -->
 
@@ -474,19 +475,61 @@ Since this is a dual behavior, all the assumptions made earlier for obstacle avo
 
 #### Design
 
-| Basic setup                                                                                  | Light chasing mode                                                                                                                        |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| <img width="550" src="https://drive.google.com/uc?export=view&id=1qMO4-wElRXtY-NxhLOUwxygP2Br04wmg">  | <img width="550" src="https://drive.google.com/uc?export=view&id=1Lq25r8le4_N1_qDS35i15WzghULaKOzO">                                    |
-
-As soon as the assembly phase of the two light sensors was completed, it was immediately clear that combining light chasing with obstacle avoidance has a strong limitation due to the size of the robot. The two side sensors bring the width of the mBot to 168mm compared to 126mm in the basic configuration (+33%) which, as mentioned earlier, caused problems when obstacles were in the blind zone of the ultrasonic sensor.
+<!-- TODO -->
 
 #### Implementation
 
-<!-- Add flowchart -->
+Our light chasing algorithm is based on three different behaviors: wander, obstacle avoidance and light chasing. The program uses the following constants:
+- `AVOID_DISTANCE`: distance beyond which the robot remains in wander mode
+- `CRITICAL_DISTANCE`: distance within which the robot changes direction to avoid the obstacle
+- `MIN_TRESHOLD`: minimum level of light treshold
+- `MAX_TRESHOLD`: maximum level of light treshold
+- `TURN_DELAY`: minimum time (ms) that must elapse between turns
+And the following global variables:
+- `distance`: current distance detected by the ultrasonic sensor
+- `avoiding`: boolean set to true if the robot is in obstacle avoidance mode
+- `changedDirection`: boolean set to true if the robot has already tried to change direction
+- `lastTurnTimestamp`: timestamp of the last turn
+- `turnDirection`: enum value representing the direction in which to turn
+- `lightRight`: light level detected by the right sensor
+- `lightLeft`: light level detected by the left sensor
+- `lightTreshold`: difference in the light level detected by the two sensors under which the robot moves forward
+- `chaseLightLevel`: light level beyond which the robot enters light chasing mode
+- `doneLightLevel`: light level beyond which the robot stops because it has reached the light source
+
+Since both the wander and obstacle avoidance modes work similarly to what was explained in the chapter on the implementation of the obstacle avoidance algorithm, those technical details will not be repeated.
+
+The basic mechanism that guides the robot in choosing which mode to execute works as follows:
+- If the distance detected by the ultrasonic sensor is less than `AVOID_DISTANCE` and neither the right nor the left light sensor detects a light level higher than `doneLightLevel`, the robot enters obstacle avoidance mode
+- If the right or left sensor detects a brightness level higher than `chaseLightLevel`, the robot enters chase light mode. In this case, the robot moves accordingly based on the light level read by the two sensors
+- Otherwise, the wander mode is activated
+
+The light chasing mode control software uses three functions to manage and calculate thresholds related to detected brightness levels:
+- `computeChaseLightLevel`: function called only the first time the robot is started, which is necessary to calculate the brightness level above which the robot enters light chasing mode. To do this, the agent performs a spin on itself, sensing the ambient brightness. The result is given by the following formula $$ chaseLightLevel = maxLight * 1,1 $$
+- `computeDoneLightLevel`: function called only the first time the robot is started, which is necessary to calculate the light threshold above which the robot has reached the light source. The result is given by the following formula $$ doneLightLevel = -50+155*log(chaseLightLevel) $$
+<!-- Inserire grafico e spiegare la formula -->
+- `computeTreshold`:
 
 #### Test and experiments
 
-<!-- Add video -->
+The test phase of the light chasing mode consists of a single environment, consisting of a short path in the middle of which are placed some cardboard boxes to act as obstacles, while at the two ends are the robot and the light source. The tests were carried out in a 16sqm room lit by a single 600lm@6000K LED bulb. Running the test 10 times, the robot was able to correctly reach the light source while avoiding all obstacles only 40% of the cases.
+
+| Light chasing and obstacle avoidance                                                                                 |
+| ----------------------------------------------------------------------------------------------------- |
+| <img width="400" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba">  |
+|<a href="https://drive.google.com/file/d/1JbtrB1WWwk3pahGgJ0Arb4F_gqmo_BuQ/view?usp=sharing">Link to the video</a><br>  |
+
+#### Limitations
+
+As a result of some experimentation to properly prepare the test environment, it was necessary to deprive the room of any natural light source because both sensors detected such high baseline values that the robot could not enter light chasing mode.
+
+In addition to a limitation due to the values read by the light sensors, an additional issue related to the physical conformation of the robot emerged during our tests.
+
+| Basic setup                                                                                  | Light chasing mode                                                                                                                        |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| <img width="350" src="https://drive.google.com/uc?export=view&id=1qMO4-wElRXtY-NxhLOUwxygP2Br04wmg">  | <img width="350" src="https://drive.google.com/uc?export=view&id=1Lq25r8le4_N1_qDS35i15WzghULaKOzO">                                    |
+
+As soon as the assembly phase of the two light sensors was completed, it was immediately clear that combining light chasing with obstacle avoidance has a strong limitation due to the size of the robot. The two side sensors bring the width of the mBot to 168mm compared to 126mm in the basic configuration (+33%) which, as mentioned earlier, caused problems when obstacles were in the blind zone of the ultrasonic sensor.
 
 ## Control software analysis
 
