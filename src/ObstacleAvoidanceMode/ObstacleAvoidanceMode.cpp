@@ -18,70 +18,70 @@ TurnDirection turnDirection = DIR_NONE;
 
 void wander()
 {
-    // Reset obstacle avoidance variables
-    avoiding = false;
-    changedDirection = false;
-    turnDirection = DIR_NONE;
+  // Reset obstacle avoidance variables
+  avoiding = false;
+  changedDirection = false;
+  turnDirection = DIR_NONE;
 
-    unsigned long timestamp = millis();
-    bool canTurn = timestamp - lastTurnTimestamp > TURN_DELAY;
-    uint8_t r = random(30);
-    if (r == 0 && canTurn)
-    {
-        wheels.forwardAndTurnRight(moveSpeed);
-        lastTurnTimestamp = timestamp;
-        delay(500);
-    }
-    else if (r == 1 && canTurn)
-    {
-        wheels.forwardAndTurnLeft(moveSpeed);
-        lastTurnTimestamp = timestamp;
-        delay(500);
-    }
-    else
-    {
-        wheels.forward(moveSpeed);
-        delay(100);
-    }
+  unsigned long timestamp = millis();
+  bool canTurn = timestamp - lastTurnTimestamp > TURN_DELAY;
+  uint8_t r = random(30);
+  if (r == 0 && canTurn)
+  {
+    wheels.forwardAndTurnRight(moveSpeed);
+    lastTurnTimestamp = timestamp;
+    delay(500);
+  }
+  else if (r == 1 && canTurn)
+  {
+    wheels.forwardAndTurnLeft(moveSpeed);
+    lastTurnTimestamp = timestamp;
+    delay(500);
+  }
+  else
+  {
+    wheels.forward(moveSpeed);
+    delay(100);
+  }
 }
 
 void avoidObstacle()
 {
-    lastTurnTimestamp = millis();
-    if (!avoiding)
+  lastTurnTimestamp = millis();
+  if (!avoiding)
+  {
+    // On first entering avoidance mode, turn in a random direction
+    avoiding = true;
+    turnDirection = random(2) == 0 ? DIR_RIGHT : DIR_LEFT;
+    wheels.turn(turnDirection, moveSpeed);
+  }
+  else
+  {
+    // Invert turning direction if the distance has lowed
+    if (distance < CRITICAL_DISTANCE && !changedDirection)
     {
-        // On first entering avoidance mode, turn in a random direction
-        avoiding = true;
-        turnDirection = random(2) == 0 ? DIR_RIGHT : DIR_LEFT;
-        wheels.turn(turnDirection, moveSpeed);
+      changedDirection = true;
+      turnDirection = turnDirection == DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
     }
-    else
-    {
-        // Invert turning direction if the distance has lowed
-        if (distance < CRITICAL_DISTANCE && !changedDirection)
-        {
-            changedDirection = true;
-            turnDirection = turnDirection == DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
-        }
-        wheels.turn(turnDirection, moveSpeed);
-    }
-    delay(300);
+    wheels.turn(turnDirection, moveSpeed);
+  }
+  delay(300);
 }
 
 void obstacleAvoidanceMode()
 {
-    distance = ultrasonicSensor.distanceCm();
-    if (distance > AVOID_DISTANCE || distance == 0)
-    {
-        wander();
-    }
-    else
-    {
-        avoidObstacle();
-    }
+  distance = ultrasonicSensor.distanceCm();
+  if (distance > AVOID_DISTANCE || distance == 0)
+  {
+    wander();
+  }
+  else
+  {
+    avoidObstacle();
+  }
 }
 
 void autoMode()
 {
-    obstacleAvoidanceMode();
+  obstacleAvoidanceMode();
 }

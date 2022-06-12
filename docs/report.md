@@ -305,20 +305,22 @@ We obviously chose the latter.
 
 ## Firmware analysis and refactor
 
+This section presents an analysis of the default firmware that comes preinstalled with mBot, highlighting its strong and weak points. It then goes on to explain the preparation work we did to get started developing our own controllers.
+
 ### Makeblock library
 
-<!-- TODO -->
+The default mBot firmware is written in C++ and based on the open source Makeblock library ([https://github.com/Makeblock-official/Makeblock-Libraries](https://github.com/Makeblock-official/Makeblock-Libraries)) that the producer makes available on GitHub. While not required for development with the Arduino IDE, its installation is needed to compile the firmware, which we wanted to do. Futhermore, the library offers simple utility classes to interface with all the sensor and actuator modules sold by Makeblock, so it's a good starting point for writing custom control programs.
 
 ### Default firmware
 
 The default firmware that comes with mBot allows to put the robot in one of three modes, either through the button that's builtin to the board or via the included IR remote. The first mode is fully manual, with the robot that stays completely still unless the IR remote is used to make it go forward, go backward, turn or adjust its speed. The other two modes offer a basic implementation of line following and obstacle avoidance respectively, with the latter having the robot always proceed forward unless it encounters an obstacle (no wandering). The robot lights its LEDs and rings its buzzer every time it receives a command via IR, which is a nice touch. The firmware is based on the Makeblock library, is open source and can be downloaded from the official Makeblock repository on GitHub:\
 [https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_firmware/mbot_firmware.ino](https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_firmware/mbot_firmware.ino)
 
-<!-- TODO
-- shortcomings of the default firmware
--->
+From a feature standpoint, the default control program is great and offers usage examples to control pretty much any part of the robot. However, it has two main issues that made us choose to go for a big refactor before starting to write our own controllers. The first one is that the entire firmware consists of a single `.ino` file with 800+ lines of code, with no separation of concerns. It was probably made this way to simplify compilation and deployment, but it makes it really hard to understand and modify any part of it. Some example features that could have been decoupled into their own separate files include: handling movement, reading from the IR receiver, reacting to the builtin button being pressed. The other issue is that, by looking at the code, it is evident that the firmware had initially been written for compatibility with multiple kits, and then modified to make it fully work with mBot. As a consequence, the code is full of conditional branches that are never going to be executed, and contains dozens of unused variables.
 
 ### Our firmware
+
+#### Makeblock library bug
 
 #### Refactoring the default firmware
 

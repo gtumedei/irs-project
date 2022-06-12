@@ -8,19 +8,19 @@
 // Wheels directions
 enum Direction
 {
-    RUN_F = 0x01,
-    RUN_B = 0x01 << 1,
-    RUN_L = 0x01 << 2,
-    RUN_R = 0x01 << 3,
-    STOP = 0
+  RUN_F = 0x01,
+  RUN_B = 0x01 << 1,
+  RUN_L = 0x01 << 2,
+  RUN_R = 0x01 << 3,
+  STOP = 0
 };
 
 // Robot modes
 enum Mode
 {
-    DRIVING_MODE,
-    OBSTACLE_AVOIDANCE_MODE,
-    LINE_FOLLWING_MODE
+  DRIVING_MODE,
+  OBSTACLE_AVOIDANCE_MODE,
+  LINE_FOLLWING_MODE
 };
 
 // Distances for the ultrasonic sensor
