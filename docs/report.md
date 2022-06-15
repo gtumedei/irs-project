@@ -309,18 +309,22 @@ This section presents an analysis of the default firmware that comes preinstalle
 
 ### Makeblock library
 
-The default mBot firmware is written in C++ and based on the open source Makeblock library ([https://github.com/Makeblock-official/Makeblock-Libraries](https://github.com/Makeblock-official/Makeblock-Libraries)) that the producer makes available on GitHub. While not required for development with the Arduino IDE, its installation is needed to compile the firmware, which we wanted to do. Futhermore, the library offers simple utility classes to interface with all the sensor and actuator modules sold by Makeblock, so it's a good starting point for writing custom control programs.
+The default mBot firmware is written in C++ and based on the open source Makeblock library that the producer makes available on GitHub ([https://github.com/Makeblock-official/Makeblock-Libraries](https://github.com/Makeblock-official/Makeblock-Libraries)). While not required for development with the Arduino IDE, its installation is needed to compile the firmware, which we wanted to do. Futhermore, the library offers simple utility classes to interface with all the sensor and actuator modules sold by Makeblock, so it's a good starting point for writing custom control programs.
 
 ### Default firmware
 
 The default firmware that comes with mBot allows to put the robot in one of three modes, either through the button that's builtin to the board or via the included IR remote. The first mode is fully manual, with the robot that stays completely still unless the IR remote is used to make it go forward, go backward, turn or adjust its speed. The other two modes offer a basic implementation of line following and obstacle avoidance respectively, with the latter having the robot always proceed forward unless it encounters an obstacle (no wandering). The robot lights its LEDs and rings its buzzer every time it receives a command via IR, which is a nice touch. The firmware is based on the Makeblock library, is open source and can be downloaded from the official Makeblock repository on GitHub:\
-[https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_firmware/mbot_firmware.ino](https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_firmware/mbot_firmware.ino)
+[https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_factory_firmware/mbot_factory_firmware.ino](https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_factory_firmware/mbot_factory_firmware.ino).
 
-From a feature standpoint, the default control program is great and offers usage examples to control pretty much any part of the robot. However, it has two main issues that made us choose to go for a big refactor before starting to write our own controllers. The first one is that the entire firmware consists of a single `.ino` file with 800+ lines of code, with no separation of concerns. It was probably made this way to simplify compilation and deployment, but it makes it really hard to understand and modify any part of it. Some example features that could have been decoupled into their own separate files include: handling movement, reading from the IR receiver, reacting to the builtin button being pressed. The other issue is that, by looking at the code, it is evident that the firmware had initially been written for compatibility with multiple kits, and then modified to make it fully work with mBot. As a consequence, the code is full of conditional branches that are never going to be executed, and contains dozens of unused variables.
+From a feature standpoint, the default control program is great and offers usage examples to control pretty much any part of the robot kit. However, it has two main issues that made us choose to go for a big refactor before starting to write our own controllers. The first one is that the entire firmware consists of a single `.ino` file with 1300+ lines of code, with no separation of concerns. It was probably made this way to simplify compilation and deployment, but it makes it really hard to understand and modify any part of it. Some example features that could have been decoupled into their own separate files include: handling movement, reading from the IR receiver, reacting to the builtin button being pressed. The other issue is that, by looking at the code, it is evident that the firmware had initially been written for compatibility with multiple kits, and then modified to make it fully work with mBot. As a consequence, the code is full of conditional branches that are never going to be executed, and contains dozens of unused variables.
 
 ### Our firmware
 
+<!-- TODO -->
+
 #### Makeblock library bug
+
+<!-- TODO -->
 
 #### Refactoring the default firmware
 
@@ -400,7 +404,7 @@ The goal of our tests was to demonstrate that the robot is able to follow the dr
 
 #### Limitations
 
-The only limitation that emerged during our tests is related to the line thickness being greater than the distance between the two sensors of the line-following module. In fact, as shown in the image below, using a line that is thinner, thus placed between the two sensors, allows to place a black line parallel to the module that, when detected by both sensors, indicates the finish line. This is indeed impossible in our case, where if both sensors detect the black line, then it means the robot is inside the track, while if they both detect the white background then the robot has simply left the track.
+The only limitation that emerged during our tests is related to the line thickness being greater than the distance between the two sensors of the line-following module. In fact, as shown in the image below, using a thinner line and making the robot keep it between the two sensors, enables to place a black line parallel to the module that, when detected by both sensors, triggers some action. This is indeed impossible in our case, where if both sensors detect the black line, then it means the robot is inside the track, while if they both detect the white background then the robot has simply left the track.
 
 ![](https://drive.google.com/uc?export=view&id=1LTR8Dhzb9fuKJJoVDFW4FLSavmwRBYY4)
 
@@ -412,13 +416,13 @@ When approaching this type of problem using a single frontal ultrasonic sensor t
 
 #### Design
 
-<!-- TODO -->
+![](https://drive.google.com/uc?export=view&id=1w58Jq3fCCD80KcHEr5lQ3paJpgp5f1f_)
 
 #### Implementation
 
-Our obstacle avoidance algorithm is based on two different behaviors: wander and obstacle avoidance. The program uses the following constants:
-- `AVOID_DISTANCE`: distance beyond which the robot remains in wander mode
-- `CRITICAL_DISTANCE`: distance within which the robot changes direction to avoid the obstacle
+Our obstacle avoidance algorithm is based on two different behaviors: wandering and obstacle avoidance. The program uses the following constants:
+- `AVOID_DISTANCE`: distance beyond which the robot remains in wandering mode
+- `CRITICAL_DISTANCE`: distance within which the robot changes direction to avoid a collision
 - `TURN_DELAY`: minimum time (ms) that must elapse between turns
 And the following global variables:
 - `distance`: current distance detected by the ultrasonic sensor
@@ -427,7 +431,7 @@ And the following global variables:
 - `lastTurnTimestamp`: timestamp of the last turn
 - `turnDirection`: enum value representing the direction in which to turn
 
-The robot stays in wander mode by default. In this behavior, it performs the following actions:
+The robot stays in wandering mode by default. In this behavior, it performs the following actions:
 - Turns left with a probability of 3.33%, if it hasn't turned in the last `TURN_DELAY` milliseconds
 - Turns right with a probability of 3.33%, if it hasn't turned in the last `TURN_DELAY` milliseconds
 - Proceeds straight otherwise
@@ -435,8 +439,6 @@ The robot stays in wander mode by default. In this behavior, it performs the fol
 If an obstacle is detected at a shorter distance than `AVOID_DISTANCE`, the robot switches to obstacle avoidance mode, which consists of the following steps:
 1. The robot randomly chooses a direction and turns toward it with the `turn` function, until no obstacle is detected
 2. If, while turning, the distance to the obstacle gets reduced even further, going below `CRITICAL_DISTANCE`, then it means the chosen direction was probably wrong, so the robot tries turning in the opposite one to avoid the imminent collision. This can only happen once per obstacle
-
-<!-- Add flowchart -->
 
 #### Test and experiments
 
@@ -477,40 +479,44 @@ Since this is a dual behavior, all the assumptions made earlier for obstacle avo
 
 #### Design
 
-<!-- TODO -->
+<!-- TODO
+- mention that the robot spins on itself to compute change and done light levels
+-->
+
+![](https://drive.google.com/uc?export=view&id=1zCMchMLzemYs8JGSNj77jgc3ixaLlWbr)
 
 #### Implementation
 
-Our light chasing algorithm is based on three different behaviors: wander, obstacle avoidance and light chasing. The program uses the following constants:
-- `AVOID_DISTANCE`: distance beyond which the robot remains in wander mode
-- `CRITICAL_DISTANCE`: distance within which the robot changes direction to avoid the obstacle
-- `MIN_TRESHOLD`: minimum level of light treshold
-- `MAX_TRESHOLD`: maximum level of light treshold
+Our light chasing algorithm is based on three different behaviors: wandering, obstacle avoidance and light chasing. The program uses the following constants:
+- `AVOID_DISTANCE`: distance beyond which the robot remains in wandering mode
+- `CRITICAL_DISTANCE`: distance within which the robot changes direction to avoid a collision
+- `MIN_THRESHOLD`: minimum level of light threshold
+- `MAX_THRESHOLD`: maximum level of light threshold
 - `TURN_DELAY`: minimum time (ms) that must elapse between turns
 And the following global variables:
 - `distance`: current distance detected by the ultrasonic sensor
 - `avoiding`: boolean set to true if the robot is in obstacle avoidance mode
 - `changedDirection`: boolean set to true if the robot has already tried to change direction
 - `lastTurnTimestamp`: timestamp of the last turn
-- `turnDirection`: enum value representing the direction in which to turn
+- `turnDirection`: enum value representing the direction in which the robot is turning
 - `lightRight`: light level detected by the right sensor
 - `lightLeft`: light level detected by the left sensor
-- `lightTreshold`: difference in the light level detected by the two sensors under which the robot moves forward
+- `lightThreshold`: margin below which the brightness values ​​read by the two sensors are considered equal
 - `chaseLightLevel`: light level beyond which the robot enters light chasing mode
 - `doneLightLevel`: light level beyond which the robot stops because it has reached the light source
-
-Since both the wander and obstacle avoidance modes work similarly to what was explained in the chapter on the implementation of the obstacle avoidance algorithm, those technical details will not be repeated.
 
 The basic mechanism that guides the robot in choosing which mode to execute works as follows:
 - If the distance detected by the ultrasonic sensor is less than `AVOID_DISTANCE` and neither the right nor the left light sensor detects a light level higher than `doneLightLevel`, the robot enters obstacle avoidance mode
 - If the right or left sensor detects a brightness level higher than `chaseLightLevel`, the robot enters chase light mode. In this case, the robot moves accordingly based on the light level read by the two sensors
-- Otherwise, the wander mode is activated
+- Otherwise, wandering mode is activated
 
-The light chasing mode control software uses three functions to manage and calculate thresholds related to detected brightness levels:
-- `computeChaseLightLevel`: function called only the first time the robot is started, which is necessary to calculate the brightness level above which the robot enters light chasing mode. To do this, the agent performs a spin on itself, sensing the ambient brightness. The result is given by the following formula $$ chaseLightLevel = maxLight * 1,1 $$
-- `computeDoneLightLevel`: function called only the first time the robot is started, which is necessary to calculate the light threshold above which the robot has reached the light source. The result is given by the following formula $$ doneLightLevel = -50+155*log(chaseLightLevel) $$
+Both wandering and obstacle avoidance modes have been ported with no modifications from the obstacle avoidance firmware (see [Obstacle avoidance](#obstacle-avoidance)).
+
+The light chasing mode control software uses three functions to compute thresholds related to detected brightness levels:
+- `computeChaseLightLevel`: calculates the brightness level above which the robot enters light chasing mode. Uses the following formula: $$ chaseLightLevel = maxLight * 1,1 $$. Only runs once at robot startup.
+- `computeDoneLightLevel`: calculates the light threshold above which the robot has reached the light source. Uses the following formula $$ doneLightLevel = -50+155*log(chaseLightLevel) $$. Only runs once at robot startup.
 <!-- Inserire grafico e spiegare la formula -->
-- `computeTreshold`:
+- `computeThreshold`:
 
 #### Test and experiments
 
