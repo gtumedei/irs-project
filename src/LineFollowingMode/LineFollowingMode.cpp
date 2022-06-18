@@ -28,7 +28,7 @@ void lineFollowingMode() {
         direction--;
       }
       moveSpeed = computeMoveSpeed();
-      wheels.forward(moveSpeed); // Try turning here
+      wheels.forwardAndTurnLeft(moveSpeed);
       break;
 
     case S1_OUT_S2_IN:
@@ -37,7 +37,7 @@ void lineFollowingMode() {
         direction++;
       }
       moveSpeed = computeMoveSpeed();
-      wheels.forward(moveSpeed); // Try turning here
+      wheels.forwardAndTurnRight(moveSpeed);
       break;
 
     case S1_OUT_S2_OUT:
