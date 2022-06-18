@@ -265,9 +265,7 @@ Given that the robot has two sensors, the resulting combinations are the followi
 
 **Ultrasonic sensor**
 
-![](https://drive.google.com/uc?export=view&id=1zHcr1mlZDDbEsbjadmiXVXWqKQDyeZ0C)
-
-<!-- Delete watermark -->
+![](https://drive.google.com/uc?export=view&id=1ARwDU6DPP9NWOH2ngFRBv_E2p8zUbbtO)
 
 mBot is equipped with a classic ultrasonic sensor, similar to those found in standard Arduino kits, which allows it to detect obstacles in a range from 1cm to 400cm.
 
@@ -278,8 +276,6 @@ $$ distance = {34cm/ms * time \over 2} $$
 **Light sensor**
 
 ![](https://drive.google.com/uc?export=view&id=1Da553WpNjLGmU8zdvgYw9QoRmWK8_EYs)
-
-<!-- <img height="350" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba"> -->
 
 The two light sensors available in the add-on kit for mBot are connected to the motherboard via RJ45 connectors, and must use ports 3 and 4 as shown in the figure.
 
@@ -324,7 +320,7 @@ From a feature standpoint, the default control program is great and offers usage
 
 #### Makeblock library bug
 
-<!-- TODO -->
+After importing the library provided by Makeblock on the Arduino IDE, compiling the code shows an error in the output related to a multiple definition of the variable specifying Mbot Board GPIO Map. To work around this bug, it was sufficient to move the definition from the MeMCore.h file to the corresponding .cpp file.
 
 #### Refactoring the default firmware
 
@@ -335,7 +331,7 @@ Starting from the single file that composes the basic firmware provided by Makeb
 - **MeWheels**: custom class for wheel management
 - **StartingBuzz**: performs robot power-up sounds and lighting
 
-<!-- Talk about manual/auto mode -->
+The structure of the .ino file for each of the three behaviors has been almost unchanged. An initial setup phase is performed, during which the buzzer sounds are played, the ports to be used are reset, and the LEDs are illuminated. Lastly, the method that executes the Arduino loop contains a switch that allows the usage of both manual (via IR remote) and automatic modes, thus leaving control of the robot to the appropriate controller.
 
 #### MeWheels class
 
@@ -363,6 +359,8 @@ To specify the direction in which to proceed, turning functions accept a value f
 - `DIR_NONE`
 
 ## Controller development
+
+<!-- TODO: intro + talk about subsumption architecture -->
 
 ### Line following
 
@@ -493,36 +491,39 @@ As mentioned earlier, thanks to the purchase of the add-on kit we were able to e
 
 #### Design
 
-The control program, in this case, is composed by three behaviors: wandering, obstacle avoidance and light chasing. The first two are identical to the obstacle avoidance controller (see the [dedicated section](#obstacle-avoidance)). The third one is, from a high level perspective, pretty simple: if the robot detects light to the left or right, it turns toward that direction, otherwise it moves forward. There are however a couple of complications that need to be dealt with:
+The control program, in this case, is composed by three behaviors: wandering, obstacle avoidance and light chasing. The first two are identical to the obstacle avoidance controller (see the [dedicated section](#obstacle-avoidance)). The third one is, from a high level perspective, pretty simple: if the two sensors detect the same light level, the robot moves forward.  otherwise it turns toward the direction of the sensor with the highest light value. There are however a couple of complications that need to be dealt with:
 - At what light level should the robot start chasing the source?
 - At what light level should the robot stop, considering the source to be reached?
 - Left and right sensor measurement will rarely be exactly the same, so what is the threshold below which the detected values should be considered equal?
 
-To establish the light levels at which the robot starts and stops chasing the source, we decided to make it perform a preliminary check on startup. In this phase, the robot performs a 360° spin and saves the highest detected light level. It then uses the following formulas to compute the required values:
+To establish the light levels at which the robot starts ($chase$) and stops ($done$) chasing the source, we decided to make it perform a preliminary check on startup. In this phase, the robot performs a 360° spin and saves the highest detected light level. It then uses the following formulas to compute the required values:
 
 $$ chase = value * 1,1 $$
 
 $$ done = -50 + 155 * ln(chase) $$
 
-$chase$ is simply a 10% increment over the maximum value detected during the initial spin. Given that the sensors can detect a wavelength between 0 and 1100nm, we assumed that $chase$ is roughly between 10 and 850nm. We were unable to detect values below this range, and values above it mean the environment is too bright for the robot to properly detect the light source. With this consideration, we opted for a logarithmic function that generates the following output.
+$chase$ is simply a 10% increment over the maximum value detected during the initial spin. Given that the sensors can detect a wavelength between 0 and 1100nm, we assumed that $chase$ is roughly between 10 and 850nm. We were unable to detect values below this range, and values above it mean the environment is too bright for the robot to properly detect the light source. With this consideration, we opted to compute $done$ with a logarithmic function that generates the following output.
 
 ![](https://drive.google.com/uc?export=view&id=14fvxmEm2TdkPRqa2W7wqIJpkt-Iv53qT)
 
-<!--
-- `computeThreshold`: a dynamic `lightThreshold` value is necessary because when the robot gets in close proximity to the light source, a small turn means a large difference in the light level detected by sensors, so the threshold should become high to prevent the robot from continuously turning left and right. This function runs on each loop when the robot is in light chasing mode, using the following formula:
-  $$
-  lightThreshold = \begin{cases}
-    lightLevel * {thresholdRange \over lightRange} &\text{if } lightLevel > chaseLightLevel + lightRange * 0.75 \\
-    minThreshold &\text{otherwise}
-  \end{cases}
-  $$
-  ![](https://drive.google.com/uc?export=view&id=1Okdb7wKT1cTE5aHzfjvz5UhvJGkLeY7s)
- -->
+Since left and right sensor measurement will rarely be exactly the same, some kind of threshold is needed below which the brightness values ​​read by the two sensors are considered equal. Choosing the right threshold is not trivial. If the value is too high, the robot may miss the light source, while if it's too low it could continuously turn left and right. Furthermore, if the light is far away from the robot, the values detected by the two sensors are going to be very similar. On the contrary, when the robot gets in close proximity to the light source, a small turn means a large difference in the detected light level. As a consequence, the threshold should be dynamic and become higher when the robot is approaching the light, to prevent it from continuously turning left and right. To do this, we have selected the following formula during the testing phase:
 
-<!-- TODO
-- subsumption with total suppression of below behaviors
-- obstacle avoidance has precedence over light chasing
--->
+$$
+  threshold = \begin{cases}
+  maxValue * {thresholdRange \over lightRange} &\text{if } maxValue > chase + lightRange * 0.75 \\
+  minThreshold &\text{otherwise}
+  \end{cases}
+$$
+
+- $maxValue$ is the maximum between the two values detected by sensors
+- $lightRange = done - chase$
+- $thresholdRange = maxThreshold - minThreshold$ is the difference between the maximum and minimum allowed thresholds. During testing, we identified the values of 40nm and 10nm respectively
+
+With the above formula, the threshold value remains constant at $minThreshold$ until the robot detects a light value that is 25% below the $done$ level, then it starts growing linearly. In our tests, this has shown to grant a good sensitivity independently from the distance to the light source.
+
+![](https://drive.google.com/uc?export=view&id=1FvFivZ4CvPCGH7KgCPzZbIGjm4Ln662R)
+
+As can be seen in the flowchart below, the obstacle avoidance behavior is the one with the highest priority, followed by the light chasing one and defaulting to wandering when no light or obstacle is detected.
 
 ![](https://drive.google.com/uc?export=view&id=1zCMchMLzemYs8JGSNj77jgc3ixaLlWbr)
 
@@ -555,7 +556,16 @@ Both wandering and obstacle avoidance modes have been ported with no modificatio
 
 #### Test and experiments
 
-The test phase of the light chasing mode consists of a single environment, consisting of a short path in the middle of which are placed some cardboard boxes to act as obstacles, while at the two ends are the robot and the light source. The tests were carried out in a 16sqm room lit by a single 600lm@6000K LED bulb. Running the test 10 times, the robot was able to correctly reach the light source while avoiding all obstacles only 40% of the cases.
+For testing, we placed the flashlight that the robot has to reach in four different environments, running the test 10 times in each one and changing the position of the light between runs. During each test, the robot had a time of 60 seconds to find and reach the flashlight.
+
+1. **Room lit by the sunlight coming from a window**\
+   Here, if the flashlight was in direct contact with the sunlight, the robot was never able to detect it. Placing it in the shadow helped, but the high ambient light level meant the robot was still unable to consistently reach the flashlight, leading to a final success rate of only 30%.
+2. **Room lit by a ceiling light**\
+   In this test, the room was lit by a single, ceiling-mounted 600lm@6000K LED bulb, providing a uniform illumination on the entire environment. The robot always reached the flashlight, provided it was able to detect it in the first place. Due to the quite high ambient light level, it had to wander very close (< 1m) to the flash light to detect it. The end result was a 50% success rate, due to the limited amount of time the robot had at its disposal to find the light source.
+3. **Room with no light sources**\
+   Having an almost completely dark environment, the robot was able to easily detect the flashlight from a 2m+ distance, achieving a success factor of 100%.
+4. **Room with no light sources and some cardboard boxes scattered around**\
+   The final test was carried out in the environment with the most ideal illumination, adding some cardboard boxes as obstacles. In this situation, the robot reached the flashlight within 60 seconds in 80% of the cases, but was able to avoid any collision only in half of them, leading to a final success rate of 40%. Albeit using the same code as before, the obstacle avoidance behavior was substantially worse compared to previous testing (see [Limitations](#limitations-2))
 
 | Light chasing and obstacle avoidance                                         |
 | ----------------------------------------------------------------------------------------------------- |
@@ -564,14 +574,14 @@ The test phase of the light chasing mode consists of a single environment, consi
 
 #### Limitations
 
-As a result of some experimentation to properly prepare the test environment, it was necessary to deprive the room of any natural light source because both sensors detected such high baseline values that the robot could not enter light chasing mode.
+As a result of the tests we carried out, it was evident that the robot could only operate properly when the room was deprived of any natural light source. Otherwise, both sensors detected such high baseline values that the robot could only enter light chasing mode when very near to the flashlight.
 
-In addition to a limitation due to the values read by the light sensors, an additional issue related to the physical conformation of the robot emerged during our tests.
+As soon as the assembly phase of the two light sensors was completed, it was immediately clear that combining light chasing with obstacle avoidance has a strong limitation due to the size of the robot. The light sensors mounted to the front brought the width of the mBot to 168mm, up from the initial 126mm of the basic configuration. This 33% increase further increased the size of the blind zone of the ultrasonic sensor, weakening even more the ability of the robot to detect and avoid obstacles.
 
 | Basic setup                                          | Light chasing mode                                                            |
 | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | <img width="350" src="https://drive.google.com/uc?export=view&id=1qMO4-wElRXtY-NxhLOUwxygP2Br04wmg">  | <img width="350" src="https://drive.google.com/uc?export=view&id=1Lq25r8le4_N1_qDS35i15WzghULaKOzO">                  |
 
-As soon as the assembly phase of the two light sensors was completed, it was immediately clear that combining light chasing with obstacle avoidance has a strong limitation due to the size of the robot. The two side sensors bring the width of the mBot to 168mm compared to 126mm in the basic configuration (+33%) which, as mentioned earlier, caused problems when obstacles were in the blind zone of the ultrasonic sensor.
-
 ## Conclusions and future work
+
+<!-- TODO -->
