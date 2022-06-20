@@ -2,7 +2,15 @@
 
 ## Introduction
 
-<!-- TODO -->
+The goal of the project is to study the functioning of an agent within a controlled environment by analyzing the possibilities and physical limitations involved. The initial plan is to complete the implementation of three modes, the outcome of which remains doubtful, as it depends on the type of agent that will be used and possible challenges that may arise within a real environment that cannot be predicted in the preliminary stages. The modes are:
+- Line following
+- Obstacle avoidance
+- Light chasing
+
+<!-- TODO
+- compare the experience of programming a controller in a simulated environment (lab sessions) against a real one
+- mention what behaviors we would like to create
+-->
 
 ## Choosing the robot kit
 
@@ -165,7 +173,7 @@ The main criteria used to identify the robot kit that best fits our needs are th
 
 ### Our choice
 
-After a careful analysis of the various options the market has to offer, our choice fell on the mBot kit produced by Makeblock. The only real downside is that we had to buy the light sensors separately, bringing the total cost just shy of the 100€ price limit.
+After a careful analysis of the various options the market has to offer, our choice fell on the mBot kit produced by Makeblock. The only real downside is that we had to buy the light sensors separately, bringing the total cost just shy of the 100€ price limit. The upside is that, by choosing this kit, we'll have the necessary hardware to implement all the controllers we set out to create.
 
 ## Robot kit analysis
 
@@ -316,22 +324,62 @@ From a feature standpoint, the default control program is great and offers usage
 
 ### Our firmware
 
-<!-- TODO -->
+In order to overcome the limitations of the default firmware, we decided to refactor it, creating a new one in the form of an Arduino library, called MeMBotFirmware. The firmware should:
+- Include the Makeblock library
+- Implement all the features of the default firmware that are common among the different controllers we are going to implement, to avoid code duplication
+- Declare an `autoMode` function that the final controller has to implement with the actual behaviors of the robot
 
 #### Makeblock library bug
 
-After importing the library provided by Makeblock on the Arduino IDE, compiling the code shows an error in the output related to a multiple definition of the variable specifying Mbot Board GPIO Map. To work around this bug, it was sufficient to move the definition from the MeMCore.h file to the corresponding .cpp file.
+Importing the Makeblock library multiple times and compiling the code shows an error in the output related to multiple definitions of the variable specifying the mBot Board's GPIO Map. This is because the definition is placed in the `MeMCore.h` file, that as all headers should only contain declarations. To avoid having to worry about this bug, it was sufficient to move the definition to a `.cpp` file. We uploaded the modified library to [https://github.com/gtumedei/irs-project/releases/download/0.0.0/Makeblock-Libraries-master.zip](https://github.com/gtumedei/irs-project/releases/download/0.0.0/Makeblock-Libraries-master.zip)
 
 #### Refactoring the default firmware
 
-Starting from the single file that composes the basic firmware provided by Makeblock, we have created a new library called MeMBotFirmware, dividing the main functionalities into the following files:
-- **BuiltinButton**: handles the button on the motherboard (used to change from automatic to manual mode and vice versa)
-- **IRCommand**: handles the inputs of the remote
-- **ManualMode**: handles the operations of the manual mode
-- **MeWheels**: custom class for wheel management
-- **StartingBuzz**: performs robot power-up sounds and lighting
+Starting from the single file that composes the basic firmware provided by Makeblock, we have divided its features into the following files:
+- `BuiltinButton.cpp`: handles the button on the motherboard (used to change from automatic to manual mode and vice versa)
+- `BuzzerTones.h`: contains the definitions of all tones that can be played by the buzzer
+- `IRCommand.cpp`: handles the inputs of the remote
+- `ManualMode.cpp`: handles the operations of the manual mode
+- `MeMBotFirmware.h`: imports all the other files and declares global variables for sensors, actuators and state
+- `MeWheels.h` and `MeWheels.cpp`: custom class for wheel management
+- `StartingBuzz.cpp`: performs robot power-up sounds and lighting
 
-The structure of the .ino file for each of the three behaviors has been almost unchanged. An initial setup phase is performed, during which the buzzer sounds are played, the ports to be used are reset, and the LEDs are illuminated. Lastly, the method that executes the Arduino loop contains a switch that allows the usage of both manual (via IR remote) and automatic modes, thus leaving control of the robot to the appropriate controller.
+The structure of the `.ino` file for a controller that uses the MeMBotFirmware consists of the standard Arduino `setup` and `loop` functions. To simplify testing, we decided to keep the manual mode, where the robot can be controller via the IR remote, and integrate it in the library. As such, the `loop` function that executes the Arduino loop contains a switch that allows the usage of both manual and automatic modes.
+
+This is structure of a controller that uses the MeMBotFirmware:
+
+<!-- TODO: check if the while (1) is needed -->
+
+```cpp
+#include "MeMBotFirmware.h"
+
+// Sensors initialization
+
+// Global variables initialization
+
+void setup() {
+  // Sensors setup
+}
+
+void loop() {
+  while (1)
+  {
+    handleIRCommand();
+    handleBuiltinButton();
+    // Execute the selected mode
+    switch (mode)
+    {
+      case MANUAL_MODE:
+        manualMode(); // Implemented by MeMBotFirmware
+        break;
+      case AUTO_MODE:
+        autoMode(); // Implemented by the controller
+        break;
+    }
+  }
+}
+
+```
 
 #### MeWheels class
 
@@ -360,24 +408,42 @@ To specify the direction in which to proceed, turning functions accept a value f
 
 ## Controller development
 
-<!-- TODO: intro + talk about subsumption architecture -->
+As mentioned in the introduction, we want to experiment with the creation of three different controllers: line following, obstacle avoidance and light chasing. Each one will consist of a dedicated folder inside the `src` directory and will include two files:
+- `ControllerName.ino`: entry point of the control program, following the structure shown in [Refactoring the default firmware](#refactoring-the-default-firmware)
+- `ControllerName.cpp`: contains the implementation of the `autoMode` function declared by the firmware library, along with the behaviors of which it's composed
+
+Given the fact that the obstacle avoidance and light chasing controllers are going to include multiple behaviors, we have opted for a simplified version of the subsumption architecture to orchestrate them. Each behavior will be represented by a function, and each Arduino tick will decide, based on state and sensor measurements, what behavior to execute. This differs from a standard subsumption because selecting a behavior means completely subsuming the others, so there is no partial takeover.
 
 ### Line following
 
-The first behavior that has been implemented is the mode that allows the robot to follow a black line drawn on the ground.
+The first controller that has been implemented allows the robot to follow a black line drawn on the ground. This is the simplest control program and only includes a single behavior to perform line following.
 
 #### Design
-
-<!-- TODO: cambiare se non cambiamo il programma -->
-
-<!-- TODO: add flowchart -->
 
 Having a line-follower module with two sensors we had two possibilities of programming the robot. The first was to make it follow a line that is thinner than the distance between the two sensors, by keeping it between them. The second was to use a line that is thicker than the sensors distance, with the robot trying to keep both sensors inside it. Given the small 1.5cm distance between our sensors, we chose the latter. Combining this decision with the four possible states in which the line follower module can be, we obtain the following cases.
 
 | Case 1                                                | Case 2                                                                  | Case 3                                                                  | Case 4                                                         |
 | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | <img height="250" src="https://drive.google.com/uc?export=view&id=1o2HyuJU_8iDzg89Bkogz3yebSaX4aUMc"> | <img height="250" src="https://drive.google.com/uc?export=view&id=1TijwBejeKzvTrgsoi45z_NsPoeojQDUL">                   | <img height="250" src="https://drive.google.com/uc?export=view&id=1Depcz2jUsGjtVr_5oxeJX2HKvhep5G_z">                   | <img height="250" src="https://drive.google.com/uc?export=view&id=16jpkEiu_sicN7yhg33FNrm5AUCvpVmyx">          |
-| mBot is on the black line, the value of the line-follower sensor is 0. The robot should keep moving forward.  | mBot deviates from the black line to the right, the value of the line-follower sensor is 1. The robot should turn left to find the black line. | mBot deviates from the black line to the left, the value of the line-follower sensor is 2. The robot should turn right to find the black line. | mBot is not on the black line, the value of the line-follower sensor is 3. The robot should move backwards to find the black line. |
+| mBot is on the black line, the value of the line-follower sensor is 0. The robot should keep moving forward.  | mBot deviates from the black line to the right, the value of the line-follower sensor is 1. The robot should turn left to find the black line. | mBot deviates from the black line to the left, the value of the line-follower sensor is 2. The robot should turn right to find the black line. | mBot is not on the black line, the value of the line-follower sensor is 3. The robot should move in order to find the line again. |
+
+Case 1 to 3 are pretty simple, but handling case 4 requires some considerations. If, while the robot is following the line, both sensors suddenly detect white, moving backward is surely going to place the robot back on track, but is far from the optimal solution. It would be ideal to give it some kind of "memory", so that if it leaves the line while turning, it continues the maneuver and probably finds the track again. To accomplish this, we used a *direction* value to indicate what movement the robot is performing:
+- If the robot is moving forward, *direction* is 0
+- If the robot is turning to the left, each Arduino tick decreases *direction* by 1, down to -10
+- If the robot is turning to the right, each Arduino tick increases *direction* by 1, up to 10
+
+When both sensors detect white, the robot acts based on the value of *direction*:
+- $direction < 0$: the robot was turning to the left, so it should continue in that direction
+- $direction > 0$: the robot was turning to the right, so it should continue in that direction
+- $direction = 0$: the robot has left the track with the left and right sensor at the same instant, so it should move backwards
+
+This solution handles all edge cases quite well, from sharp turns to crossroads in the track.
+
+![](https://drive.google.com/uc?export=view&id=1jOotZ9m6YItNjzIvtuXrMmJJMTrpB3fE)
+
+The described behavior is shown in the flow chart below. To stay true to the actual implementation, it represents a single Arduino loop and gets run on each tick.
+
+![](https://drive.google.com/uc?export=view&id=1kqMFumo0dSmUO7Oh--htYUrAk-0GZuP2)
 
 #### Implementation
 
@@ -386,8 +452,6 @@ The line following controller is very simple and basically consists of a switch 
 $$ speed= maxSpeed * (1-{\vert direction \vert\over 10 }) $$
 
 Where $maxSpeed$ is a constant representing the maximum value of speed the robot can reach, which is 255. The calculation is done within the `computeSpeed()` function, which returns the minimum between the calculated speed and $minSpeed$, a constant set to 230.
-
-<!-- Talk about the direction value in the code -->
 
 #### Tests and experiments
 
@@ -410,7 +474,7 @@ The only limitation that emerged during our tests is related to the line thickne
 
 ### Obstacle avoidance
 
-The second and last behavior that we were able to realize using only the basic kit is wandering + obstacle avoidance.
+The second control program, and the last that we were able to realize using only the basic kit, is the obstacle avoidance one. This controller consist of two behaviors, one for randomly wandering around the environment, and the other to actually avoid detected obstacles.
 
 #### Design
 
@@ -487,7 +551,7 @@ Below are graphically depicted the two most frequent scenarios in which the robo
 
 ### Light chasing with obstacle avoidance
 
-As mentioned earlier, thanks to the purchase of the add-on kit we were able to equip the robot with two light sensors, enabling us to create a new controller for light chasing with obstacle avoidance.
+As mentioned earlier, thanks to the purchase of the add-on kit we were able to equip the robot with two light sensors, enabling us to create a new controller for light chasing with obstacle avoidance. This is an extension of the previous control program and implements, in addition to wandering and obstacle avoidance, an additional behavior for light chasing.
 
 #### Design
 
@@ -584,4 +648,12 @@ As soon as the assembly phase of the two light sensors was completed, it was imm
 
 ## Conclusions and future work
 
-<!-- TODO -->
+<!-- TODO
+conclusions:
+- comparison with a simulated environment
+- overall behaviors outcome
+future work:
+- repeat the experiments with a physical robot that has the exact characteristics of the simulated one
+  - program and test in the simulator, validate in real world
+- create new behaviors
+-->
