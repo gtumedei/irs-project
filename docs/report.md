@@ -650,7 +650,7 @@ As soon as the assembly phase of the two light sensors was completed, it was imm
 
 <!-- TODO
 conclusions:
-- comparison with a simulated environment
+- comparison with a simulated environment (sensor noise)
 - overall behaviors outcome
 future work:
 - repeat the experiments with a physical robot that has the exact characteristics of the simulated one
