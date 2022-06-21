@@ -193,11 +193,10 @@ For this reason, we decided to purchase an additional kit that allows to setup t
   <tbody>
     <tr>
       <td>
-        <img height="200" src="https://drive.google.com/uc?export=view&id=1iIHip_pIJdKip6pugbEDiucPwCZXv268">
-        <img height="300" src="https://drive.google.com/uc?export=view&id=1te4AjnjjeQa8E3wZ79ZFdrNh0Z49Befm">
+        <img src="https://drive.google.com/uc?export=view&id=1vUQNjRXqfnBdAtmm-Mr8u8QshHHZdc5j">
       </td>
       <td>
-        <img height="300" src="https://drive.google.com/uc?export=view&id=1REbNeqX91fLJRQoElLyLo-WaTCKrCl7D">
+        <img src="https://drive.google.com/uc?export=view&id=1aIdJ8qSwMl8YfgHFhuWhS2GfVq6JZ_si">
       </td>
     </tr>
   </tbody>
@@ -207,7 +206,7 @@ For this reason, we decided to purchase an additional kit that allows to setup t
 
 <table>
   <tr>
-    <td colspan="2">Makeblock mBot kit</td>
+    <th colspan="2" style="text-align: left">Makeblock mBot kit</th>
   </tr>
   <tr>
     <td>
@@ -233,8 +232,10 @@ For this reason, we decided to purchase an additional kit that allows to setup t
       </ul>
     </td>
   </tr>
+</table>
+<table>
   <tr>
-    <td colspan="2">Makeblock mBot Add-on 3-in-1</td>
+    <th colspan="2" style="text-align: left">Makeblock mBot Add-on 3-in-1</th>
   </tr>
   <tr>
     <td>
@@ -422,10 +423,34 @@ The first controller that has been implemented allows the robot to follow a blac
 
 Having a line-follower module with two sensors we had two possibilities of programming the robot. The first was to make it follow a line that is thinner than the distance between the two sensors, by keeping it between them. The second was to use a line that is thicker than the sensors distance, with the robot trying to keep both sensors inside it. Given the small 1.5cm distance between our sensors, we chose the latter. Combining this decision with the four possible states in which the line follower module can be, we obtain the following cases.
 
-| Case 1                                                | Case 2                                                                  | Case 3                                                                  | Case 4                                                         |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| <img height="250" src="https://drive.google.com/uc?export=view&id=1o2HyuJU_8iDzg89Bkogz3yebSaX4aUMc"> | <img height="250" src="https://drive.google.com/uc?export=view&id=1TijwBejeKzvTrgsoi45z_NsPoeojQDUL">                   | <img height="250" src="https://drive.google.com/uc?export=view&id=1Depcz2jUsGjtVr_5oxeJX2HKvhep5G_z">                   | <img height="250" src="https://drive.google.com/uc?export=view&id=16jpkEiu_sicN7yhg33FNrm5AUCvpVmyx">          |
-| mBot is on the black line, the value of the line-follower sensor is 0. The robot should keep moving forward.  | mBot deviates from the black line to the right, the value of the line-follower sensor is 1. The robot should turn left to find the black line. | mBot deviates from the black line to the left, the value of the line-follower sensor is 2. The robot should turn right to find the black line. | mBot is not on the black line, the value of the line-follower sensor is 3. The robot should move in order to find the line again. |
+<table>
+  <tr>
+    <th style="width: 25%">Case 1</th>
+    <th style="width: 25%">Case 2</th>
+    <th style="width: 25%">Case 3</th>
+    <th style="width: 25%">Case 4</th>
+  </tr>
+  <tr>
+    <td style="width: 25%">
+      <img src="https://drive.google.com/uc?export=view&id=1BTqCKWXz_7mLkJK8eYkz5NmWEZskXvUB"/>
+    </td>
+    <td style="width: 25%">
+      <img src="https://drive.google.com/uc?export=view&id=1wyQnW15pNeGB_2P0_aw40o3ZbKMKv5GX"/>
+    </td>
+    <td style="width: 25%">
+      <img src="https://drive.google.com/uc?export=view&id=1tvtMdM0ly2idXh7crXF_4skmQTvb1mbp"/>
+    </td>
+    <td style="width: 25%">
+      <img src="https://drive.google.com/uc?export=view&id=1gJ3VRI_dy6ozp6RnOyIrduZ67TyoF7Av"/>
+    </td>
+  </tr>
+  <tr>
+    <td style="width: 25%">mBot is on the black line, the value of the line-follower sensor is 0. The robot should keep moving forward.</td>
+    <td style="width: 25%">mBot deviates from the black line to the right, the value of the line-follower sensor is 1. The robot should turn left to find the black line.</td>
+    <td style="width: 25%">mBot deviates from the black line to the left, the value of the line-follower sensor is 2. The robot should turn right to find the black line.</td>
+    <td style="width: 25%">mBot is not on the black line, the value of the line-follower sensor is 3. The robot should move in order to find the line again.</td>
+  </tr>
+</table>
 
 Case 1 to 3 are pretty simple, but handling case 4 requires some considerations. If, while the robot is following the line, both sensors suddenly detect white, moving backward is surely going to place the robot back on track, but is far from the optimal solution. It would be ideal to give it some kind of "memory", so that if it leaves the line while turning, it continues the maneuver and probably finds the track again. To accomplish this, we used a *direction* value to indicate what movement the robot is performing:
 - If the robot is moving forward, *direction* is 0
@@ -461,10 +486,23 @@ The goal of our tests was to demonstrate that the robot is able to follow the dr
 - **Rectangular track**: hand-built track using electrical tape on cardboard, the rectangular shape allowed us to test the robot's behavior in sharp turns. In the first tests, the robot was able to properly follow about 1 turn every 3. We then realized that the sharp turns needed to be slightly cut off on the outside. This is because otherwise the sensors of the line-following module reached the white background roughly at the same time, causing the robot to: go backwards if it detected white on both sensors simultaneously, turn 90° (correct behavior) or turn 270° if a sensor read white before the other. By making the above change, the outermost sensor always detects the white background first, allowing the robot to curve correctly and obtain a success rate of 100%.
 - **Mixed track**: a more complex track that had the properties of both the previous ones. The line was at first drawn using an indelible marker, but in this case the sensor was unable to detect it correctly, as the ink probably contained some reflective substances. After recreating the track using a black spray can, we were able to make the ten attempts. Despite the difficulty of the path, our experiments yielded good results: the robot was able to complete the path without deviations 80% of the time.
 
-| Infinity-shaped track                                                 | Rectangular track                                                                 | Mixed track                                                                  |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| <img width="650" src="https://drive.google.com/uc?export=view&id=1VVzeHh6uENo4SxQycs6u5JeqdmkOHL9P"> | <img width="650" src="https://drive.google.com/uc?export=view&id=1XGQeXnBC5ACRlYf55nEEAwRyD4rd2x78">                   | <img width="650" src="https://drive.google.com/uc?export=view&id=1tXyivJEmGDgJU8mMY4VuGNSvYleuGTAw">                  |
-|<a href="https://drive.google.com/file/d/111KmP_mfyQhs-e7-Xhquj9NTwerWya8x/view?usp=sharing">Link to the video</a><br>  | <a href="https://drive.google.com/file/d/1eC8OpXyJH8jLvrJn8K7qu9o_2jx-icFX/view?usp=sharing">Link to the video</a><br>                   | <a href="https://drive.google.com/file/d/1GKMX8KEeZe8vkeV6XMvj6-Tru8w0QBOJ/view?usp=sharing">Link to the video</a><br>                  |
+<table>
+  <tr>
+    <th style="width: 33%">Infinity-shaped track</th>
+    <th style="width: 33%">Rectangular track</th>
+    <th style="width: 33%">Mixed track</th>
+  </tr>
+  <tr>
+    <td style="width: 33%"><img src="https://drive.google.com/uc?export=view&id=1VVzeHh6uENo4SxQycs6u5JeqdmkOHL9P"/></td>
+    <td style="width: 33%"><img src="https://drive.google.com/uc?export=view&id=1XGQeXnBC5ACRlYf55nEEAwRyD4rd2x78"/></td>
+    <td style="width: 33%"><img src="https://drive.google.com/uc?export=view&id=1tXyivJEmGDgJU8mMY4VuGNSvYleuGTAw"/></td>
+  </tr>
+  <tr>
+    <td style="width: 33%"><a href="https://drive.google.com/file/d/111KmP_mfyQhs-e7-Xhquj9NTwerWya8x/view?usp=sharing">Video</a></td>
+    <td style="width: 33%"><a href="https://drive.google.com/file/d/1eC8OpXyJH8jLvrJn8K7qu9o_2jx-icFX/view?usp=sharing">Video</a></td>
+    <td style="width: 33%"><a href="https://drive.google.com/file/d/1GKMX8KEeZe8vkeV6XMvj6-Tru8w0QBOJ/view?usp=sharing">Video</a></td>
+  </tr>
+</table>
 
 #### Limitations
 
@@ -525,29 +563,65 @@ The goal of our tests was to demonstrate that the robot is able to avoid obstacl
 - **Controlled perimeter**: limited area defined by a perimeter composed of cardboard boxes. In this test the robot was able to easily detect obstacles, staying within the area and avoiding them in most cases.
 - **Open environment**: large space of about 12sqm with some cardboard boxes, again used as obstacles. Although the collision avoidance algorithm worked correctly as expected, collisions were more frequent during our tests than in the previous case study, due to the limitations of the ultrasonic sensor. The frequency of collisions is obviously higher as the probability of the robot finding an obstacle in a blind spot increases.
 
-| Controlled perimeter                                          | Open environment                                                            |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| <img width="550" src="https://drive.google.com/uc?export=view&id=1STkrO68TkiODY0vH1kDabf1mb7bMYvvm">  | <img width="550" src="https://drive.google.com/uc?export=view&id=1fWpy0qN9GY-kqCCeTJhIj2dzgjNzAFvq">                  |
-|<a href="https://drive.google.com/file/d/16hjmNWZJci_vfP-aY5fA5w3V-6P3VM1W/view?usp=sharing">Link to the video</a><br>  | <a href="https://drive.google.com/file/d/1_O2Lzs7QVdZh8MXopDFHaz6QkgEBlsgZ/view?usp=sharing">Link to the video</a><br> |
+<table>
+  <tr>
+    <th style="width: 50%">Controlled perimeter</th>
+    <th style="width: 50%">Open environment</th>
+  </tr>
+  <tr>
+    <td style="width: 50%"><img src="https://drive.google.com/uc?export=view&id=1STkrO68TkiODY0vH1kDabf1mb7bMYvvm"/></td>
+    <td style="width: 50%"><img src="https://drive.google.com/uc?export=view&id=1fWpy0qN9GY-kqCCeTJhIj2dzgjNzAFvq"/></td>
+  </tr>
+  <tr>
+    <td style="width: 50%"><a href="https://drive.google.com/file/d/16hjmNWZJci_vfP-aY5fA5w3V-6P3VM1W/view?usp=sharing">Video</a></td>
+    <td style="width: 50%"><a href="https://drive.google.com/file/d/1_O2Lzs7QVdZh8MXopDFHaz6QkgEBlsgZ/view?usp=sharing">Video</a></td>
+  </tr>
+</table>
 
 #### Limitations
 
 During our tests emerged two types of limitations, the first is related to the working mode of the Arduino ultrasonic sensor, whose cases are shown in the following table. However, another type of limitations, is associated to the structure of the robot and the use of the sensor in a fixed position.
 
-| Case 1                                                | Case 2                                                                  | Case 3                                                                  | Case 4                                                         |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| <img width="300" src="https://drive.google.com/uc?export=view&id=16kooovh31j4DQnbAM3kn7G11GxGvpA4g"> | <img width="300" src="https://drive.google.com/uc?export=view&id=18YU7aSQEpP7PTzHXBFM_6VAx9ueZWK-3">                   | <img width="300" src="https://drive.google.com/uc?export=view&id=1eG2G0QueXjrFfH94hWbEoyokIe3z_2Mu">                   | <img width="300" src="https://drive.google.com/uc?export=view&id=1dTI569X0yYUjTHgPQYNSMDranEnox6-m">          |
-| Object is too far away  | Flat object is not facing sensor | Object is too small | Object is too soft |
+<table>
+  <tr>
+    <th style="width: 25%">Case 1</th>
+    <th style="width: 25%">Case 2</th>
+    <th style="width: 25%">Case 3</th>
+    <th style="width: 25%">Case 4</th>
+  </tr>
+  <tr>
+    <td style="width: 25%"><img src="https://drive.google.com/uc?export=view&id=16kooovh31j4DQnbAM3kn7G11GxGvpA4g"/></td>
+    <td style="width: 25%"><img src="https://drive.google.com/uc?export=view&id=18YU7aSQEpP7PTzHXBFM_6VAx9ueZWK-3"/></td>
+    <td style="width: 25%"><img src="https://drive.google.com/uc?export=view&id=1eG2G0QueXjrFfH94hWbEoyokIe3z_2Mu"/></td>
+    <td style="width: 25%"><img src="https://drive.google.com/uc?export=view&id=1dTI569X0yYUjTHgPQYNSMDranEnox6-m"/></td>
+  </tr>
+  <tr>
+    <td style="width: 25%">The object is too far away.</td>
+    <td style="width: 25%">The object is too inclined with respect to the sensor.</td>
+    <td style="width: 25%">The object is too small.</td>
+    <td style="width: 25%">The object is not dense enough.</td>
+  </tr>
+</table>
 
 In our case, these limitations may result in scenarios where the robot is unable to detect the obstacle, mainly because its body is significantly wider (11cm) than the area covered by the sensor (4.5cm).
 The sound waves emitted by the transmitter, therefore, may not be wide enough, especially when the robot is at certain angles to the obstacle, to ensure that the passage area is actually free.
 
 Below are graphically depicted the two most frequent scenarios in which the robot may find itself when it needs to avoid an obstacle.
 
-| Case 1                                                | Case 2                                                                  |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| <img width="250" src="https://drive.google.com/uc?export=view&id=1Gs2VW1mq0hzX0DMY-CrnlymQ-Vmf7eMO"> | <img width="250" src="https://drive.google.com/uc?export=view&id=1GWq5lqiK97Tg18xkevRsV39O56XcMEFy">                   |
-| The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction and avoid it with no issues.  | The ultrasonic sensor is unable to detect any obstacle, since it is in the blind zone. mBot won't change direction and will inevitably collide with the object. |
+<table>
+  <tr>
+    <th style="width: 50%">Case 1</th>
+    <th style="width: 50%">Case 2</th>
+  </tr>
+  <tr>
+    <td style="width: 50%; text-align: center;"><img height="300" src="https://drive.google.com/uc?export=view&id=1Gs2VW1mq0hzX0DMY-CrnlymQ-Vmf7eMO"/></td>
+    <td style="width: 50%; text-align: center;"><img height="300" src="https://drive.google.com/uc?export=view&id=1GWq5lqiK97Tg18xkevRsV39O56XcMEFy"/></td>
+  </tr>
+  <tr>
+    <td style="width: 50%">The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction and avoid it with no issues.</td>
+    <td style="width: 50%">The ultrasonic sensor is unable to detect any obstacle, since it is in the blind zone. mBot won't change direction and will inevitably collide with the object.</td>
+  </tr>
+</table>
 
 ### Light chasing with obstacle avoidance
 
@@ -634,7 +708,7 @@ For testing, we placed the flashlight that the robot has to reach in four differ
 | Light chasing and obstacle avoidance                                         |
 | ----------------------------------------------------------------------------------------------------- |
 | <img width="400" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba">  |
-|<a href="https://drive.google.com/file/d/1JbtrB1WWwk3pahGgJ0Arb4F_gqmo_BuQ/view?usp=sharing">Link to the video</a><br>  |
+|<a href="https://drive.google.com/file/d/1JbtrB1WWwk3pahGgJ0Arb4F_gqmo_BuQ/view?usp=sharing">Video</a><br>  |
 
 #### Limitations
 
@@ -642,9 +716,16 @@ As a result of the tests we carried out, it was evident that the robot could onl
 
 As soon as the assembly phase of the two light sensors was completed, it was immediately clear that combining light chasing with obstacle avoidance has a strong limitation due to the size of the robot. The light sensors mounted to the front brought the width of the mBot to 168mm, up from the initial 126mm of the basic configuration. This 33% increase further increased the size of the blind zone of the ultrasonic sensor, weakening even more the ability of the robot to detect and avoid obstacles.
 
-| Basic setup                                          | Light chasing mode                                                            |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| <img width="350" src="https://drive.google.com/uc?export=view&id=1qMO4-wElRXtY-NxhLOUwxygP2Br04wmg">  | <img width="350" src="https://drive.google.com/uc?export=view&id=1Lq25r8le4_N1_qDS35i15WzghULaKOzO">                  |
+<table>
+  <tr>
+    <th style="width: 50%">Basic setup</th>
+    <th style="width: 50%">With light sensors</th>
+  </tr>
+  <tr>
+    <td style="width: 50%"><img src="https://drive.google.com/uc?export=view&id=1qMO4-wElRXtY-NxhLOUwxygP2Br04wmg" /></td>
+    <td style="width: 50%"><img src="https://drive.google.com/uc?export=view&id=1Lq25r8le4_N1_qDS35i15WzghULaKOzO" /></td>
+  </tr>
+</table>
 
 ## Conclusions and future work
 
