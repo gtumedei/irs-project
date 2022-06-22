@@ -343,8 +343,6 @@ The structure of the `.ino` file for a controller that uses the MeMBotFirmware c
 
 This is structure of a controller that uses the MeMBotFirmware:
 
-<!-- TODO: check if the while (1) is needed -->
-
 ```cpp
 #include "MeMBotFirmware.h"
 
@@ -357,21 +355,18 @@ void setup() {
 }
 
 void loop() {
-  while (1)
+  handleIRCommand();
+  handleBuiltinButton();
+  // Execute the selected mode
+  switch (mode)
   {
-    handleIRCommand();
-    handleBuiltinButton();
-    // Execute the selected mode
-    switch (mode)
-    {
-      case MANUAL_MODE:
-        manualMode(); // Implemented by MeMBotFirmware
-        break;
-      case AUTO_MODE:
-        autoMode(); // Implemented by the controller
-        break;
-    }
-  }
+    case MANUAL_MODE:
+      manualMode(); // Implemented by MeMBotFirmware
+      break;
+    case AUTO_MODE:
+      autoMode(); // Implemented by the controller
+      break;
+ }
 }
 
 ```

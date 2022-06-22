@@ -17,7 +17,8 @@ Direction motorState = STOP;
 Direction prevMotorState = STOP;
 Mode mode = MANUAL_MODE;
 
-void setup() {
+void setup()
+{
   delay(5);
   wheels.stop();
   pinMode(13, OUTPUT);
@@ -37,20 +38,18 @@ void setup() {
   randomSeed(analogRead(6));
 }
 
-void loop() {
-  while (1)
+void loop()
+{
+  handleIRCommand();
+  handleBuiltinButton();
+  // Execute the selected mode
+  switch (mode)
   {
-    handleIRCommand();
-    handleBuiltinButton();
-    // Execute the selected mode
-    switch (mode)
-    {
-      case MANUAL_MODE:
-        manualMode();
-        break;
-      case AUTO_MODE:
-        autoMode();
-        break;
-    }
+  case MANUAL_MODE:
+    manualMode();
+    break;
+  case AUTO_MODE:
+    autoMode();
+    break;
   }
 }
