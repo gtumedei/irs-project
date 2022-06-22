@@ -2,23 +2,17 @@
 
 ## Introduction
 
-The goal of the project is to study the functioning of an agent within a controlled environment by analyzing the possibilities and physical limitations involved. The initial plan is to complete the implementation of three modes, the outcome of which remains doubtful, as it depends on the type of agent that will be used and possible challenges that may arise within a real environment that cannot be predicted in the preliminary stages. The modes are:
-- Line following
-- Obstacle avoidance
-- Light chasing
+The Intelligent Robotic Systems course includes a number of laboratory sessions in which students approach the design of robot controllers using the scientific method, testing their implementations in a simulated environment. While robot simulators offer a number of advantages, they are a result of an abstraction, that only preserves the most relevant aspects of the physical environment and agent. The goal of this project is to compare the experience of programming a robot controller in a simulated environment against a real world one. To do this, we set out to find a good robot kit that enables us to implement a series of control programs, similar to the ones created in laboratory. As in that case, we are going to apply a scientific approach, by formulating hypotheses, checking them against actual behaviors and making adjustments when needed.
 
-<!-- TODO
-- compare the experience of programming a controller in a simulated environment (lab sessions) against a real one
-- mention what behaviors we would like to create
--->
+The initial plan is to complete the implementation of four behaviors: wandering, line following, obstacle avoidance and phototaxis. We are then going to combine them in order to create slightly more complex, multi-behavior control programs. The actual outcome depends on the hardware characteristics of the robot kit we will choose, along with challenges that may arise in a real environment and cannot be predicted in the preliminary stages (e.g. sensor noise).
 
 ## Choosing the robot kit
 
-Choosing the right kit is an important step because its components will define what can and can't be done in the project. As such, we have started by defining a set of features that a kit must match in order to be a valid candidate.
+The first step to carry out the project is to choose a robot kit with the required features to implement the aforementioned behaviors. The obvious choice would be to use a foot-bot similar to the one simulated in ARGoS. Unfortunately, due to the high price tag of similarly equipped robots, we had to settle for a more economic, consumer-oriented solution. As a consequence, the selected kit will inevitably have some hardware limitations that will influence the behaviors implementation, defining what can and can't be done in the project.
 
-### Required features
+### Requirements
 
-The main criteria used to identify the robot kit that best fits our needs are the following:
+To identify the robot kit to choose, we have started by defining a set of features that a it must match in order to be a valid candidate.
 
 - **Reasonably priced**: since this is a self-funded project, the cost to purchase the kit should not exceed 100€ so that it can a viable solution for similar activities made by other students
 - **Preferably equipped with two wheels**: any other solution involves the usage of more than two motors, thus increasing the price and making any movement related code harder to write
@@ -733,6 +727,7 @@ As soon as the assembly phase of the two light sensors was completed, it was imm
 conclusions:
 - comparison with a simulated environment (sensor noise)
 - overall behaviors outcome
+- can't test robot swarms
 future work:
 - repeat the experiments with a physical robot that has the exact characteristics of the simulated one
   - program and test in the simulator, validate in real world
