@@ -317,6 +317,23 @@ The default firmware that comes with mBot allows to put the robot in one of thre
 
 From a feature standpoint, the default control program is great and offers usage examples to control pretty much any part of the robot kit. However, it has two main issues that made us choose to go for a big refactor before starting to write our own controllers. The first one is that the entire firmware consists of a single `.ino` file with 1300+ lines of code, with no separation of concerns. It was probably made this way to simplify compilation and deployment, but it makes it really hard to understand and modify any part of it. Some example features that could have been decoupled into their own separate files include: handling movement, reading from the IR receiver, reacting to the builtin button being pressed. The other issue is that, by looking at the code, it is evident that the firmware had initially been written for compatibility with multiple kits, and then modified to make it fully work with mBot. As a consequence, the code is full of conditional branches that are never going to be executed, and contains dozens of unused variables.
 
+#### Line Following
+
+The implementation of the line following mode featured in the firmware provided by Makeblock is relatively simple, but effective. A variable, called `lineFollowFlag`, which can take values from 0 to 20, is used to indicate the direction to be taken.
+The algorithm is basically built on a switch construct, which considers the four possible scenarios:
+- Both sensors detect the line, the `lineFollowFlag` value is 10
+- Only the right sensor detects the line, the `lineFollowFlag` value is decremented
+- Only the left sensor detects the line, the `lineFollowFlag` value is incremented
+- No sensor detects the line
+
+In the Makeblock implementation, the robot will turn only in the last case, based on the value of `lineFollowFlag`.
+
+#### Obstacle avoidance
+
+The implementation of the obstacle avoidance algorithm in the base firmware is quite weak. The movements to be performed by the robot are based on the value detected by the ultrasonic sensor (`d`), combined with two constants, named `AVOID_DISTANCE` and `CRITICAL_DISTANCE`, set, however, to the same value (15cm). One of the conditions that allows the robot to curve left or right, randomly, is the following: `else if ((d > CRITICAL_DISTANCE) && (d < AVOID_DISTANCE))`, which is clearly never executed. The entire program is thus based on a single switch, executed if the robot detects an obstacle at a distance smaller than `AVOID_DISTANCE`, which selects with a 50% probability each the turns direction.
+
+This type of implementation leads the robot, in most cases, to avoid the object very inefficiently, and in some cases, even collide with it.
+
 ### Our firmware
 
 In order to overcome the limitations of the default firmware, we decided to refactor it, creating a new one in the form of an Arduino library, called MeMBotFirmware. The firmware should:
