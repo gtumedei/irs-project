@@ -27,9 +27,9 @@ To identify the robot kit to choose, we have started by defining a set of featur
 <table>
   <thead>
     <tr>
-      <th>Kit</th>
-      <th>Pros</th>
-      <th>Cons</th>
+      <th style="width: 33%">Kit</th>
+      <th style="width: 33%">Pros</th>
+      <th style="width: 33%">Cons</th>
     </tr>
   </thead>
   <tbody>
@@ -37,7 +37,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       <td>
         <strong>Makeblock mBot Kit</strong><br>
         <a href="https://amzn.to/3lsxlnw">https://amzn.to/3lsxlnw</a><br>
-        <img height="200" src="https://drive.google.com/uc?export=view&id=1fV3h-D6ATuJwflhDP8jxG3BIhxFH27jf">
+        <div><img height="200" src="https://drive.google.com/uc?export=view&id=1fV3h-D6ATuJwflhDP8jxG3BIhxFH27jf"></div>
       </td>
       <td>
         <ul>
@@ -60,7 +60,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       <td>
         <strong>Freenove Micro: Rover Kit</strong><br>
         <a href="https://amzn.to/3MzPews">https://amzn.to/3MzPews</a><br>
-        <img height="200" src="https://drive.google.com/uc?export=view&id=1KF2s55cbdmwdAdRxurueLzvAnRS-Si5j">
+        <div><img height="200" src="https://drive.google.com/uc?export=view&id=1KF2s55cbdmwdAdRxurueLzvAnRS-Si5j"></div>
       </td>
       <td>
         <ul>
@@ -83,7 +83,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       <td>
         <strong>ELEGOO UNO Project Kit</strong><br>
         <a href="https://amzn.to/3luxFC3">https://amzn.to/3luxFC3</a><br>
-        <img height="200" src="https://drive.google.com/uc?export=view&id=1WOvLLYx-pIQsI6A6rFICLVA0HmraIE_E">
+        <div><img height="200" src="https://drive.google.com/uc?export=view&id=1WOvLLYx-pIQsI6A6rFICLVA0HmraIE_E"></div>
       </td>
       <td>
         <ul>
@@ -104,7 +104,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       <td>
         <strong>ELEGOO Smart Owl Robot Car Kit</strong><br>
         <a href="https://amzn.to/3sJYs1p">https://amzn.to/3sJYs1p</a><br>
-        <img height="200" src="https://drive.google.com/uc?export=view&id=1ROB8XoqZokn4gsE7J6WCTK1rMLIp6gml">
+        <div><img height="200" src="https://drive.google.com/uc?export=view&id=1ROB8XoqZokn4gsE7J6WCTK1rMLIp6gml"></div>
       </td>
       <td>
         <ul>
@@ -125,7 +125,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       <td>
         <strong>OSOYOO V2.1 Smart Robot Car Kit for Arduino</strong><br>
         <a href="https://amzn.to/3tc00Sb">https://amzn.to/3tc00Sb</a><br>
-        <img height="200" src="https://drive.google.com/uc?export=view&id=1G1MLzwOc9xPzwSLPTIT6QSm9QR1fnFY6">
+        <div><img height="200" src="https://drive.google.com/uc?export=view&id=1G1MLzwOc9xPzwSLPTIT6QSm9QR1fnFY6"></div>
       </td>
       <td>
         <ul>
@@ -146,7 +146,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       <td>
         <strong>OSOYOO Robotic Car for Raspberry Pi 4 3B + 3B</strong><br>
         <a href="https://amzn.to/3yMlRmF">https://amzn.to/3yMlRmF</a><br>
-        <img height="200" src="https://drive.google.com/uc?export=view&id=1fujrBIhGpEm7pkfz3-Egj0sEaiDUlt3j">
+        <div><img height="200" src="https://drive.google.com/uc?export=view&id=1fujrBIhGpEm7pkfz3-Egj0sEaiDUlt3j"></div>
       </td>
       <td>
         <ul>
@@ -185,12 +185,12 @@ For this reason, we decided to purchase an additional kit that allows to setup t
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr  style="width: 50%">
       <td>
-        <img src="https://drive.google.com/uc?export=view&id=1vUQNjRXqfnBdAtmm-Mr8u8QshHHZdc5j">
+        <div style="text-align: center"><img height="360" src="https://drive.google.com/uc?export=view&id=1vUQNjRXqfnBdAtmm-Mr8u8QshHHZdc5j"></div>
       </td>
-      <td>
-        <img src="https://drive.google.com/uc?export=view&id=1aIdJ8qSwMl8YfgHFhuWhS2GfVq6JZ_si">
+      <td  style="width: 50%">
+        <div style="text-align: center"><img height="360" src="https://drive.google.com/uc?export=view&id=1aIdJ8qSwMl8YfgHFhuWhS2GfVq6JZ_si"></div>
       </td>
     </tr>
   </tbody>
@@ -203,10 +203,10 @@ For this reason, we decided to purchase an additional kit that allows to setup t
     <th colspan="2" style="text-align: left">Makeblock mBot kit</th>
   </tr>
   <tr>
-    <td>
-      <img height="350" src="https://drive.google.com/uc?export=view&id=1DoDd6_Jf0MZ20qUcL1Fyng-e5RsvFIkV">
+    <td style="width: 60%">
+      <div><img height="350" src="https://drive.google.com/uc?export=view&id=1DoDd6_Jf0MZ20qUcL1Fyng-e5RsvFIkV"></div>
     </td>
-    <td>
+    <td style="width: 40%">
       <ul>
         <li>AA battery holder</li>
         <li>Chassis</li>
@@ -232,10 +232,10 @@ For this reason, we decided to purchase an additional kit that allows to setup t
     <th colspan="2" style="text-align: left">Makeblock mBot Add-on 3-in-1</th>
   </tr>
   <tr>
-    <td>
-      <img height="350" src="https://drive.google.com/uc?export=view&id=1sX3-d8Da5P27FlVUPPt8YvPWt6nwU3FW">
+    <td style="width: 60%">
+      <div><img height="350" src="https://drive.google.com/uc?export=view&id=1sX3-d8Da5P27FlVUPPt8YvPWt6nwU3FW"></div>
     </td>
-    <td>
+    <td style="width: 40%">
       <ul>
         <li>Beams and plates</li>
         <li>Fasteners</li>
@@ -253,7 +253,7 @@ For this reason, we decided to purchase an additional kit that allows to setup t
 
 **Wheels**
 
-<img height="250" src="https://drive.google.com/uc?export=view&id=1GT9KO9y2CCT283IapBGvkIVHU9n0GFbd">
+<img height="250" src="https://drive.google.com/uc?export=view&id=1GT9KO9y2CCT283IapBGvkIVHU9n0GFbd"/>
 
 Each of the two wheels equipped to mBot are attached to a servo motor and connected to the motherboard via RJ45 connectors. These are mapped inside Arduino to PWM pins, enabling the rotation speed for each wheel to be specified using values between 0 and 255.
 
@@ -266,9 +266,9 @@ Given that the robot has two sensors, the resulting combinations are the followi
 - The left sensor reads 1, while the right reads 0
 - Both sensors read 1
 
-**Ultrasonic sensor**
+#### Ultrasonic sensor
 
-![](https://drive.google.com/uc?export=view&id=1ARwDU6DPP9NWOH2ngFRBv_E2p8zUbbtO)
+<img height="300" src="https://drive.google.com/uc?export=view&id=1ARwDU6DPP9NWOH2ngFRBv_E2p8zUbbtO" />
 
 mBot is equipped with a classic ultrasonic sensor, similar to those found in standard Arduino kits, which allows it to detect obstacles in a range from 1cm to 400cm.
 
@@ -278,11 +278,11 @@ $$ distance = {34cm/ms * time \over 2} $$
 
 **Light sensor**
 
-![](https://drive.google.com/uc?export=view&id=1Da553WpNjLGmU8zdvgYw9QoRmWK8_EYs)
+<img height="300" src="https://drive.google.com/uc?export=view&id=1Da553WpNjLGmU8zdvgYw9QoRmWK8_EYs" />
 
 The two light sensors available in the add-on kit for mBot are connected to the motherboard via RJ45 connectors, and must use ports 3 and 4 as shown in the figure.
 
-![](https://drive.google.com/uc?export=view&id=112d1gGe8w4nuZTNu0aPKUfR9teqG-ZaD)
+<img height="300" src="https://drive.google.com/uc?export=view&id=112d1gGe8w4nuZTNu0aPKUfR9teqG-ZaD" />
 
 These sensors are based on the photoelectric effect principle in semiconductors and can be used to detect the intensity of ambient light.
 
@@ -438,16 +438,16 @@ Having a line-follower module with two sensors we had two possibilities of progr
   </tr>
   <tr>
     <td style="width: 25%">
-      <img src="https://drive.google.com/uc?export=view&id=1BTqCKWXz_7mLkJK8eYkz5NmWEZskXvUB"/>
+      <div><img src="https://drive.google.com/uc?export=view&id=1BTqCKWXz_7mLkJK8eYkz5NmWEZskXvUB"/></div>
     </td>
     <td style="width: 25%">
-      <img src="https://drive.google.com/uc?export=view&id=1wyQnW15pNeGB_2P0_aw40o3ZbKMKv5GX"/>
+      <div><img src="https://drive.google.com/uc?export=view&id=1wyQnW15pNeGB_2P0_aw40o3ZbKMKv5GX"/></div>
     </td>
     <td style="width: 25%">
-      <img src="https://drive.google.com/uc?export=view&id=1tvtMdM0ly2idXh7crXF_4skmQTvb1mbp"/>
+      <div><img src="https://drive.google.com/uc?export=view&id=1tvtMdM0ly2idXh7crXF_4skmQTvb1mbp"/></div>
     </td>
     <td style="width: 25%">
-      <img src="https://drive.google.com/uc?export=view&id=1gJ3VRI_dy6ozp6RnOyIrduZ67TyoF7Av"/>
+      <div><img src="https://drive.google.com/uc?export=view&id=1gJ3VRI_dy6ozp6RnOyIrduZ67TyoF7Av"/></div>
     </td>
   </tr>
   <tr>
@@ -470,11 +470,11 @@ When both sensors detect white, the robot acts based on the value of *direction*
 
 This solution handles all edge cases quite well, from sharp turns to crossroads in the track.
 
-![](https://drive.google.com/uc?export=view&id=1jOotZ9m6YItNjzIvtuXrMmJJMTrpB3fE)
+<img height="290" src="https://drive.google.com/uc?export=view&id=1jOotZ9m6YItNjzIvtuXrMmJJMTrpB3fE"/>
 
 The described behavior is shown in the flow chart below. To stay true to the actual implementation, it represents a single Arduino loop and gets run on each tick.
 
-![](https://drive.google.com/uc?export=view&id=1kqMFumo0dSmUO7Oh--htYUrAk-0GZuP2)
+<img height="700" src="https://drive.google.com/uc?export=view&id=1kqMFumo0dSmUO7Oh--htYUrAk-0GZuP2"/>
 
 #### Implementation
 
@@ -499,9 +499,9 @@ The goal of our tests was to demonstrate that the robot is able to follow the dr
     <th style="width: 33%">Mixed track</th>
   </tr>
   <tr>
-    <td style="width: 33%"><img src="https://drive.google.com/uc?export=view&id=1VVzeHh6uENo4SxQycs6u5JeqdmkOHL9P"/></td>
-    <td style="width: 33%"><img src="https://drive.google.com/uc?export=view&id=1XGQeXnBC5ACRlYf55nEEAwRyD4rd2x78"/></td>
-    <td style="width: 33%"><img src="https://drive.google.com/uc?export=view&id=1tXyivJEmGDgJU8mMY4VuGNSvYleuGTAw"/></td>
+    <td style="width: 33%"><div><img src="https://drive.google.com/uc?export=view&id=1VVzeHh6uENo4SxQycs6u5JeqdmkOHL9P"/></div></td>
+    <td style="width: 33%"><div><img src="https://drive.google.com/uc?export=view&id=1XGQeXnBC5ACRlYf55nEEAwRyD4rd2x78"/></div></td>
+    <td style="width: 33%"><div><img src="https://drive.google.com/uc?export=view&id=1tXyivJEmGDgJU8mMY4VuGNSvYleuGTAw"/></div></td>
   </tr>
   <tr>
     <td style="width: 33%"><a href="https://drive.google.com/file/d/111KmP_mfyQhs-e7-Xhquj9NTwerWya8x/view?usp=sharing">Video</a></td>
@@ -514,7 +514,7 @@ The goal of our tests was to demonstrate that the robot is able to follow the dr
 
 The only limitation that emerged during our tests is related to the line thickness being greater than the distance between the two sensors of the line-following module. In fact, as shown in the image below, using a thinner line and making the robot keep it between the two sensors, enables to place a black line parallel to the module that, when detected by both sensors, triggers some action. This is indeed impossible in our case, where if both sensors detect the black line, then it means the robot is inside the track, while if they both detect the white background then the robot has simply left the track.
 
-![](https://drive.google.com/uc?export=view&id=1LTR8Dhzb9fuKJJoVDFW4FLSavmwRBYY4)
+<img height="200" src="https://drive.google.com/uc?export=view&id=1LTR8Dhzb9fuKJJoVDFW4FLSavmwRBYY4"/>
 
 ### Obstacle avoidance
 
@@ -537,7 +537,7 @@ Delays reduce the responsiveness of the robot to external inputs, but are necess
 
 Below is a flow chart of the obstacle avoidance behavior. To stay true to the actual implementation, it represents a single Arduino loop and gets run on each tick.
 
-![](https://drive.google.com/uc?export=view&id=1w58Jq3fCCD80KcHEr5lQ3paJpgp5f1f_)
+<img height="650" src="https://drive.google.com/uc?export=view&id=1w58Jq3fCCD80KcHEr5lQ3paJpgp5f1f_"/>
 
 #### Implementation
 
@@ -575,8 +575,8 @@ The goal of our tests was to demonstrate that the robot is able to avoid obstacl
     <th style="width: 50%">Open environment</th>
   </tr>
   <tr>
-    <td style="width: 50%"><img src="https://drive.google.com/uc?export=view&id=1STkrO68TkiODY0vH1kDabf1mb7bMYvvm"/></td>
-    <td style="width: 50%"><img src="https://drive.google.com/uc?export=view&id=1fWpy0qN9GY-kqCCeTJhIj2dzgjNzAFvq"/></td>
+    <td style="width: 50%"><div><img src="https://drive.google.com/uc?export=view&id=1STkrO68TkiODY0vH1kDabf1mb7bMYvvm"/></div></td>
+    <td style="width: 50%"><div><img src="https://drive.google.com/uc?export=view&id=1fWpy0qN9GY-kqCCeTJhIj2dzgjNzAFvq"/></div></td>
   </tr>
   <tr>
     <td style="width: 50%"><a href="https://drive.google.com/file/d/16hjmNWZJci_vfP-aY5fA5w3V-6P3VM1W/view?usp=sharing">Video</a></td>
@@ -596,10 +596,10 @@ During our tests emerged two types of limitations, the first is related to the w
     <th style="width: 25%">Case 4</th>
   </tr>
   <tr>
-    <td style="width: 25%"><img src="https://drive.google.com/uc?export=view&id=16kooovh31j4DQnbAM3kn7G11GxGvpA4g"/></td>
-    <td style="width: 25%"><img src="https://drive.google.com/uc?export=view&id=18YU7aSQEpP7PTzHXBFM_6VAx9ueZWK-3"/></td>
-    <td style="width: 25%"><img src="https://drive.google.com/uc?export=view&id=1eG2G0QueXjrFfH94hWbEoyokIe3z_2Mu"/></td>
-    <td style="width: 25%"><img src="https://drive.google.com/uc?export=view&id=1dTI569X0yYUjTHgPQYNSMDranEnox6-m"/></td>
+    <td style="width: 25%"><div><img src="https://drive.google.com/uc?export=view&id=16kooovh31j4DQnbAM3kn7G11GxGvpA4g"/></div></td>
+    <td style="width: 25%"><div><img src="https://drive.google.com/uc?export=view&id=18YU7aSQEpP7PTzHXBFM_6VAx9ueZWK-3"/></div></td>
+    <td style="width: 25%"><div><img src="https://drive.google.com/uc?export=view&id=1eG2G0QueXjrFfH94hWbEoyokIe3z_2Mu"/></div></td>
+    <td style="width: 25%"><div><img src="https://drive.google.com/uc?export=view&id=1dTI569X0yYUjTHgPQYNSMDranEnox6-m"/></div></td>
   </tr>
   <tr>
     <td style="width: 25%">The object is too far away.</td>
@@ -620,8 +620,8 @@ Below are graphically depicted the two most frequent scenarios in which the robo
     <th style="width: 50%">Case 2</th>
   </tr>
   <tr>
-    <td style="width: 50%; text-align: center;"><img height="300" src="https://drive.google.com/uc?export=view&id=1Gs2VW1mq0hzX0DMY-CrnlymQ-Vmf7eMO"/></td>
-    <td style="width: 50%; text-align: center;"><img height="300" src="https://drive.google.com/uc?export=view&id=1GWq5lqiK97Tg18xkevRsV39O56XcMEFy"/></td>
+    <td style="width: 50%; text-align: center;"><div><img height="300" src="https://drive.google.com/uc?export=view&id=18PD91ICMCLwP-xcBV95xYP_PEEE7c7lB"/></div></td>
+    <td style="width: 50%; text-align: center;"><div><img height="300" src="https://drive.google.com/uc?export=view&id=1hkFE7fOAA53xs0imC8cmVnX9EkE_HcbP"/></div></td>
   </tr>
   <tr>
     <td style="width: 50%">The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction and avoid it with no issues.</td>
@@ -648,7 +648,7 @@ $$ done = -50 + 155 * ln(chase) $$
 
 $chase$ is simply a 10% increment over the maximum value detected during the initial spin. Given that the sensors can detect a wavelength between 0 and 1100nm, we assumed that $chase$ is roughly between 10 and 850nm. We were unable to detect values below this range, and values above it mean the environment is too bright for the robot to properly detect the light source. With this consideration, we opted to compute $done$ with a logarithmic function that generates the following output.
 
-![](https://drive.google.com/uc?export=view&id=14fvxmEm2TdkPRqa2W7wqIJpkt-Iv53qT)
+<img height="300" src="https://drive.google.com/uc?export=view&id=14fvxmEm2TdkPRqa2W7wqIJpkt-Iv53qT"/>
 
 Since left and right sensor measurement will rarely be exactly the same, some kind of threshold is needed below which the brightness values ​​read by the two sensors are considered equal. Choosing the right threshold is not trivial. If the value is too high, the robot may miss the light source, while if it's too low it could continuously turn left and right. Furthermore, if the light is far away from the robot, the values detected by the two sensors are going to be very similar. On the contrary, when the robot gets in close proximity to the light source, a small turn means a large difference in the detected light level. As a consequence, the threshold should be dynamic and become higher when the robot is approaching the light, to prevent it from continuously turning left and right. To do this, we have selected the following formula during the testing phase:
 
@@ -669,7 +669,7 @@ With the above formula, the threshold value remains constant at $minThreshold$ u
 
 As can be seen in the flowchart below, the obstacle avoidance behavior is the one with the highest priority, followed by the light chasing one and defaulting to wandering when no light or obstacle is detected.
 
-![](https://drive.google.com/uc?export=view&id=1zCMchMLzemYs8JGSNj77jgc3ixaLlWbr)
+<img height="800" src="https://drive.google.com/uc?export=view&id=1zCMchMLzemYs8JGSNj77jgc3ixaLlWbr"/>
 
 #### Implementation
 
@@ -711,10 +711,17 @@ For testing, we placed the flashlight that the robot has to reach in four differ
 4. **Room with no light sources and some cardboard boxes scattered around**\
    The final test was carried out in the environment with the most ideal illumination, adding some cardboard boxes as obstacles. In this situation, the robot reached the flashlight within 60 seconds in 80% of the cases, but was able to avoid any collision only in half of them, leading to a final success rate of 40%. Albeit using the same code as before, the obstacle avoidance behavior was substantially worse compared to previous testing (see [Limitations](#limitations-2))
 
-| Light chasing and obstacle avoidance                                         |
-| ----------------------------------------------------------------------------------------------------- |
-| <img width="400" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba">  |
-|<a href="https://drive.google.com/file/d/1JbtrB1WWwk3pahGgJ0Arb4F_gqmo_BuQ/view?usp=sharing">Video</a><br>  |
+<table>
+  <tr>
+    <th>Light chasing and obstacle avoidance</th>
+  </tr>
+  <tr>
+    <td><div><img width="400" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba"/></div></td>
+  </tr>
+  <tr>
+    <td><a href="https://drive.google.com/file/d/1JbtrB1WWwk3pahGgJ0Arb4F_gqmo_BuQ/view?usp=sharing">Video</a></td>
+  </tr>
+</table>
 
 #### Limitations
 
@@ -728,8 +735,8 @@ As soon as the assembly phase of the two light sensors was completed, it was imm
     <th style="width: 50%">With light sensors</th>
   </tr>
   <tr>
-    <td style="width: 50%"><img src="https://drive.google.com/uc?export=view&id=1qMO4-wElRXtY-NxhLOUwxygP2Br04wmg" /></td>
-    <td style="width: 50%"><img src="https://drive.google.com/uc?export=view&id=1Lq25r8le4_N1_qDS35i15WzghULaKOzO" /></td>
+    <td style="width: 50%"><div><img src="https://drive.google.com/uc?export=view&id=1qMO4-wElRXtY-NxhLOUwxygP2Br04wmg" /></div></td>
+    <td style="width: 50%"><div><img src="https://drive.google.com/uc?export=view&id=1Lq25r8le4_N1_qDS35i15WzghULaKOzO" /></div></td>
   </tr>
 </table>
 
