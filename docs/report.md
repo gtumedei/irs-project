@@ -735,13 +735,8 @@ As soon as the assembly phase of the two light sensors was completed, it was imm
 
 ## Conclusions and future work
 
-<!-- TODO
-conclusions:
-- comparison with a simulated environment (sensor noise)
-- overall behaviors outcome
-- can't test robot swarms
-future work:
-- repeat the experiments with a physical robot that has the exact characteristics of the simulated one
-  - program and test in the simulator, validate in real world
-- create new behaviors
--->
+This project's goal was to experience programming a robot controller in a real world environment, in order to compare it against the simulated one that has been used in laboratory sessions. From a control program point of view, we are quite satisfied with the behaviors we were able to create, and we think that the results we obtained during our experiments can't be improved by much due to the nature and the limitations of the robot kit we chose. The experience of programming a controller on the physical robot is very different from the usage of a simulator. On one side, testing directly in a real world environment has allowed us to catch more errors, fine tune parameters to prevent problems related to sensor noise, and feel more secure of having a successful implementation - after all, we already tested it on physical hardware. On the other side, however, testing in a simulator is way more efficient from a time and resource point of view: setting up a virtual environment is faster, and testing is even more, thanks to the ability to run multiple instances of the controller in parallel. In the end, the ideal setup would be to have both a simulator and a real environment to test with, and adopt an iterative **plan** - **implement** - **test** - **validate** approach, like shown in the figure below.
+
+![](https://drive.google.com/uc?export=view&id=19gQlYBuoI68eXopMGo1DMop018Z2qZQA)
+
+The nature of this project lends itself particularly well to future development. For one, the chosen kit can be easily expanded with additional modules, offering the possibility to implement new and more advances controllers. Another interesting activity would be to purchase more kits and test the usage of robot swarms, a scenario that we were unable to take into account due to time and budget constraints. During testing, we would have been interested in directly comparing the results we got in the real world against the ones obtained within a simulator. However, in order to make a 1:1 comparison, it is obviously necessary to use a robot with the same characteristics as the agent running on the virtual environment. In our case this was not possible, but as previously highlighted this approach would have offered the best developer experience and should be considered for any serious robot programming project.
