@@ -2,38 +2,40 @@
 
 ## Introduction
 
-The Intelligent Robotic Systems course includes a number of laboratory sessions in which students approach the design of robot controllers using the scientific method, testing their implementations in a simulated environment. While robot simulators offer a number of advantages, they are a result of an abstraction, that only preserves the most relevant aspects of the physical environment and agent. The goal of this project is to compare the experience of programming a robot controller in a simulated environment against a real world one. To do this, we set out to find a good robot kit that enables us to implement a series of control programs, similar to the ones created in laboratory. As in that case, we are going to apply a scientific approach, by formulating hypotheses, checking them against actual behaviors and making adjustments when needed.
+The Intelligent Robotic Systems course includes a number of laboratory sessions in which students approach the design of robot controllers using the scientific method and testing their implementations in a simulated environment. While robot simulators offer a number of advantages, they are the result of an abstraction, that only preserves the most relevant aspects of the physical environment and agent. The goal of this project is to compare the experience of programming a robot controller in a simulated environment against a real world one. To do this, we set out to find a good robot kit that enables us to implement a series of control programs, similar to the ones created in laboratory. As in that case, we are going to apply a scientific approach to development and testing, by formulating hypotheses, checking them against actual behaviors and making adjustments when needed.
 
 The initial plan is to complete the implementation of four behaviors: wandering, line following, obstacle avoidance and phototaxis. We are then going to combine them in order to create slightly more complex, multi-behavior control programs. The actual outcome depends on the hardware characteristics of the robot kit we will choose, along with challenges that may arise in a real environment and cannot be predicted in the preliminary stages (e.g. sensor noise).
 
 ## Choosing the robot kit
 
-The first step to carry out the project is to choose a robot kit with the required features to implement the aforementioned behaviors. The obvious choice would be to use a foot-bot similar to the one simulated in ARGoS. Unfortunately, due to the high price tag of similarly equipped robots, we had to settle for a more economic, consumer-oriented solution. As a consequence, the selected kit will inevitably have some hardware limitations that will influence the behaviors implementation, defining what can and can't be done in the project.
+The first step to carry out the project is to choose a robot kit with the required features to implement the aforementioned behaviors. The obvious solution would be to use a foot-bot, in order to have the same robot as the one in ARGoS, the simulator we used in laboratory. Unfortunately, due to the high price tag of similarly equipped robots, we had to settle for a more economic, consumer-oriented solution. As a consequence, the selected kit will inevitably have some hardware limitations that will influence the implementation of behaviors, defining what can and can't be done in the project.
 
 ### Requirements
 
-To identify the robot kit to choose, we have started by defining a set of features that a it must match in order to be a valid candidate.
+To identify the robot kit to pick, we initially defined a set of features that it must match in order to be a valid candidate.
 
-- **Reasonably priced**: since this is a self-funded project, the cost to purchase the kit should not exceed 100€ so that it can a viable solution for similar activities made by other students
-- **Preferably equipped with two wheels**: any other solution involves the usage of more than two motors, thus increasing the price and making any movement related code harder to write
+- **Reasonably priced**: since this is a self-funded project, the cost to purchase the kit should not exceed 100€; this also makes it a viable solution for similar activities made by other students
+- **Preferably equipped with two wheels**: any solution that involves the usage of more than two motors increases the price and makes any movement-related code harder to write
 - **Presence of ultrasonic sensor**: since obstacle avoidance is the main behavior that the robot must be able to adopt as the project goal, this sensor is indispensable
-- **Preferably equipped with some light sensors**: not mandatory, but it opens up to interesting behaviors such as combining obstacle avoidance and light chasing
-- **Programmable in a known language**: the main complexities when dealing with a robot acting in a real environment lie in the physical limitations of both the agent and its surroundings. Therefore, using an already known programming language gives a certain level of confidence that anomalies are related to the physical environment and not to the development one
+- **Preferably equipped with some light sensors**: not mandatory, but opens up the possibility to create a phototaxis behavior, that can then be combined with obstacle avoidance
+- **Programmable in a known language**: using an already known programming language speeds up the implementation and gives a certain level of confidence that anomalies are related to the physical environment and/or agent and not to the development one
 - **Presence of documentation to support programming**: the development phase is going to be much straightforward if the robot is based on a well documented and/or popular board
-- **Good level of modularity**: the more the kit is modular, the more possibilities open up, from buying replacement parts in case of damage to the existing ones, to adding sensors and actuators and implementing new, complex controllers
+- **Good level of modularity**: the more the kit is modular, the more possibilities open up, from buying replacement parts in case of damage to the existing ones, to adding sensors and actuators and implementing new, more complex controllers
 
 ### The market of programmable robot kits
 
 <table>
   <thead>
     <tr>
-      <th style="width: 33%">Kit</th>
-      <th style="width: 33%">Pros</th>
-      <th style="width: 33%">Cons</th>
+      <th style="width: 10%"></th>
+      <th style="width: 30%">Kit</th>
+      <th style="width: 30%">Pros</th>
+      <th style="width: 30%">Cons</th>
     </tr>
   </thead>
   <tbody>
     <tr>
+      <td>1</td>
       <td>
         <strong>Makeblock mBot Kit</strong><br>
         <a href="https://amzn.to/3lsxlnw">https://amzn.to/3lsxlnw</a><br>
@@ -57,6 +59,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       </td>
     </tr>
     <tr>
+      <td>2</td>
       <td>
         <strong>Freenove Micro: Rover Kit</strong><br>
         <a href="https://amzn.to/3MzPews">https://amzn.to/3MzPews</a><br>
@@ -80,6 +83,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       </td>
     </tr>
     <tr>
+      <td>3</td>
       <td>
         <strong>ELEGOO UNO Project Kit</strong><br>
         <a href="https://amzn.to/3luxFC3">https://amzn.to/3luxFC3</a><br>
@@ -101,6 +105,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       </td>
     </tr>
     <tr>
+      <td>4</td>
       <td>
         <strong>ELEGOO Smart Owl Robot Car Kit</strong><br>
         <a href="https://amzn.to/3sJYs1p">https://amzn.to/3sJYs1p</a><br>
@@ -122,6 +127,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       </td>
     </tr>
     <tr>
+      <td>5</td>
       <td>
         <strong>OSOYOO V2.1 Smart Robot Car Kit for Arduino</strong><br>
         <a href="https://amzn.to/3tc00Sb">https://amzn.to/3tc00Sb</a><br>
@@ -143,6 +149,7 @@ To identify the robot kit to choose, we have started by defining a set of featur
       </td>
     </tr>
     <tr>
+      <td>6</td>
       <td>
         <strong>OSOYOO Robotic Car for Raspberry Pi 4 3B + 3B</strong><br>
         <a href="https://amzn.to/3yMlRmF">https://amzn.to/3yMlRmF</a><br>
@@ -167,12 +174,12 @@ To identify the robot kit to choose, we have started by defining a set of featur
 
 ### Our choice
 
-After a careful analysis of the various options the market has to offer, our choice fell on the mBot kit produced by Makeblock. The only real downside is that we had to buy the light sensors separately, bringing the total cost just shy of the 100€ price limit. The upside is that, by choosing this kit, we'll have the necessary hardware to implement all the controllers we set out to create.
+After a careful analysis of the various options that the market has to offer, our choice fell on the mBot kit produced by Makeblock. The only real downside is that we had to buy the light sensors separately, bringing the total cost just shy of the 100€ price limit. The upside is that, by choosing this kit, we'll have the necessary hardware to implement all the controllers we set out to create.
 
 ## Robot kit analysis
 
-The provided kit contains all the components necessary to meet most of the features required to complete the project objectives. The only lack is related to light sensors, which are needed for the implementation of more complex behaviors such as combining obstacle avoidance and light chasing.
-For this reason, we decided to purchase an additional kit that allows to setup the robot in three additional configurations:
+The provided kit contains all the necessary components to meet most of the features required to complete the project objectives. The only lack is related to light sensors, which are needed for the implementation of more complex behaviors such as combining obstacle avoidance and light chasing.
+For this reason, we decided to purchase an expansion kit that allows to setup the robot in three additional configurations:
 - Light chasing (the one we were interested in)
 - Scorpion (with a rgb-responsive tail)
 - Intelligent desk light
@@ -255,7 +262,7 @@ For this reason, we decided to purchase an additional kit that allows to setup t
 
 <img height="250" src="https://drive.google.com/uc?export=view&id=1GT9KO9y2CCT283IapBGvkIVHU9n0GFbd"/>
 
-Each of the two wheels equipped to mBot are attached to a servo motor and connected to the motherboard via RJ45 connectors. These are mapped inside Arduino to PWM pins, enabling the rotation speed for each wheel to be specified using values between 0 and 255.
+Each of the two wheels equipped to mBot are attached to a servo motor and connected to the motherboard via RJ45 plugs. These are mapped inside Arduino to an analog and a PWM pin each, enabling the speed for each wheel to be specified using values between 0 and 255 and the direction to be set using the analog pin.
 
 **Line follower sensor**
 
@@ -266,7 +273,7 @@ Given that the robot has two sensors, the resulting combinations are the followi
 - The left sensor reads 1, while the right reads 0
 - Both sensors read 1
 
-#### Ultrasonic sensor
+**Ultrasonic sensor**
 
 <img height="300" src="https://drive.google.com/uc?export=view&id=1ARwDU6DPP9NWOH2ngFRBv_E2p8zUbbtO" />
 
@@ -278,11 +285,9 @@ $$ distance = {34cm/ms * time \over 2} $$
 
 **Light sensor**
 
-<img height="300" src="https://drive.google.com/uc?export=view&id=1Da553WpNjLGmU8zdvgYw9QoRmWK8_EYs" />
+<img height="250" src="https://drive.google.com/uc?export=view&id=1a_Pch011lZ-WZ2W_39cGYLjfP5Gro2tG" />
 
-The two light sensors available in the add-on kit for mBot are connected to the motherboard via RJ45 connectors, and must use ports 3 and 4 as shown in the figure.
-
-<img height="300" src="https://drive.google.com/uc?export=view&id=112d1gGe8w4nuZTNu0aPKUfR9teqG-ZaD" />
+The two light sensors available in the add-on kit for mBot are connected to the motherboard via RJ45 plugs, and must use ports 3 and 4 as shown in the figure.
 
 These sensors are based on the photoelectric effect principle in semiconductors and can be used to detect the intensity of ambient light.
 
@@ -295,12 +300,10 @@ The photosensitive wavelength range varies between 400 and 1100nm, the analog va
 
 Most of the robot kits produced by Makeblock, including mBot, support several development platforms, which can be chosen according to the desired level of difficulty, making them ideal for any user.
 
-- **mBlock 5**: cooding tool that supports both Python and block programming via a dedicated browser platform. More information available at https://mblock.makeblock.com/en-us/
-- **mBlock Blockly**: game-based robot app that supports block programming, specifically designed for younger users. More information available at https://www.makeblock.com/software/mblock-app
-- **Makeblock App**: all-in-1 controller for any Makeblock robots that supports multiple control modes and 3D modeling. More information available at https://www.makeblock.com/software/makeblock-app
-- **Arduino IDE**: it's just like programming a normal Arduino board, but with additional resources provided by Makeblock through their official GitHub repository, accessible at https://github.com/Makeblock-official/Makeblock-Libraries
-
-We obviously chose the latter.
+- **mBlock 5**: coding tool that supports both Python and block programming via a dedicated browser platform (https://mblock.makeblock.com/en-us/)
+- **mBlock Blockly**: game-based robot app that supports block programming, specifically designed for younger users (https://www.makeblock.com/software/mblock-app)
+- **Makeblock App**: all-in-1 controller for any Makeblock robots that supports multiple control modes and 3D modeling (https://www.makeblock.com/software/makeblock-app)
+- **Arduino IDE**: it's the option we chose, since it's just like programming a normal Arduino board, but with additional resources provided by Makeblock through their official GitHub repository, accessible at https://github.com/Makeblock-official/Makeblock-Libraries
 
 ## Firmware analysis and refactor
 
@@ -315,24 +318,29 @@ The default mBot firmware is written in C++ and based on the open source Makeblo
 The default firmware that comes with mBot allows to put the robot in one of three modes, either through the button that's builtin to the board or via the included IR remote. The first mode is fully manual, with the robot that stays completely still unless the IR remote is used to make it go forward, go backward, turn or adjust its speed. The other two modes offer a basic implementation of line following and obstacle avoidance respectively, with the latter having the robot always proceed forward unless it encounters an obstacle (no wandering). The robot lights its LEDs and rings its buzzer every time it receives a command via IR, which is a nice touch. The firmware is based on the Makeblock library, is open source and can be downloaded from the official Makeblock repository on GitHub:\
 [https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_factory_firmware/mbot_factory_firmware.ino](https://github.com/Makeblock-official/Makeblock-Libraries/blob/master/examples/Firmware_For_mBlock/mbot_factory_firmware/mbot_factory_firmware.ino).
 
-From a feature standpoint, the default control program is great and offers usage examples to control pretty much any part of the robot kit. However, it has two main issues that made us choose to go for a big refactor before starting to write our own controllers. The first one is that the entire firmware consists of a single `.ino` file with 1300+ lines of code, with no separation of concerns. It was probably made this way to simplify compilation and deployment, but it makes it really hard to understand and modify any part of it. Some example features that could have been decoupled into their own separate files include: handling movement, reading from the IR receiver, reacting to the builtin button being pressed. The other issue is that, by looking at the code, it is evident that the firmware had initially been written for compatibility with multiple kits, and then modified to make it fully work with mBot. As a consequence, the code is full of conditional branches that are never going to be executed, and contains dozens of unused variables.
+**Line Following**
 
-#### Line Following
-
-The implementation of the line following mode featured in the firmware provided by Makeblock is relatively simple, but effective. A variable, called `lineFollowFlag`, which can take values from 0 to 20, is used to indicate the direction to be taken.
+The line following implementation of the default firmware is relatively simple, but effective. A variable, called `lineFollowFlag`, which can assume values from 1 to 20, is used to indicate the direction that the robot should take.
 The algorithm is basically built on a switch construct, which considers the four possible scenarios:
-- Both sensors detect the line, the `lineFollowFlag` value is 10
-- Only the right sensor detects the line, the `lineFollowFlag` value is decremented
-- Only the left sensor detects the line, the `lineFollowFlag` value is incremented
-- No sensor detects the line
+- Both sensors detect the line: `lineFollowFlag` is set to 10
+- Only the right sensor detects the line: `lineFollowFlag` is decremented
+- Only the left sensor detects the line: `lineFollowFlag` is incremented
+- No sensor detects the line: the robot acts based on the value of `lineFollowFlag` to get back on track:
+  - If it's 10, it goes backward
+  - If it's below 10, it turns to the left
+  - If it's above 10, it turns to the right
 
-In the Makeblock implementation, the robot will turn only in the last case, based on the value of `lineFollowFlag`.
+This implementation has the peculiarity of making the robot turn only when both sensors leave the line.
 
-#### Obstacle avoidance
+**Obstacle avoidance**
 
-The implementation of the obstacle avoidance algorithm in the base firmware is quite weak. The movements to be performed by the robot are based on the value detected by the ultrasonic sensor (`d`), combined with two constants, named `AVOID_DISTANCE` and `CRITICAL_DISTANCE`, set, however, to the same value (15cm). One of the conditions that allows the robot to curve left or right, randomly, is the following: `else if ((d > CRITICAL_DISTANCE) && (d < AVOID_DISTANCE))`, which is clearly never executed. The entire program is thus based on a single switch, executed if the robot detects an obstacle at a distance smaller than `AVOID_DISTANCE`, which selects with a 50% probability each the turns direction.
+The implementation of the obstacle avoidance algorithm in the base firmware is extremely simple. The robot's movement is based on the value detected by the ultrasonic sensor (`d`): if it's above the `AVOID_DISTANCE` value (15cm), the robot proceeds forward, otherwise it picks a side with a 50% probability and turns in that direction until no obstacle is detected.
 
-This type of implementation leads the robot, in most cases, to avoid the object very inefficiently, and in some cases, even collide with it.
+This type of solution leads to a very inefficient behavior, and in some cases, causes the robot to collide with obstacles.
+
+**Pros and cons**
+
+From a feature standpoint, the default control program is great and offers usage examples to control pretty much any part of the robot kit. However, it has two main issues that made us choose to go for a big refactor before starting to write our own controllers. The first one is that the entire firmware consists of a single `.ino` file with 1300+ lines of code, with no separation of concerns. It was probably made this way to simplify compilation and deployment, but it makes it really hard to understand and modify any part of it. Some example features that could have been decoupled into their own separate files include: handling movement, reading from the IR receiver, reacting to the builtin button being pressed. The other issue is that, by looking at the code, it is evident that the firmware had initially been written for compatibility with multiple kits, and then modified to make it fully work with mBot. As a consequence, the code is full of conditional branches that are never going to be executed, and contains dozens of unused variables.
 
 ### Our firmware
 
@@ -341,11 +349,11 @@ In order to overcome the limitations of the default firmware, we decided to refa
 - Implement all the features of the default firmware that are common among the different controllers we are going to implement, to avoid code duplication
 - Declare an `autoMode` function that the final controller has to implement with the actual behaviors of the robot
 
-#### Makeblock library bug
+**Makeblock library bug**
 
-Importing the Makeblock library multiple times and compiling the code shows an error in the output related to multiple definitions of the variable specifying the mBot Board's GPIO Map. This is because the definition is placed in the `MeMCore.h` file, that as all headers should only contain declarations. To avoid having to worry about this bug, it was sufficient to move the definition to a `.cpp` file. We uploaded the modified library to [https://github.com/gtumedei/irs-project/releases/download/0.0.0/Makeblock-Libraries-master.zip](https://github.com/gtumedei/irs-project/releases/download/0.0.0/Makeblock-Libraries-master.zip)
+Importing the Makeblock library more than once and compiling the code shows an error in the output, related to multiple definitions of the variable specifying the mBot Board's GPIO Map. This is because the definition is placed in the `MeMCore.h` file, that, as all headers, should only contain declarations. To avoid having to worry about this bug, it was sufficient to move the definition to a `.cpp` file. We uploaded the modified library to [https://github.com/gtumedei/irs-project/releases/download/0.0.0/Makeblock-Libraries-master.zip](https://github.com/gtumedei/irs-project/releases/download/0.0.0/Makeblock-Libraries-master.zip)
 
-#### Refactoring the default firmware
+**Refactoring the default firmware**
 
 Starting from the single file that composes the basic firmware provided by Makeblock, we have divided its features into the following files:
 - `BuiltinButton.cpp`: handles the button on the motherboard (used to change from automatic to manual mode and vice versa)
@@ -388,7 +396,7 @@ void loop() {
 
 ```
 
-#### MeWheels class
+**MeWheels class**
 
 The default firmware does not handle the usage of the wheels in a very intuitive way. The main issue is that, since the left motor is identical to the right, but mounted in a flipped way, to go forward the robot needs to spin the two wheels in opposite directions. To overcome this limitation and simplify operations like turning, we added a new class to the firmware, called `MeWheels`. The class contains the following functions:
 - `spinRight`: spins the right wheel at a given speed
@@ -408,24 +416,21 @@ The default firmware does not handle the usage of the wheels in a very intuitive
   - `backwardAndTurnLeft`: calls `backwardAndTurn` with left as the direction
   - `backwardAndTurnRight`: calls `backwardAndTurn` with left as the direction
 
-To specify the direction in which to proceed, turning functions accept a value from the `TurnDirection` enum, which can be:
-- `DIR_RIGHT`
-- `DIR_LEFT`
-- `DIR_NONE`
+To specify the direction in which to proceed, turning functions accept a value from the `TurnDirection` enum, which can be: `DIR_RIGHT`, `DIR_LEFT`, `DIR_NONE`.
 
 ## Controller development
 
-As mentioned in the introduction, we want to experiment with the creation of three different controllers: line following, obstacle avoidance and light chasing. Each one will consist of a dedicated folder inside the `src` directory and will include two files:
+As mentioned in the introduction, we wanted to experiment with the creation of three different controllers: line following, obstacle avoidance and light chasing. Each one will consist of a dedicated folder inside the `src` directory and will include two files:
 - `ControllerName.ino`: entry point of the control program, following the structure shown in [Refactoring the default firmware](#refactoring-the-default-firmware)
 - `ControllerName.cpp`: contains the implementation of the `autoMode` function declared by the firmware library, along with the behaviors of which it's composed
 
-Given the fact that the obstacle avoidance and light chasing controllers are going to include multiple behaviors, we have opted for a simplified version of the subsumption architecture to orchestrate them. Each behavior will be represented by a function, and each Arduino tick will decide, based on state and sensor measurements, what behavior to execute. This differs from a standard subsumption because selecting a behavior means completely subsuming the others, so there is no partial takeover.
+Given the fact that the obstacle avoidance and light chasing controllers are going to include multiple behaviors, we have opted for a simplified version of the subsumption architecture to orchestrate them. Each behavior will be represented by a function, and each Arduino tick will decide, based on state and sensor measurements, what behavior to execute. This differs from a standard subsumption in that selecting a behavior means completely subsuming the others, so there is no partial takeover.
 
 ### Line following
 
 The first controller that has been implemented allows the robot to follow a black line drawn on the ground. This is the simplest control program and only includes a single behavior to perform line following.
 
-#### Design
+**Design**
 
 Having a line-follower module with two sensors we had two possibilities of programming the robot. The first was to make it follow a line that is thinner than the distance between the two sensors, by keeping it between them. The second was to use a line that is thicker than the sensors distance, with the robot trying to keep both sensors inside it. Given the small 1.5cm distance between our sensors, we chose the latter. Combining this decision with the four possible states in which the line follower module can be, we obtain the following cases.
 
@@ -476,21 +481,21 @@ The described behavior is shown in the flow chart below. To stay true to the act
 
 <img height="700" src="https://drive.google.com/uc?export=view&id=1kqMFumo0dSmUO7Oh--htYUrAk-0GZuP2"/>
 
-#### Implementation
+**Implementation**
 
-The line following controller is very simple and basically consists of a switch that handles the above four cases, moving the wheels according to the value read from the sensors. To regulate the speed, making the robot go faster in straight tracks and slower during turns, we made some tests and identified the following formula:
+The line following controller is very simple and basically consists of a switch that handles the above four cases, moving the wheels according to the value read by the sensors. To regulate the speed, making the robot go faster in straight tracks and slower during turns, we made some tests and identified the following formula:
 
 $$ speed= maxSpeed * (1-{\vert direction \vert\over 10 }) $$
 
 Where $maxSpeed$ is a constant representing the maximum value of speed the robot can reach, which is 255. The calculation is done within the `computeSpeed()` function, which returns the minimum between the calculated speed and $minSpeed$, a constant set to 230.
 
-#### Tests and experiments
+**Testing**
 
-The goal of our tests was to demonstrate that the robot is able to follow the drawn black line. To carry out the verification of our hypotheses, we created three tracks of increasing difficulty and tested the behavior of the robot ten times each.
+The goal of our tests was to demonstrate that the robot is able to follow the drawn black line. To carry out the verification of our hypotheses, we created three tracks of increasing difficulty and tested the behavior of the robot ten times on each one.
 
-- **Infinity-shaped track**: this is the track bundled with the robot kit, characterized by an infinity-shaped line printed on paper, so we expected the robot to be able to follow the line without particular difficulty. After adjusting our parameters to optimize the robot's movements, the success rate was 100%.
+- **Infinity-shaped track**: this is the track bundled with the robot kit, characterized by an infinity-shaped line printed on paper, so we expected the robot to be able to follow the line without any particular difficulty. After adjusting our parameters to optimize the robot's movements, the success rate was 100%.
 - **Rectangular track**: hand-built track using electrical tape on cardboard, the rectangular shape allowed us to test the robot's behavior in sharp turns. In the first tests, the robot was able to properly follow about 1 turn every 3. We then realized that the sharp turns needed to be slightly cut off on the outside. This is because otherwise the sensors of the line-following module reached the white background roughly at the same time, causing the robot to: go backwards if it detected white on both sensors simultaneously, turn 90° (correct behavior) or turn 270° if a sensor read white before the other. By making the above change, the outermost sensor always detects the white background first, allowing the robot to curve correctly and obtain a success rate of 100%.
-- **Mixed track**: a more complex track that had the properties of both the previous ones. The line was at first drawn using an indelible marker, but in this case the sensor was unable to detect it correctly, as the ink probably contained some reflective substances. After recreating the track using a black spray can, we were able to make the ten attempts. Despite the difficulty of the path, our experiments yielded good results: the robot was able to complete the path without deviations 80% of the time.
+- **Mixed track**: a more complex track that had the properties of both the previous ones. The line was at first drawn using an indelible marker, but in this case the sensor was unable to detect it correctly, as the ink probably contained some reflective substances. After recreating the track using a black spray paint, we were able to make the ten attempts. Despite the difficulty of the path, our experiments yielded good results: the robot was able to complete the path without deviations 80% of the time; performed a wrong turn, but was able to get back on track 10% of the time; wrongly took the crossroad and started following the line in the wrong senses in the last case.
 
 <table>
   <tr>
@@ -510,7 +515,7 @@ The goal of our tests was to demonstrate that the robot is able to follow the dr
   </tr>
 </table>
 
-#### Limitations
+**Limitations**
 
 The only limitation that emerged during our tests is related to the line thickness being greater than the distance between the two sensors of the line-following module. In fact, as shown in the image below, using a thinner line and making the robot keep it between the two sensors, enables to place a black line parallel to the module that, when detected by both sensors, triggers some action. This is indeed impossible in our case, where if both sensors detect the black line, then it means the robot is inside the track, while if they both detect the white background then the robot has simply left the track.
 
@@ -518,15 +523,15 @@ The only limitation that emerged during our tests is related to the line thickne
 
 ### Obstacle avoidance
 
-The second control program, and the last that we were able to realize using only the basic kit, is the obstacle avoidance one. This controller consist of two behaviors, one for randomly wandering around the environment, and the other to actually avoid detected obstacles.
+The second control program, and the last that we were able to realize using only the basic kit, is the obstacle avoidance one. This controller consists of two behaviors, one for randomly wandering around the environment, and the other to actually avoid detected obstacles.
 
-#### Design
+**Design**
 
 When approaching this type of problem using a single frontal ultrasonic sensor there are basically two possibilities, which depend on the type of robot kit being used. If the sensor can be moved through a servo motor, we can use an algorithm that periodically scans the environment around the agent, which can then more effectively avoid obstacles since it is, potentially, free of blind spots. In our case, the ultrasonic sensor is mounted directly to the robot's chassis, which, as pointed out below, leads to some disadvantages and problems that can hardly be avoided.
 
 The control program we designed is structured in two behaviors, one for wandering and the other for obstacle avoidance. The first one is the default and has a simple random check that, on each loop, gives the robot a 3,33% chance of turning to the left, 3,33% to the right, and the rest of going forward. To give the robot a more human-like wandering behavior, there is also an additional check, that for simplicity is not shown in the flow chart below, which prevents the robot from turning more than once every 5 seconds.
 
-The obstacle avoidance behavior gets activated when the robot detects an object at a distance lower than 20cm. Given that the robot is unable to know the direction of the obstacle, it chooses a random direction (left or right) and turns towards it. While turning, if the distance gets reduces below 5cm, then it means that the robot chose the wrong direction, so it should turn in the opposite one to avoid a collision.
+The obstacle avoidance behavior gets activated when the robot detects an object at a distance lower than 20cm. Given that the robot is unable to know where the obstacle is, it chooses a random direction (left or right) and turns towards it. While turning, if the distance gets reduces below 5cm, then it means that the robot chose the wrong direction, so it should turn in the opposite one to avoid a collision.
 
 Based on the move that the robot performs on each Arduino loop, it then runs a delay, that can assume the following values:
 - 100ms if the robot is in wandering mode and going forward
@@ -539,12 +544,12 @@ Below is a flow chart of the obstacle avoidance behavior. To stay true to the ac
 
 <img height="650" src="https://drive.google.com/uc?export=view&id=1w58Jq3fCCD80KcHEr5lQ3paJpgp5f1f_"/>
 
-#### Implementation
+**Implementation**
 
 The program uses the following constants:
 - `AVOID_DISTANCE`: distance beyond which the robot remains in wandering mode
 - `CRITICAL_DISTANCE`: distance within which the robot changes direction to avoid a collision
-- `TURN_DELAY`: minimum time (ms) that must elapse between turns
+- `TURN_DELAY`: minimum time (ms) that must elapse between turns in wandering mode
 
 And the following global variables:
 - `distance`: current distance detected by the ultrasonic sensor
@@ -553,21 +558,18 @@ And the following global variables:
 - `lastTurnTimestamp`: timestamp of the last turn
 - `turnDirection`: enum value representing the direction in which to turn
 
-The robot stays in wandering mode by default. In this behavior, it performs the following actions:
-- Turns left with a probability of 3,33%, if it hasn't turned in the last `TURN_DELAY` milliseconds
-- Turns right with a probability of 3,33%, if it hasn't turned in the last `TURN_DELAY` milliseconds
-- Proceeds straight otherwise
+The robot stays in wandering mode by default, switching to obstacle avoidance if an object is detected at a shorter distance than `AVOID_DISTANCE`.
 
-If an obstacle is detected at a shorter distance than `AVOID_DISTANCE`, the robot switches to obstacle avoidance mode, which consists of the following steps:
+Obstacle avoidance consists of the following steps:
 1. The robot randomly chooses a direction and turns toward it with the `turn` function, until no obstacle is detected
 2. If, while turning, the distance to the obstacle gets reduced even further, going below `CRITICAL_DISTANCE`, then it means the chosen direction was probably wrong, so the robot tries turning in the opposite one to avoid the imminent collision. This can only happen once per obstacle
 
-#### Test and experiments
+**Testing**
 
 The goal of our tests was to demonstrate that the robot is able to avoid obstacles in a controlled environment. To carry out the verification of our hypotheses, we created two different cases of increasing difficulty and left the robot running on the field for a minute, testing the scenarios ten times each.
 
 - **Controlled perimeter**: limited area defined by a perimeter composed of cardboard boxes. In this test the robot was able to easily detect obstacles, staying within the area and avoiding them in most cases.
-- **Open environment**: large space of about 12sqm with some cardboard boxes, again used as obstacles. Although the collision avoidance algorithm worked correctly as expected, collisions were more frequent during our tests than in the previous case study, due to the limitations of the ultrasonic sensor. The frequency of collisions is obviously higher as the probability of the robot finding an obstacle in a blind spot increases.
+- **Open environment**: large space of about 12sqm with some cardboard boxes, again used as obstacles. Although the collision avoidance algorithm worked correctly as expected, collisions were more frequent during our tests than in the previous case study, due to the limitations of the ultrasonic sensor. The frequency of collisions is higher as the probability of the robot finding an obstacle in a blind spot increases.
 
 <table>
   <tr>
@@ -584,9 +586,9 @@ The goal of our tests was to demonstrate that the robot is able to avoid obstacl
   </tr>
 </table>
 
-#### Limitations
+**Limitations**
 
-During our tests emerged two types of limitations, the first is related to the working mode of the Arduino ultrasonic sensor, whose cases are shown in the following table. However, another type of limitations, is associated to the structure of the robot and the use of the sensor in a fixed position.
+During our tests two types of limitations emerged. The first is related to how the ultrasonic sensor works, as shown in the following table. The second is related to the fact that the sensor in a fixed position.
 
 <table>
   <tr>
@@ -596,23 +598,23 @@ During our tests emerged two types of limitations, the first is related to the w
     <th style="width: 25%">Case 4</th>
   </tr>
   <tr>
-    <td style="width: 25%"><div><img src="https://drive.google.com/uc?export=view&id=16kooovh31j4DQnbAM3kn7G11GxGvpA4g"/></div></td>
-    <td style="width: 25%"><div><img src="https://drive.google.com/uc?export=view&id=18YU7aSQEpP7PTzHXBFM_6VAx9ueZWK-3"/></div></td>
-    <td style="width: 25%"><div><img src="https://drive.google.com/uc?export=view&id=1eG2G0QueXjrFfH94hWbEoyokIe3z_2Mu"/></div></td>
-    <td style="width: 25%"><div><img src="https://drive.google.com/uc?export=view&id=1dTI569X0yYUjTHgPQYNSMDranEnox6-m"/></div></td>
+    <td><div><img src="https://drive.google.com/uc?export=view&id=16kooovh31j4DQnbAM3kn7G11GxGvpA4g"/></div></td>
+    <td><div><img src="https://drive.google.com/uc?export=view&id=18YU7aSQEpP7PTzHXBFM_6VAx9ueZWK-3"/></div></td>
+    <td><div><img src="https://drive.google.com/uc?export=view&id=1eG2G0QueXjrFfH94hWbEoyokIe3z_2Mu"/></div></td>
+    <td><div><img src="https://drive.google.com/uc?export=view&id=1dTI569X0yYUjTHgPQYNSMDranEnox6-m"/></div></td>
   </tr>
   <tr>
-    <td style="width: 25%">The object is too far away.</td>
-    <td style="width: 25%">The object is too inclined with respect to the sensor.</td>
-    <td style="width: 25%">The object is too small.</td>
-    <td style="width: 25%">The object is not dense enough.</td>
+    <td>The object is too far away.</td>
+    <td>The object is too inclined with respect to the sensor.</td>
+    <td>The object is too small.</td>
+    <td>The object is not dense enough.</td>
   </tr>
 </table>
 
 In our case, these limitations may result in scenarios where the robot is unable to detect the obstacle, mainly because its body is significantly wider (11cm) than the area covered by the sensor (4.5cm).
 The sound waves emitted by the transmitter, therefore, may not be wide enough, especially when the robot is at certain angles to the obstacle, to ensure that the passage area is actually free.
 
-Below are graphically depicted the two most frequent scenarios in which the robot may find itself when it needs to avoid an obstacle.
+The images below show the two most frequent scenarios in which the robot may find itself when it needs to avoid an obstacle.
 
 <table>
   <tr>
@@ -624,33 +626,33 @@ Below are graphically depicted the two most frequent scenarios in which the robo
     <td style="width: 50%; text-align: center;"><div><img height="300" src="https://drive.google.com/uc?export=view&id=1hkFE7fOAA53xs0imC8cmVnX9EkE_HcbP"/></div></td>
   </tr>
   <tr>
-    <td style="width: 50%">The ultrasonic sensor correctly detects the presence of an obstacle, mBot should then change its direction and avoid it with no issues.</td>
-    <td style="width: 50%">The ultrasonic sensor is unable to detect any obstacle, since it is in the blind zone. mBot won't change direction and will inevitably collide with the object.</td>
+    <td style="width: 50%">The ultrasonic sensor correctly detects the presence of an obstacle, so the robot can change its direction and avoid it with no issues.</td>
+    <td style="width: 50%">The ultrasonic sensor is unable to detect the obstacle, since it is in the blind zone. The robot won't change direction and will inevitably collide with the object.</td>
   </tr>
 </table>
 
 ### Light chasing with obstacle avoidance
 
-As mentioned earlier, thanks to the purchase of the add-on kit we were able to equip the robot with two light sensors, enabling us to create a new controller for light chasing with obstacle avoidance. This is an extension of the previous control program and implements, in addition to wandering and obstacle avoidance, an additional behavior for light chasing.
+As mentioned earlier, thanks to the purchase of the add-on kit we were able to equip the robot with two light sensors. This allowed us to create a new controller for light chasing with obstacle avoidance. This is an extension of the previous control program and implements, in addition to wandering and obstacle avoidance, an new behavior for phototaxis.
 
-#### Design
+**Design**
 
-The control program, in this case, is composed by three behaviors: wandering, obstacle avoidance and light chasing. The first two are identical to the obstacle avoidance controller (see the [dedicated section](#obstacle-avoidance)). The third one is, from a high level perspective, pretty simple: if the two sensors detect the same light level, the robot moves forward.  otherwise it turns toward the direction of the sensor with the highest light value. There are however a couple of complications that need to be dealt with:
+The control program, in this case, is composed by three behaviors: wandering, obstacle avoidance and light chasing. The first two are identical to the obstacle avoidance controller (see the [dedicated section](#obstacle-avoidance)). The third one is, from a high level perspective, pretty simple: if the two sensors detect the same light level, the robot moves forward, otherwise it turns toward the direction of the sensor with the highest light value. There are however some of complications that need to be dealt with:
 - At what light level should the robot start chasing the source?
 - At what light level should the robot stop, considering the source to be reached?
 - Left and right sensor measurement will rarely be exactly the same, so what is the threshold below which the detected values should be considered equal?
 
-To establish the light levels at which the robot starts ($chase$) and stops ($done$) chasing the source, we decided to make it perform a preliminary check on startup. In this phase, the robot performs a 360° spin and saves the highest detected light level. It then uses the following formulas to compute the required values:
+To establish the light levels at which the robot starts ($chase$) and stops ($done$) chasing the source, we decided to make it perform a preliminary check on startup. In this phase, the robot moves in a 360° spin and saves the highest detected light level ($value$). It then uses the following formulas to compute the required values:
 
 $$ chase = value * 1,1 $$
 
 $$ done = -50 + 155 * ln(chase) $$
 
-$chase$ is simply a 10% increment over the maximum value detected during the initial spin. Given that the sensors can detect a wavelength between 0 and 1100nm, we assumed that $chase$ is roughly between 10 and 850nm. We were unable to detect values below this range, and values above it mean the environment is too bright for the robot to properly detect the light source. With this consideration, we opted to compute $done$ with a logarithmic function that generates the following output.
+$chase$ is simply a 10% increment over the maximum value detected during the initial spin. Given that the sensors can detect a wavelength between 400 and 1100nm, we assumed $chase$ to be roughly between 10 and 850nm. We were unable to detect values below this range, and values above it mean the environment is too bright for the robot to properly detect the light source. With this consideration, we opted to compute $done$ with a logarithmic function that generates the following output.
 
 <img height="300" src="https://drive.google.com/uc?export=view&id=14fvxmEm2TdkPRqa2W7wqIJpkt-Iv53qT"/>
 
-Since left and right sensor measurement will rarely be exactly the same, some kind of threshold is needed below which the brightness values ​​read by the two sensors are considered equal. Choosing the right threshold is not trivial. If the value is too high, the robot may miss the light source, while if it's too low it could continuously turn left and right. Furthermore, if the light is far away from the robot, the values detected by the two sensors are going to be very similar. On the contrary, when the robot gets in close proximity to the light source, a small turn means a large difference in the detected light level. As a consequence, the threshold should be dynamic and become higher when the robot is approaching the light, to prevent it from continuously turning left and right. To do this, we have selected the following formula during the testing phase:
+Since left and right sensor measurement will rarely be exactly the same, some kind of threshold is needed, below which the brightness values ​​read by the two sensors are considered equal. Choosing the right threshold is not trivial. If the value is too high, the robot may miss the light source, while if it's too low it could continuously turn left and right. Furthermore, if the light is far away from the robot, the values detected by the two sensors are going to be very similar. On the contrary, when the robot gets in close proximity to the light source, a small turn means a large difference in the detected light level. As a consequence, the threshold should be dynamic and become higher when the robot is approaching the light, to prevent it from continuously turning left and right. To do this, we have selected the following formula during the testing phase:
 
 $$
   threshold = \begin{cases}
@@ -671,7 +673,7 @@ As can be seen in the flowchart below, the obstacle avoidance behavior is the on
 
 <img height="800" src="https://drive.google.com/uc?export=view&id=1zCMchMLzemYs8JGSNj77jgc3ixaLlWbr"/>
 
-#### Implementation
+**Implementation**
 
 Our light chasing algorithm is based on three different behaviors: wandering, obstacle avoidance and light chasing. The program uses the following constants:
 - `AVOID_DISTANCE`: distance beyond which the robot remains in wandering mode
@@ -679,6 +681,7 @@ Our light chasing algorithm is based on three different behaviors: wandering, ob
 - `MIN_THRESHOLD`: minimum level of light threshold
 - `MAX_THRESHOLD`: maximum level of light threshold
 - `TURN_DELAY`: minimum time (ms) that must elapse between turns
+
 And the following global variables:
 - `distance`: current distance detected by the ultrasonic sensor
 - `avoiding`: boolean set to true if the robot is in obstacle avoidance mode
@@ -698,12 +701,12 @@ The basic mechanism that guides the robot in choosing which mode to execute work
 
 Both wandering and obstacle avoidance modes have been ported with no modifications from the obstacle avoidance firmware (see [Obstacle avoidance](#obstacle-avoidance)).
 
-#### Test and experiments
+**Testing**
 
-For testing, we placed the flashlight that the robot has to reach in four different environments, running the test 10 times in each one and changing the position of the light between runs. During each test, the robot had a time of 60 seconds to find and reach the flashlight.
+For testing, we placed a flashlight that the robot has to reach in four different environments, running the test 10 times in each one and changing the position of the light between runs. During each test, the robot had a time of 60 seconds to find and reach the flashlight.
 
 1. **Room lit by the sunlight coming from a window**\
-   Here, if the flashlight was in direct contact with the sunlight, the robot was never able to detect it. Placing it in the shadow helped, but the high ambient light level meant the robot was still unable to consistently reach the flashlight, leading to a final success rate of only 30%.
+   Here, if the flashlight was in direct contact with the sunlight, the robot was never able to detect it. Placing the source in the shadow helped, but the high ambient light level meant the robot was still unable to consistently reach the flashlight, leading to a final success rate of only 30%.
 2. **Room lit by a ceiling light**\
    In this test, the room was lit by a single, ceiling-mounted 600lm@6000K LED bulb, providing a uniform illumination on the entire environment. The robot always reached the flashlight, provided it was able to detect it in the first place. Due to the quite high ambient light level, it had to wander very close (< 1m) to the flash light to detect it. The end result was a 50% success rate, due to the limited amount of time the robot had at its disposal to find the light source.
 3. **Room with no light sources**\
@@ -713,7 +716,7 @@ For testing, we placed the flashlight that the robot has to reach in four differ
 
 <table>
   <tr>
-    <th>Light chasing and obstacle avoidance</th>
+    <th>Room with no light sources and some cardboard boxes scattered around</th>
   </tr>
   <tr>
     <td><div><img width="400" src="https://drive.google.com/uc?export=view&id=18eIrnUq6Gfmd-ySeTzisakrXYeK7wyba"/></div></td>
@@ -723,11 +726,11 @@ For testing, we placed the flashlight that the robot has to reach in four differ
   </tr>
 </table>
 
-#### Limitations
+**Limitations**
 
 As a result of the tests we carried out, it was evident that the robot could only operate properly when the room was deprived of any natural light source. Otherwise, both sensors detected such high baseline values that the robot could only enter light chasing mode when very near to the flashlight.
 
-As soon as the assembly phase of the two light sensors was completed, it was immediately clear that combining light chasing with obstacle avoidance has a strong limitation due to the size of the robot. The light sensors mounted to the front brought the width of the mBot to 168mm, up from the initial 126mm of the basic configuration. This 33% increase further increased the size of the blind zone of the ultrasonic sensor, weakening even more the ability of the robot to detect and avoid obstacles.
+As soon as the assembly phase of the two light sensors was completed, it was immediately clear that combining light chasing with obstacle avoidance has a strong limitation due to the size of the robot. The light sensors mounted to the front brought the width of the mBot to 168mm, up from the initial 126mm of the basic configuration. This 33% increase amplified the blind zone of the ultrasonic sensor, weakening the ability of the robot to detect and avoid obstacles even more.
 
 <table>
   <tr>
@@ -742,8 +745,8 @@ As soon as the assembly phase of the two light sensors was completed, it was imm
 
 ## Conclusions and future work
 
-This project's goal was to experience programming a robot controller in a real world environment, in order to compare it against the simulated one that has been used in laboratory sessions. From a control program point of view, we are quite satisfied with the behaviors we were able to create, and we think that the results we obtained during our experiments can't be improved by much due to the nature and the limitations of the robot kit we chose. The experience of programming a controller on the physical robot is very different from the usage of a simulator. On one side, testing directly in a real world environment has allowed us to catch more errors, fine tune parameters to prevent problems related to sensor noise, and feel more secure of having a successful implementation - after all, we already tested it on physical hardware. On the other side, however, testing in a simulator is way more efficient from a time and resource point of view: setting up a virtual environment is faster, and testing is even more, thanks to the ability to run multiple instances of the controller in parallel. In the end, the ideal setup would be to have both a simulator and a real environment to test with, and adopt an iterative **plan** - **implement** - **test** - **validate** approach, like shown in the figure below.
+This project's goal was to experience programming a robot controller in a real world environment, in order to compare it against the simulated one that has been used in laboratory sessions. From a control program point of view, we are quite satisfied with the behaviors we were able to create, and we think that the results we obtained during our experiments can't be improved by much due to the nature and the limitations of the robot kit we chose. The experience of programming a controller on a physical robot is very different from the usage of a simulator. On one side, testing directly in a real world environment has allowed us to catch more errors, fine tune parameters to prevent problems related to sensor noise, and feel more secure of having a successful implementation - after all, we already tested it on physical hardware. On the other side, however, testing in a simulator is way more efficient from a time and resource point of view: setting up a virtual environment is faster, and testing is even more, thanks to the ability to run multiple instances of the controller in parallel. In the end, the ideal setup would be to have both a simulator and a real environment to test with, and adopt an iterative **plan** - **implement** - **test** - **validate** approach, like shown in the figure below.
 
 ![](https://drive.google.com/uc?export=view&id=19gQlYBuoI68eXopMGo1DMop018Z2qZQA)
 
-The nature of this project lends itself particularly well to future development. For one, the chosen kit can be easily expanded with additional modules, offering the possibility to implement new and more advances controllers. Another interesting activity would be to purchase more kits and test the usage of robot swarms, a scenario that we were unable to take into account due to time and budget constraints. During testing, we would have been interested in directly comparing the results we got in the real world against the ones obtained within a simulator. However, in order to make a 1:1 comparison, it is obviously necessary to use a robot with the same characteristics as the agent running on the virtual environment. In our case this was not possible, but as previously highlighted this approach would have offered the best developer experience and should be considered for any serious robot programming project.
+The nature of this project lends itself particularly well to future development. For one, the chosen kit can be easily expanded with additional modules, offering the possibility to implement new and more advanced controllers. Another interesting activity would be to purchase more kits and test the usage of robot swarms, a scenario that we were unable to take into account due to time and budget constraints. During testing, we would have been interested in directly comparing the results we got in the real world against the ones obtained within a simulator. However, in order to make a 1:1 comparison, it is obviously necessary to use a robot with the same characteristics as the agent running on the virtual environment. In our case this was not possible, but as previously highlighted this approach would have offered the best developer experience and should be considered for any advanced robot programming project.
