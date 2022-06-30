@@ -9,7 +9,7 @@
 ## Project report
 
 This is a project for the [Intelligent Robotics Systems](https://www.unibo.it/it/didattica/insegnamenti/insegnamento/2020/447106) 2021/22 course of the University of Bologna.\
-The project's report is included in this repository in [markdown format](./docs/report.md) and uploaded as a release in [PDF format](#).
+The project's report is included in this repository in [markdown format](./docs/report.md) and uploaded as a release in [PDF format](https://github.com/gtumedei/irs-project/releases/download/1.0.0/report.pdf).
 
 ## Getting started for local development
 
