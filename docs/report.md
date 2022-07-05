@@ -1,4 +1,24 @@
-# Report
+# Intelligent Robotic Systems - Report
+
+- [Intelligent Robotic Systems - Report](#intelligent-robotic-systems---report)
+  - [Introduction](#introduction)
+  - [Choosing the robot kit](#choosing-the-robot-kit)
+    - [Requirements](#requirements)
+    - [The market of programmable robot kits](#the-market-of-programmable-robot-kits)
+    - [Our choice](#our-choice)
+  - [Robot kit analysis](#robot-kit-analysis)
+    - [Bundle](#bundle)
+    - [Sensors and actuators](#sensors-and-actuators)
+    - [Software](#software)
+  - [Firmware analysis and refactor](#firmware-analysis-and-refactor)
+    - [Makeblock library](#makeblock-library)
+    - [Default firmware](#default-firmware)
+    - [Our firmware](#our-firmware)
+  - [Controller development](#controller-development)
+    - [Line following](#line-following)
+    - [Obstacle avoidance](#obstacle-avoidance)
+    - [Light chasing with obstacle avoidance](#light-chasing-with-obstacle-avoidance)
+  - [Conclusions and future work](#conclusions-and-future-work)
 
 ## Introduction
 
@@ -366,7 +386,7 @@ Starting from the single file that composes the basic firmware provided by Makeb
 
 The structure of the `.ino` file for a controller that uses the MeMBotFirmware consists of the standard Arduino `setup` and `loop` functions. To simplify testing, we decided to keep the manual mode, where the robot can be controller via the IR remote, and integrate it in the library. As such, the `loop` function that executes the Arduino loop contains a switch that allows the usage of both manual and automatic modes.
 
-This is structure of a controller that uses the MeMBotFirmware:
+This is the structure of a controller that uses the MeMBotFirmware:
 
 ```cpp
 #include "MeMBotFirmware.h"
