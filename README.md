@@ -4,14 +4,25 @@
   Possibilities and Limitations of Switching from a Robot Simulator to a Real-World Scenario
 </h1>
 
+<center>
+  Mattia Rossi (<a href="mailto:mattia.rossi15@studio.unibo.it">mattia.rossi15@studio.unibo.it</a>)<br/>
+  Gianni Tumedei (<a href="mailto:gianni.tumedei@studio.unibo.it">gianni.tumedei@studio.unibo.it</a>)<br/>
+  <br/>
+</center>
+
 ![](https://drive.google.com/uc?export=view&id=1lmTIVMaEcnv2D_NmNa49LbAqFAn7RR0O)
 
-## Project report
+## Introduction
 
-This is a project for the [Intelligent Robotics Systems](https://www.unibo.it/it/didattica/insegnamenti/insegnamento/2020/447106) 2021/22 course of the University of Bologna.\
-The project's report is included in this repository in [markdown format](./docs/report.md) and uploaded as a release in [PDF format](https://github.com/gtumedei/irs-project/releases/download/1.0.0/report.pdf).
+This is a project for the [Intelligent Robotics Systems](https://www.unibo.it/it/didattica/insegnamenti/insegnamento/2020/447106) 2021/22 course of the University of Bologna.
 
-## Getting started for local development
+The goal of this project is to compare the experience of programming a robot controller in a simulated environment against a real world one. To do this, we have chosen [mBot](https://www.makeblock.com/mbot-3), a robot kit by [Makeblock](https://www.makeblock.com) that enabled us to implement a series of control programs, similar to the ones created in the course's laboratory sessions. As in that case, we applied a scientific approach to development and testing, by formulating hypotheses, checking them against actual behaviors and making adjustments when needed.
+
+This repository includes the implementation of four behaviors: wandering, line following, obstacle avoidance and phototaxis, which have been combined in order to create slightly more complex, multi-behavior control programs (see [Control programs](#control-programs)).
+
+The full report, with more details about the project topics and an analysis of the robot kits market, can be accessed in [markdown](./docs/report.md) or [PDF](https://github.com/gtumedei/irs-project/releases/download/1.0.0/report.pdf) format.
+
+## Getting started for development
 
 ### Requirements
 
@@ -29,53 +40,102 @@ The project's report is included in this repository in [markdown format](./docs/
 
 \* The official Makeblock library ([repo](https://github.com/Makeblock-official/Makeblock-Libraries)) includes a variable initialization in a `.h` file, resulting in problems if that file gets imported more than once.
 
-## Project summary
+## Firmware
+`lib/MeMBotFirmware`
 
-The goal of this project is to compare the experience of programming a robot controller in a simulated environment against a real world one. To do this, we started by choosing a good robot kit that enabled us to implement a series of control programs, similar to the ones created in laboratory. As in that case, we applied a scientific approach to development and testing, by formulating hypotheses, checking them against actual behaviors and making adjustments when needed.
+To ease controller development and reduce code duplication among different control programs, we have created a MeMBotFirmware Arduino library, that:
+- Includes the Makeblock library
+- Implements the following features that are common among controllers: handling the builtin button, the IR receiver, and the two wheels, emitting tones from the buzzer, manually controlling the robot with the IR remote
+- Declares an `autoMode` function that the final controller has to implement with the actual behaviors of the robot
 
-We therefore completed the implementation of four behaviors: wandering, line following, obstacle avoidance and phototaxis, combining them in order to create slightly more complex, multi-behavior control programs.
+## Control programs
+
+Each control program is composed by:
+- a `.ino` file: standard Arduino program with `setup` and `loop` functions
+- a `.cpp` file: includes a function for each behavior, plus an `autoMode` function that decides what to execute on each Arduino tick
 
 ### Line following
+`src/LineFollowingMode`
 
-The first controller that has been implemented allows the robot to follow a black track drawn on the ground, using just the line following module, composed by two infrared sensors. This is the simplest control program and only includes a single behavior to perform line following.
+This is the simplest control program and only includes a single behavior to perform line following. The controller allows the robot to follow a black track drawn on the ground, using the two infrared sensors of the line following module included in the kit.
 
-#### Design and developing
+**Design and development**
 
-We opted for a design that kept both sensors within the track to allow the robot to follow it, resulting in the following four scenarios:
-- both sensors detect the black line, the robot then proceeds straight ahead
-- only the left sensor detects the black line, the robot then curves to the left
-- only the right sensor detects the black line, the robot then curves to the right
-- neither sensor detects the black line, in which case the controller tells the robot how to move based on a value used as a compass
+The controller is designed to follow a line that is wider than the distance between the two infrared sensors, trying to keep both of them within the track. It handles the following four scenarios:
+- both sensors detect the black line: the robot proceeds straight ahead
+- only the left sensor detects the black line: the robot turns to the left
+- only the right sensor detects the black line: the robot turns to the right
+- no sensor detects the black line: the robot uses a variable, whose value is based on previous measurements, as a compass to decide how to move
 
-The line following controller is very simple and basically consists of a switch that handles the above four cases, moving the wheels according to the value read by the sensors. To regulate the speed, making the robot go faster in straight tracks and slower during turns, we made some tests and identified the following formula:
+To regulate the speed, making the robot go faster in straight tracks and slower during turns, the following formula is used:
 
 $$ speed= maxSpeed * (1-{\vert direction \vert\over 10 }) $$
 
 Where $maxSpeed$ is a constant representing the maximum value of speed the robot can reach, which is 255. The calculation is done within the `computeSpeed()` function, which returns the minimum between the calculated speed and $minSpeed$, a constant set to 230.
 
-#### Testing and results
+**Testing and results**
 
-We tested the behavior of the robot by running it on the following three tracks, increasing the difficulty each time:
-- Infinity-shaped track: bundled with the robot kit, mBot was able to follow the line without any particular difficulty. The success rate was 100%
-- Rectangular track: hand crafted with electrical tape to test the robot's behavior on sharp turns. We needed to slightly cut off the sharp turns on the outside, in order to avoid that both sensor reach the white background at the same time. After this change the success rate was 100%
-- Mixed track: track that has properties of both the previous ones. The success rate was 80%, the robot performed a wrong turn, but was able to get back on track 10% of the time; wrongly took the crossroad and started following the line in the wrong senses in the last case
+This behavior has been tested by running the robot on the following three tracks of increasing difficulty:
+- Infinity-shaped track: bundled with the robot kit, includes a crossroad and has no sharp turns. During testing, the robot was consistently able to follow the line with no errors.
+- Rectangular track: hand crafted with electrical tape to test the robot's behavior on sharp turns. We needed to slightly cut off the turns' corners on the outside, in order to prevent both sensors from reaching the white background at the same time. After this modification, the robot was able to follow the line 100% of the time.
+- Mixed track: has properties of both the previous ones, including sharp turns, non-sharp turns and a crossroad. Testing showed a success rate of 80%. In 10% of the cases the robot performed a wrong turn, but was able to get back on track, while in the remaining 10% it wrongly took the crossroad and started following the line in the opposite sense.
 
 ### Obstacle avoidance
+`src/ObstacleAvoidanceMode`
 
-The second control program, and the last that we were able to realize using only the basic kit, is the obstacle avoidance one. This controller consists of two behaviors, one for randomly wandering around the environment, and the other to actually avoid detected obstacles using the frontal ultrasonic sensor.
+The second control program, and the last that we were able to realize using only the basic kit, is the obstacle avoidance one. This controller consists of two behaviors, one for randomly wandering around the environment, and the other to actually avoid detected obstacles using the front-mounted ultrasonic sensor.
 
-#### Design and developing
+**Design and development**
 
-Wandering is the default behavior, during which the robot has a 3,33% chance of either turning left or right, but without being able to make more than one consecutive turn within 5 seconds from the last one, giving it a more human-like wandering behavior.
+Wandering is the default behavior, during which the robot has a 3,33% chance of either turning left or right, but without being able to make more than one consecutive turn within 5 seconds from the last one, to give it a less hesitant, more human-like wandering behavior.
 
-The obstacle avoidance behavior gets activated when the robot detects an object at a distance lower than 20cm. Given that the robot is unable to know where the obstacle is, it chooses a random direction (left or right) and turns towards it. While turning, if the distance gets reduces below 5cm, then it means that the robot chose the wrong direction, so it should turn in the opposite one to avoid a collision.
+The obstacle avoidance behavior gets activated when the robot detects an object at a distance lower than 20cm (defined by `AVOID_DISTANCE`). Due to the static placement of the single ultrasonic sensor, the robot is unable to know where the obstacle is exactly, so it chooses a random direction (left or right) and turns towards it. While turning, if the distance gets reduced below 5cm (`CRITICAL_DISTANCE`), then it means that the robot chose the wrong direction, so it should turn in the opposite one to avoid a collision.
 
-#### Testing and results
+**Testing and results**
 
-To demonstrate the operation of the obstacle avoidance mode, we created two different case histories where the robot was left free to run for one minute. The first one was limited area defined by a perimeter composed of cardboard boxes, where the robot was able to easily detect obstacles. The second was a larger space, where cardboard boxes were used as obstacles; although the collision avoidance algorithm worked correctly as expected, collisions were more frequent.
+To demonstrate the operativity of the obstacle avoidance mode, we created two different testing scenarios where the robot was left free to roam for one minute. The first was an area enclosed by a perimeter of cardboard boxes, where the robot was able to detect and avoid most collisions. The second was a larger space, where cardboard boxes were scattered around as obstacles. Here, although the collision avoidance algorithm worked as expected, collisions were more frequent.
 
-Most of the limitations that arose during our tests are related to having the ultrasonic sensor in a fixed position, resulting in scenarios where the robot is unable to to detect the obstacle, mainly because its body is significantly wider (11cm) than the area covered by the sensor (4.5cm). The sound waves emitted by the transmitter, therefore, may not be wide enough, especially when the robot is at certain angles to the obstacle, to ensure that the passage area is actually free.
+Most of the limitations that came up during our tests are related to having a single ultrasonic sensor in a fixed position, resulting in scenarios where the robot is unable to to detect the obstacle, mainly because its body is significantly wider (11cm) than the area covered by the sensor (4.5cm). The sound waves emitted by the transmitter, therefore, may not be wide enough, especially when the robot is at certain angles to the obstacle, to ensure that the passage area is actually free.
 
 ### Light chasing with obstacle avoidance
+`src/LightChasingMode`
 
-#### Testing and results
+In order to equip the robot with two light sensors, we purchased an extension kit so that we could implement the light chasing mode mixed with obstacle avoidance. This is an extension of the previous control program and implements, in addition to wandering and obstacle avoidance, an new behavior for phototaxis.
+
+**Design and development**
+
+The control program, in this case, is composed by three behaviors: wandering, obstacle avoidance and light chasing. The first two are identical to the obstacle avoidance controller. The third one is, from a high level perspective, pretty simple: if the two sensors detect the same light level, the robot moves forward, otherwise it turns toward the direction of the sensor with the highest light value.
+
+To establish the light levels at which the robot starts ($chase$) and stops ($done$) chasing the source, we decided to make it perform a preliminary check on startup. In this phase, the robot moves in a 360° spin and saves the highest detected light level ($value$). It then uses the following formulas to compute the required values:
+
+$$ chase = value * 1,1 $$
+
+$$ done = -50 + 155 * ln(chase) $$
+
+$chase$ is simply a 10% increment over the maximum value detected during the initial spin. Given that the sensors can detect a wavelength between 400 and 1100nm, we assumed $chase$ to be roughly between 10 and 850nm. We were unable to detect values below this range, and values above it mean the environment is too bright for the robot to properly detect the light source. With this consideration, we opted to compute $done$ with a logarithmic function that generates the following output.
+
+<img height="300" src="https://drive.google.com/uc?export=view&id=14fvxmEm2TdkPRqa2W7wqIJpkt-Iv53qT"/>
+
+The following threshold is used to give the robot a less hesitant behavior, below this value the brightness values ​​read by the two sensors are considered equal. After some adjustment we understand that the threshold should be dynamic and become higher when the robot is approaching the light, to prevent it from continuously turning left and right. To do this, we have selected the following formula during the testing phase:
+
+$$
+  threshold = \begin{cases}
+  maxValue * {thresholdRange \over lightRange} &\text{if } maxValue > chase + lightRange * 0.75 \\
+  minThreshold &\text{otherwise}
+  \end{cases}
+$$
+
+- $maxValue$ is the maximum between the two values detected by sensors
+- $lightRange = done - chase$
+- $thresholdRange = maxThreshold - minThreshold$ is the difference between the maximum and minimum allowed thresholds. During testing, we identified the values of 40nm and 10nm respectively
+
+With the above formula, the threshold value remains constant at $minThreshold$ until the robot detects a light value that is 25% below the $done$ level, then it starts growing linearly. In our tests, this has shown to grant a good sensitivity independently from the distance to the light source.
+
+**Testing and results**
+
+This controller was tested by placing a flashlight that the robot has to reach in four different environments, letting the robot roam 10 times in each one and changing the position of the light between runs. During each test, the robot had a time of 60 seconds to find and reach the flashlight.
+
+1. **Room lit by the sunlight coming from a window**: due to the high ambient light level, the robot was unable to consistently reach the flashlight, leading to a final success rate of only 30%.
+2. **Room lit by a ceiling light**: the robot always reached the flashlight, provided it was able to detect it in the first place. Due to the quite high ambient light level, it had to wander very close (< 1m) to the flash light to detect it. The end result was a 50% success rate, due to the limited amount of time the robot had at its disposal to find the light source.
+3. **Room with no light sources**: the robot was able to easily detect the flashlight from a 2m+ distance, achieving a success factor of 100%.
+4. **Room with no light sources and some cardboard boxes scattered around**: the robot reached the flashlight within 60 seconds in 80% of the cases, but was able to avoid any collision only in half of them, leading to a final success rate of 40%. Here, the obstacle avoidance behavior was also impaired by the
