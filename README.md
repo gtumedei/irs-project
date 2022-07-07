@@ -44,9 +44,9 @@ The full report, with more details about the project topics and an analysis of t
 `lib/MeMBotFirmware`
 
 To ease controller development and reduce code duplication among different control programs, we have created a MeMBotFirmware Arduino library, that:
-- Includes the Makeblock library
-- Implements the following features that are common among controllers: handling the builtin button, the IR receiver, and the two wheels, emitting tones from the buzzer, manually controlling the robot with the IR remote
-- Declares an `autoMode` function that the final controller has to implement with the actual behaviors of the robot
+- includes the Makeblock library;
+- implements the following features that are common among controllers: handling the builtin button, the IR receiver, and the two wheels, emitting tones from the buzzer, manually controlling the robot with the IR remote;
+- declares an `autoMode` function that the final controller has to implement with the actual behaviors of the robot.
 
 ## Control programs
 
@@ -100,11 +100,11 @@ Most of the limitations that came up during our tests are related to having a si
 ### Light chasing with obstacle avoidance
 `src/LightChasingMode`
 
-In order to equip the robot with two light sensors, we purchased an extension kit so that we could implement the light chasing mode mixed with obstacle avoidance. This is an extension of the previous control program and implements, in addition to wandering and obstacle avoidance, an new behavior for phototaxis.
+The last control program is an extension of the previous one and implements, in addition to wandering and obstacle avoidance, an new behavior for phototaxis/light chasing. In order to implement this behavior, we purchased an [extension kit](https://www.makeblock.com/mbot-add-on-packs-interactive-light-sound) by Makeblock and equipped the robot with two light sensors included in it.
 
 **Design and development**
 
-The control program, in this case, is composed by three behaviors: wandering, obstacle avoidance and light chasing. The first two are identical to the obstacle avoidance controller. The third one is, from a high level perspective, pretty simple: if the two sensors detect the same light level, the robot moves forward, otherwise it turns toward the direction of the sensor with the highest light value.
+The wandering and obstacle avoidance implementation is identical to the previous controller. A for phototaxis, it is, from a high level perspective, pretty simple: if the two sensors detect the same light level, the robot moves forward, otherwise it turns toward the direction of the sensor with the highest light value.
 
 To establish the light levels at which the robot starts ($chase$) and stops ($done$) chasing the source, we decided to make it perform a preliminary check on startup. In this phase, the robot moves in a 360° spin and saves the highest detected light level ($value$). It then uses the following formulas to compute the required values:
 
@@ -112,11 +112,7 @@ $$ chase = value * 1,1 $$
 
 $$ done = -50 + 155 * ln(chase) $$
 
-$chase$ is simply a 10% increment over the maximum value detected during the initial spin. Given that the sensors can detect a wavelength between 400 and 1100nm, we assumed $chase$ to be roughly between 10 and 850nm. We were unable to detect values below this range, and values above it mean the environment is too bright for the robot to properly detect the light source. With this consideration, we opted to compute $done$ with a logarithmic function that generates the following output.
-
-<img height="300" src="https://drive.google.com/uc?export=view&id=14fvxmEm2TdkPRqa2W7wqIJpkt-Iv53qT"/>
-
-The following threshold is used to give the robot a less hesitant behavior, below this value the brightness values ​​read by the two sensors are considered equal. After some adjustment we understand that the threshold should be dynamic and become higher when the robot is approaching the light, to prevent it from continuously turning left and right. To do this, we have selected the following formula during the testing phase:
+Given that the light sensors detect wavelength values in a 400-1100nm range, a threshold is needed below which the two measurements are considered to be the same. The threshold should be higher the closer the robot is to the light, to prevent it from continuously turning left and right. To compute it, we have perfected the following formula during the testing phase:
 
 $$
   threshold = \begin{cases}
@@ -129,13 +125,15 @@ $$
 - $lightRange = done - chase$
 - $thresholdRange = maxThreshold - minThreshold$ is the difference between the maximum and minimum allowed thresholds. During testing, we identified the values of 40nm and 10nm respectively
 
-With the above formula, the threshold value remains constant at $minThreshold$ until the robot detects a light value that is 25% below the $done$ level, then it starts growing linearly. In our tests, this has shown to grant a good sensitivity independently from the distance to the light source.
+With the above formula, the threshold value remains constant at $minThreshold$ until the robot detects a light value that is 25% below the $done$ level, then it starts growing linearly.
+
+For more details on the $chase$, $done$ and $threshold$ formulas, see the [full report](./docs/report.md).
 
 **Testing and results**
 
-This controller was tested by placing a flashlight that the robot has to reach in four different environments, letting the robot roam 10 times in each one and changing the position of the light between runs. During each test, the robot had a time of 60 seconds to find and reach the flashlight.
+This controller was tested by placing in four different environments a flashlight that the robot has to reach, and then letting it roam 10 times in each one and changing the position of the light between runs. During each test, the robot had a time of 60 seconds to find and reach the flashlight.
 
 1. **Room lit by the sunlight coming from a window**: due to the high ambient light level, the robot was unable to consistently reach the flashlight, leading to a final success rate of only 30%.
-2. **Room lit by a ceiling light**: the robot always reached the flashlight, provided it was able to detect it in the first place. Due to the quite high ambient light level, it had to wander very close (< 1m) to the flash light to detect it. The end result was a 50% success rate, due to the limited amount of time the robot had at its disposal to find the light source.
+2. **Room lit by a ceiling light**: the robot always reached the flashlight, provided it was able to detect it in the first place. Due to the quite high ambient light level, it had to wander very close (< 1m) to the flashlight to detect it. The end result was a 50% success rate, due to the limited amount of time the robot had at its disposal to find the light source.
 3. **Room with no light sources**: the robot was able to easily detect the flashlight from a 2m+ distance, achieving a success factor of 100%.
-4. **Room with no light sources and some cardboard boxes scattered around**: the robot reached the flashlight within 60 seconds in 80% of the cases, but was able to avoid any collision only in half of them, leading to a final success rate of 40%. Here, the obstacle avoidance behavior was also impaired by the
+4. **Room with no light sources and some cardboard boxes scattered around**: the robot reached the flashlight within 60 seconds in 80% of the cases, but was able to avoid any collision only in half of them, leading to a final success rate of 40%. Here, the obstacle avoidance behavior was also impaired by the additional bulk that the light sensors add to the robot's chassis.
