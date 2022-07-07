@@ -4,7 +4,7 @@
   Possibilities and Limitations of Switching from a Robot Simulator to a Real-World Scenario
 </h1>
 
-<center>
+<p align="center">
   Mattia Rossi (<a href="mailto:mattia.rossi15@studio.unibo.it">mattia.rossi15@studio.unibo.it</a>)<br/>
   Gianni Tumedei (<a href="mailto:gianni.tumedei@studio.unibo.it">gianni.tumedei@studio.unibo.it</a>)<br/>
   <br/>
